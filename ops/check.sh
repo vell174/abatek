@@ -17,6 +17,7 @@ warn() { printf '\033[1;33m ВНИМАНИЕ\033[0m %s\n' "$1"; }
 step() { printf '\n\033[1;34m==> %s\033[0m\n' "$1"; }
 
 command -v dig >/dev/null 2>&1 || apt-get install -y dnsutils >/dev/null 2>&1 || true
+command -v whois >/dev/null 2>&1 || apt-get install -y whois >/dev/null 2>&1 || true
 
 step "DNS"
 if ! getent hosts github.com >/dev/null 2>&1; then
@@ -24,9 +25,10 @@ if ! getent hosts github.com >/dev/null 2>&1; then
 fi
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 echo "  IP сервера: ${SERVER_IP}"
+A_OK=1
 for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "mail.${SITE_DOMAIN}"; do
   R="$(dig +short A "$host" | tail -n1)"
-  if [ "$R" = "$SERVER_IP" ]; then ok "A ${host} -> ${R}"; else bad "A ${host} -> ${R:-нет записи} (ожидался ${SERVER_IP})"; fi
+  if [ "$R" = "$SERVER_IP" ]; then ok "A ${host} -> ${R}"; else bad "A ${host} -> ${R:-нет записи} (ожидался ${SERVER_IP})"; A_OK=0; fi
 done
 MXR="$(dig +short MX "$SITE_DOMAIN" | tail -n1)"
 case "$MXR" in *"mail.${SITE_DOMAIN}"*) ok "MX -> ${MXR}" ;; *) bad "MX -> ${MXR:-нет записи} (ожидался mail.${SITE_DOMAIN})" ;; esac
@@ -38,6 +40,28 @@ DKIM="$(dig +short TXT "mail._domainkey.${SITE_DOMAIN}" | head -n1)"
 [ -n "$DKIM" ] && ok "DKIM запись есть" || warn "DKIM не найден — добавьте TXT mail._domainkey (см. README, шаг 4)"
 PTR="$(dig +short -x "$SERVER_IP" | head -n1)"
 case "$PTR" in "mail.${SITE_DOMAIN}."*) ok "PTR -> ${PTR}" ;; *) warn "PTR -> ${PTR:-не настроен} (желательно mail.${SITE_DOMAIN}) — настраивается в панели VPS" ;; esac
+
+if [ "$A_OK" -ne 1 ]; then
+  step "Диагностика DNS"
+  WHOIS_OUT="$(whois "$SITE_DOMAIN" 2>/dev/null || true)"
+  echo "$WHOIS_OUT" | grep -iE '^(nserver|state|created|paid-till|registrar)' | sed 's/^/  /' || true
+  REG_NS="$(echo "$WHOIS_OUT" | awk '/^nserver:/ {print $2; exit}' | sed 's/\.$//')"
+  ZONE_IP=""
+  [ -n "$REG_NS" ] && ZONE_IP="$(dig +short A "$SITE_DOMAIN" "@${REG_NS}" 2>/dev/null | tail -n1)"
+  if dig +trace "$SITE_DOMAIN" 2>/dev/null | grep -qE "^${SITE_DOMAIN}\.[[:space:]]+[0-9]+[[:space:]]+IN[[:space:]]+NS"; then
+    if [ -n "$ZONE_IP" ] && [ "$ZONE_IP" != "$SERVER_IP" ]; then
+      warn "Зона отдаёт ${ZONE_IP}, а сервер имеет ${SERVER_IP} — исправьте A-записи у регистратора."
+    else
+      warn "Домен делегирован, публичные резолверы ещё не обновили кэш — подождите."
+    fi
+  elif [ "$ZONE_IP" = "$SERVER_IP" ]; then
+    warn "Записи в зоне верные (${REG_NS} -> ${ZONE_IP}), но делегирование ещё не опубликовано"
+    warn "в зоне верхнего уровня. Для нового домена это нормально: 1-4 часа. Ничего делать не нужно."
+  else
+    warn "Домен не делегирован: укажите DNS-серверы регистратора (например ns1.reg.ru, ns2.reg.ru)."
+  fi
+  info "Проверять готовность: dig +short A ${SITE_DOMAIN} @8.8.8.8"
+fi
 
 step "Контейнеры"
 docker compose ps

@@ -84,7 +84,7 @@ fi
 step "2/8 Обновление системы и базовые пакеты"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y ca-certificates curl git openssl ufw gnupg dnsutils
+apt-get install -y ca-certificates curl git openssl ufw gnupg dnsutils whois
 
 step "3/8 Hostname и /etc/hosts"
 hostnamectl set-hostname "$FQDN"
@@ -168,7 +168,7 @@ EOF
   info "Создан .env (пароль БД сгенерирован случайно)."
 fi
 
-# ------------------------------------------------------------------ 6.5 проверка DNS
+# ------------------------------------------------------------------ 7.5 проверка DNS
 step "Проверка DNS перед выпуском сертификата"
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 DNS_OK=1
@@ -181,12 +181,52 @@ for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "$FQDN"; do
     DNS_OK=0
   fi
 done
+
 if [ "$DNS_OK" -ne 1 ]; then
-  warn "DNS ещё не указывает на этот сервер. Let's Encrypt не сможет выпустить сертификат,"
-  warn "сайт поднимется, но будет доступен только по HTTP/с ошибкой сертификата."
+  # разбираемся, в чём именно причина: делегирование, зона регистратора или кэш резолверов
+  step "Диагностика DNS"
+
+  WHOIS_OUT=""
+  if whois "$SITE_DOMAIN" >/dev/null 2>&1; then
+    WHOIS_OUT="$(whois "$SITE_DOMAIN" 2>/dev/null)"
+    echo "$WHOIS_OUT" | grep -iE '^(nserver|state|created|paid-till|registrar)' | sed 's/^/    /' || true
+  fi
+
+  # NS домена по данным авторитетных серверов
+  REG_NS="$(echo "$WHOIS_OUT" | awk '/^nserver:/ {print $2; exit}' | sed 's/\.$//')"
+  DELEGATED=0
+  if dig +trace "$SITE_DOMAIN" 2>/dev/null | grep -qE "^${SITE_DOMAIN}\.[[:space:]]+[0-9]+[[:space:]]+IN[[:space:]]+NS"; then
+    DELEGATED=1
+  fi
+
+  ZONE_IP=""
+  if [ -n "$REG_NS" ]; then
+    ZONE_IP="$(dig +short A "$SITE_DOMAIN" "@${REG_NS}" 2>/dev/null | tail -n1)"
+  fi
+
+  if [ "$DELEGATED" -eq 0 ] && [ "$ZONE_IP" = "$SERVER_IP" ]; then
+    warn "Записи в зоне регистратора верные (${REG_NS} -> ${ZONE_IP}),"
+    warn "но домен ещё не появился в зоне верхнего уровня — делегирование не опубликовано."
+    warn "Это нормально для только что зарегистрированного домена: обычно 1-4 часа."
+    warn "Настраивать ничего не нужно, просто подождите."
+  elif [ "$DELEGATED" -eq 0 ]; then
+    warn "Домен не делегирован: в панели регистратора укажите DNS-серверы (например ns1.reg.ru, ns2.reg.ru)."
+  elif [ -n "$REG_NS" ] && [ -z "$ZONE_IP" ]; then
+    warn "Домен делегирован на ${REG_NS}, но A-записи в зоне нет — добавьте её в панели регистратора."
+  elif [ -n "$ZONE_IP" ] && [ "$ZONE_IP" != "$SERVER_IP" ]; then
+    warn "A-запись в зоне указывает на ${ZONE_IP}, а сервер имеет ${SERVER_IP} — исправьте запись."
+  else
+    warn "Зона отдаёт правильный адрес, публичные резолверы ещё не обновили кэш — подождите."
+  fi
+
+  info "Проверять готовность: dig +short A ${SITE_DOMAIN} @8.8.8.8"
+  echo
+  warn "Пока DNS не заработает, Let's Encrypt не выпустит сертификат:"
+  warn "сайт поднимется, но будет открываться только по HTTP/с ошибкой сертификата."
+  warn "Traefik повторяет попытку автоматически; ускорить: sudo docker compose restart traefik"
   if [ -t 0 ]; then
-    read -rp "Продолжить всё равно? [y/N]: " GO
-    case "${GO}" in [yY]*) ;; *) fail "Остановлено. Поправьте DNS и запустите скрипт снова." ;; esac
+    read -rp "Продолжить установку? [Y/n]: " GO
+    case "${GO:-Y}" in [nN]*) fail "Остановлено. Запустите скрипт снова, когда DNS заработает." ;; esac
   fi
 fi
 
