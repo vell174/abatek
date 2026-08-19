@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.7.11
+    image: traefik:v3.7.10
     container_name: abatek-traefik
     restart: unless-stopped
     command:
