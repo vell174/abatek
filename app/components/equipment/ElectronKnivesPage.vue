@@ -85,7 +85,7 @@ const users = [
         <div class="knife-page__product-list">
           <article v-for="product in catalog" :key="product.name" class="knife-page__product">
             <div class="knife-page__product-media">
-              <img :src="product.image" :alt="product.alt" width="900" height="700" />
+              <img :src="product.image" :alt="product.alt" width="900" height="700" loading="lazy" decoding="async" />
             </div>
             <div class="knife-page__product-content">
               <p class="knife-page__price">Цена по запросу</p>
@@ -103,7 +103,14 @@ const users = [
 
         <article class="knife-page__blade">
           <div class="knife-page__blade-media">
-            <img src="/images/26552451.webp" alt="Дисковой нож АРН-200-32-2" width="800" height="600" />
+            <img
+              src="/images/26552451.webp"
+              alt="Дисковой нож АРН-200-32-2"
+              width="800"
+              height="600"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
           <div>
             <p class="knife-page__price">Расходный материал · цена по запросу</p>

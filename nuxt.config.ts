@@ -81,6 +81,11 @@ export default defineNuxtConfig({
   ],
   css: ['~/assets/styles/main.scss'],
   vite: {
+    build: {
+      // Стили компонентов собираются в один кешируемый файл: иначе главная тянет
+      // ~12 мелких блокирующих CSS-запросов.
+      cssCodeSplit: false,
+    },
     css: {
       preprocessorOptions: {
         scss: {

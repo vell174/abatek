@@ -97,7 +97,15 @@ const categories = [
     </div>
     <div class="home-categories__grid">
       <NuxtLink v-for="category in categories" :key="category.to" class="home-categories__item" :to="category.to">
-        <img class="home-categories__image" :src="category.image" :alt="category.label" width="720" height="480" />
+        <img
+          class="home-categories__image"
+          :src="category.image"
+          :alt="category.label"
+          width="720"
+          height="480"
+          loading="lazy"
+          decoding="async"
+        />
         <span class="home-categories__shade" aria-hidden="true" />
         <Icon class="home-categories__arrow" name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
         <span class="home-categories__content">

@@ -5,7 +5,15 @@ import { projects } from '~/data/projects';
   <div class="project-grid">
     <article v-for="(project, index) in projects" :key="project.title" class="project-grid__item">
       <div class="project-grid__media">
-        <img class="project-grid__image" :src="project.image" :alt="project.title" width="720" height="540" />
+        <img
+          class="project-grid__image"
+          :src="project.image"
+          :alt="project.title"
+          width="720"
+          height="540"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div class="project-grid__content">
         <span class="project-grid__index">{{ String(index + 1).padStart(2, '0') }}</span>

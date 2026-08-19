@@ -173,8 +173,22 @@ const faq = [
 
     <div class="screw-page__scheme-band">
       <section class="content-section site-container screw-page__scheme" aria-label="Схемы винтовых конвейеров">
-        <figure><img src="/images/screw-26759703.webp" alt="Схемы направления подачи винтового конвейера" /></figure>
-        <figure><img src="/images/screw-26759990.webp" alt="Трубчатый винтовой конвейер с приводом" /></figure>
+        <figure>
+          <img
+            src="/images/screw-26759703.webp"
+            alt="Схемы направления подачи винтового конвейера"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+        <figure>
+          <img
+            src="/images/screw-26759990.webp"
+            alt="Трубчатый винтовой конвейер с приводом"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
       </section>
     </div>
 
@@ -247,6 +261,8 @@ const faq = [
               alt="Схема горизонтального винтового конвейера"
               width="480"
               height="466"
+              loading="lazy"
+              decoding="async"
             />
             <div>
               <h3>Горизонтальные</h3>
@@ -268,6 +284,8 @@ const faq = [
               alt="Схемы вертикальных винтовых конвейеров"
               width="515"
               height="466"
+              loading="lazy"
+              decoding="async"
             />
             <div>
               <h3>Вертикальные</h3>

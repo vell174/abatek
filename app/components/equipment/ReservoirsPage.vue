@@ -143,6 +143,8 @@ const faq = [
             alt="Виды горизонтальных резервуаров РГС"
             width="445"
             height="321"
+            loading="lazy"
+            decoding="async"
           />
           <figcaption>Виды горизонтальных резервуаров</figcaption>
         </figure>
@@ -227,6 +229,8 @@ const faq = [
           alt="Этапы изготовления горизонтальных резервуаров"
           width="955"
           height="675"
+          loading="lazy"
+          decoding="async"
         />
         <figcaption>Этапы изготовления горизонтальных резервуаров</figcaption>
       </figure>
