@@ -250,6 +250,7 @@ cd /opt/abatek && sudo bash ops/mail-setup.sh
 | Симптом | Что делать |
 | --- | --- |
 | Сайт не открывается или ошибка сертификата | DNS ещё не разошёлся. Проверьте: `sudo bash ops/check.sh`, затем `sudo docker compose logs traefik \| grep -i acme`. Исправив DNS, выполните `sudo docker compose restart traefik` |
+| Браузер пишет «сертификат не защищён», а в инкогнито сайт открывается нормально | Браузер закэшировал самоподписанный сертификат, который Traefik отдавал до выпуска настоящего. Очистите кэш (Ctrl+Shift+Del → «Изображения и файлы в кэше») и полностью перезапустите браузер. Проверить сервер: `curl -I https://abatek74.ru` |
 | `dig: parse of /etc/resolv.conf failed` | Битый резолвер VPS. Чинится автоматически: `sudo bash ops/install.sh`. Вручную: `printf 'nameserver 8.8.8.8\nnameserver 1.1.1.1\n' \| sudo tee /etc/resolv.conf` |
 | Домен не резолвится, хотя записи в reg.ru заведены | Если домен зарегистрирован только что — делегирование появляется в зоне `.ru` через 1–4 часа. Скрипты сами это диагностируют. Ждать, проверяя `dig +short A abatek74.ru @8.8.8.8` |
 | `too many failed authorizations` в логах Traefik | Лимит Let's Encrypt из-за повторных попыток при неверном DNS — подождите час |
