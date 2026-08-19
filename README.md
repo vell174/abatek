@@ -227,9 +227,20 @@ sudo bash ops/requests.sh csv      # выгрузка всех заявок в z
 ### Почтовые ящики
 
 ```bash
-sudo docker exec abatek-mailserver setup email list
-sudo docker exec -it abatek-mailserver setup email add new@abatek74.ru
-sudo docker exec -it abatek-mailserver setup email update zakaz@abatek74.ru
+sudo docker exec abatek-mailserver setup email list                      # список ящиков
+sudo docker exec -it abatek-mailserver setup email add new@abatek74.ru   # добавить ящик
+sudo docker exec -it abatek-mailserver setup email update zakaz@abatek74.ru  # сменить пароль
+sudo docker exec -it abatek-mailserver setup email del zakaz@abatek74.ru     # удалить ящик и письма
+sudo docker exec abatek-mailserver setup alias list                      # список алиасов
+```
+
+Смена пароля не влияет на работу сайта: письма он отправляет внутри Docker-сети без
+авторизации, пароль `site@` нужен только для входа в ящик почтовым клиентом.
+
+Показать DKIM-запись ещё раз (существующие ящики скрипт не трогает):
+
+```bash
+cd /opt/abatek && sudo bash ops/mail-setup.sh
 ```
 
 ---

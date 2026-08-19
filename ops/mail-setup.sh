@@ -39,13 +39,22 @@ done
 
 ms setup config dkim domain "${SITE_DOMAIN}" || true
 
+DKIM_RAW="$(ms cat "/tmp/docker-mailserver/rspamd/dkim/rsa-2048-mail-${SITE_DOMAIN}.public.txt" 2>/dev/null \
+  || ms sh -c 'cat /tmp/docker-mailserver/rspamd/dkim/*public.txt' 2>/dev/null || true)"
+
+# склеить многострочное значение в одну строку для вставки в панель DNS
+DKIM_VALUE="$(printf '%s' "$DKIM_RAW" | tr -d '\n' | grep -o '"[^"]*"' | tr -d '"' | tr -d '\n')"
+
 echo
-echo ">>> Ящики: ${MAIL_FROM}, ${MAIL_TO}, ${MAIL_ADMIN} (системный)."
-echo ">>> Добавьте в DNS запись TXT с именем mail._domainkey и значением из блока ниже"
-echo ">>> (склейте содержимое кавычек в одну строку, без кавычек и переносов):"
-echo "---------------------------------------------------------------"
-ms cat "/tmp/docker-mailserver/rspamd/dkim/rsa-2048-mail-${SITE_DOMAIN}.public.txt" 2>/dev/null \
-  || ms sh -c 'cat /tmp/docker-mailserver/rspamd/dkim/*public.txt' 2>/dev/null \
-  || echo "DKIM-ключ не найден. Повторите: sudo docker exec abatek-mailserver setup config dkim domain ${SITE_DOMAIN}"
-echo "---------------------------------------------------------------"
+echo ">>> Ящики созданы: ${MAIL_FROM}, ${MAIL_TO}, ${MAIL_ADMIN} (системный)."
+echo
+if [ -n "$DKIM_VALUE" ]; then
+  echo ">>> Добавьте в DNS запись:  тип TXT,  имя mail._domainkey,  значение (одной строкой):"
+  echo "---------------------------------------------------------------"
+  echo "$DKIM_VALUE"
+  echo "---------------------------------------------------------------"
+  echo ">>> Показать снова: sudo bash ops/mail-setup.sh"
+else
+  echo ">>> DKIM-ключ не найден. Повторите: sudo docker exec abatek-mailserver setup config dkim domain ${SITE_DOMAIN}"
+fi
 echo ">>> Проверьте DNS: MX -> mail.${SITE_DOMAIN}, A mail -> IP сервера, SPF 'v=spf1 mx -all'."

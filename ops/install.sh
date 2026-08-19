@@ -237,13 +237,24 @@ docker compose ps
 
 # ------------------------------------------------------------------- почта
 step "Почтовые ящики"
-info "Жду готовности почтового сервера..."
-for _ in $(seq 1 30); do
-  if docker exec abatek-mailserver setup email list >/dev/null 2>&1; then break; fi
+printf '    Жду готовности почтового сервера (до 3 минут)'
+MAIL_READY=0
+for i in $(seq 1 36); do
+  HS="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' abatek-mailserver 2>/dev/null || echo none)"
+  if [ "$HS" = "healthy" ] && timeout 20 docker exec abatek-mailserver setup email list >/dev/null 2>&1; then
+    MAIL_READY=1
+    break
+  fi
+  printf '.'
   sleep 5
 done
+echo
 
-if docker exec abatek-mailserver setup email list 2>/dev/null | grep -q "$MAIL_TO"; then
+if [ "$MAIL_READY" -ne 1 ]; then
+  warn "Почтовый сервер ещё не готов (статус: ${HS:-неизвестен})."
+  warn "Создайте ящики позже командой: sudo bash ops/mail-setup.sh"
+  warn "Диагностика: sudo docker compose logs --tail=50 mailserver"
+elif timeout 20 docker exec abatek-mailserver setup email list 2>/dev/null | grep -q "$MAIL_TO"; then
   info "Ящики уже созданы, пропускаю."
 elif [ -t 0 ]; then
   bash ops/mail-setup.sh
