@@ -1,0 +1,105 @@
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: abatek-traefik
+    restart: unless-stopped
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --certificatesresolvers.le.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-letsencrypt:/letsencrypt
+
+  app:
+    build: .
+    container_name: abatek-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NUXT_DATABASE_URL=postgres://${POSTGRES_USER:-abatek}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-abatek}
+      - NUXT_SMTP_HOST=mailserver
+      - NUXT_SMTP_PORT=25
+      - NUXT_MAIL_FROM=${MAIL_FROM:-site@${SITE_DOMAIN}}
+      - NUXT_MAIL_TO=${MAIL_TO:-zakaz@${SITE_DOMAIN}}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.abatek.rule=Host(`${SITE_DOMAIN}`) || Host(`www.${SITE_DOMAIN}`)
+      - traefik.http.routers.abatek.entrypoints=websecure
+      - traefik.http.routers.abatek.tls.certresolver=le
+      - traefik.http.services.abatek.loadbalancer.server.port=3000
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3000/']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: abatek-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-abatek}
+      - POSTGRES_USER=${POSTGRES_USER:-abatek}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-abatek} -d ${POSTGRES_DB:-abatek}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:15
+    container_name: abatek-mailserver
+    hostname: mail.${SITE_DOMAIN}
+    restart: unless-stopped
+    ports:
+      - '25:25' # SMTP (приём почты между серверами)
+      - '465:465' # SMTPS (отправка из почтовых клиентов)
+      - '587:587' # Submission
+      - '993:993' # IMAPS (чтение zakaz@ из клиента)
+    environment:
+      - ENABLE_FAIL2BAN=0
+      - ENABLE_CLAMAV=0
+      - ENABLE_RSPAMD=1
+      - ENABLE_OPENDKIM=0
+      - ENABLE_OPENDMARC=0
+      - ENABLE_POLICYD_SPF=0
+      # Разрешить отправку писем контейнерам этой docker-сети без авторизации (для API сайта)
+      - PERMIT_DOCKER=connected-networks
+      - SSL_TYPE=${MAIL_SSL_TYPE:-}
+    volumes:
+      - dms-mail-data:/var/mail
+      - dms-mail-state:/var/mail-state
+      - dms-mail-logs:/var/log/mail
+      - dms-config:/tmp/docker-mailserver
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'ss -lntp | grep -q ":25"']
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  traefik-letsencrypt:
+  pgdata:
+  dms-mail-data:
+  dms-mail-state:
+  dms-mail-logs:
+  dms-config:

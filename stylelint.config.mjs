@@ -1,0 +1,11 @@
+export default {
+  extends: ['stylelint-config-standard-scss', 'stylelint-config-recommended-vue/scss', 'stylelint-config-recess-order'],
+  rules: {
+    'selector-class-pattern': [
+      '^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:__[a-z][a-z0-9]*(?:-[a-z0-9]+)*)?(?:--[a-z][a-z0-9]*(?:-[a-z0-9]+)*)?$',
+      {
+        message: 'Используйте БЭМ: block, block__element или block--modifier',
+      },
+    ],
+  },
+};

@@ -1,0 +1,19 @@
+# Dependencies and generated output
+node_modules
+.nuxt
+.output
+.data
+.nitro
+.cache
+dist
+
+# Package manager lockfiles
+package-lock.json
+yarn.lock
+
+# IDE and environment files
+.idea
+.fleet
+.github
+.env
+.env.*
