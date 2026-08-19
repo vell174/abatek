@@ -26,6 +26,8 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
+      - NUXT_BASIC_AUTH_USER=${BASIC_AUTH_USER}
+      - NUXT_BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD}
       - NUXT_DATABASE_URL=postgres://${POSTGRES_USER:-abatek}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-abatek}
       - NUXT_SMTP_HOST=mailserver
       - NUXT_SMTP_PORT=25
@@ -43,7 +45,11 @@ services:
       - traefik.http.middlewares.abatek-compress.compress=true
       - traefik.http.services.abatek.loadbalancer.server.port=3000
     healthcheck:
-      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3000/']
+      test:
+        [
+          'CMD-SHELL',
+          'AUTH=$$(printf "%s:%s" "$$NUXT_BASIC_AUTH_USER" "$$NUXT_BASIC_AUTH_PASSWORD" | base64 | tr -d "\n"); wget -qO- --header="Authorization: Basic $$AUTH" http://127.0.0.1:3000/',
+        ]
       interval: 30s
       timeout: 5s
       retries: 3

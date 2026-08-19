@@ -159,6 +159,8 @@ ACME_EMAIL=${ACME_EMAIL}
 POSTGRES_DB=abatek
 POSTGRES_USER=abatek
 POSTGRES_PASSWORD=$(openssl rand -hex 24)
+BASIC_AUTH_USER=abatek
+BASIC_AUTH_PASSWORD=$(openssl rand -hex 16)
 MAIL_FROM=${MAIL_FROM}
 MAIL_TO=${MAIL_TO}
 MAIL_ADMIN=${MAIL_ADMIN}
@@ -166,6 +168,12 @@ MAIL_SSL_TYPE=
 EOF
   chmod 600 .env
   info "Создан .env (пароль БД сгенерирован случайно)."
+fi
+
+if ! grep -q '^BASIC_AUTH_USER=' .env; then
+  printf '\nBASIC_AUTH_USER=abatek\nBASIC_AUTH_PASSWORD=%s\n' "$(openssl rand -hex 16)" >> .env
+  chmod 600 .env
+  info "Добавлены настройки Basic Auth."
 fi
 
 # ------------------------------------------------------------------ 7.5 проверка DNS

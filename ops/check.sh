@@ -9,6 +9,7 @@ set -a; . ./.env; set +a
 POSTGRES_USER="${POSTGRES_USER:-abatek}"
 POSTGRES_DB="${POSTGRES_DB:-abatek}"
 MAIL_TO="${MAIL_TO:-zakaz@${SITE_DOMAIN}}"
+AUTH_ARGS=(-u "${BASIC_AUTH_USER}:${BASIC_AUTH_PASSWORD}")
 
 FAILED=0
 ok()   { printf '\033[1;32m  OK  \033[0m %s\n' "$1"; }
@@ -71,7 +72,7 @@ for c in abatek-traefik abatek-app abatek-postgres abatek-mailserver; do
 done
 
 step "Сайт"
-CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://${SITE_DOMAIN}" 2>/dev/null)"
+CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "${AUTH_ARGS[@]}" "https://${SITE_DOMAIN}" 2>/dev/null)"
 [ "$CODE" = "200" ] && ok "https://${SITE_DOMAIN} -> ${CODE}" || bad "https://${SITE_DOMAIN} -> ${CODE:-нет ответа}"
 RCODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "http://${SITE_DOMAIN}" 2>/dev/null)"
 case "$RCODE" in 30*) ok "http -> https редирект (${RCODE})" ;; *) warn "http вернул ${RCODE:-нет ответа}, ожидался редирект" ;; esac
@@ -79,7 +80,7 @@ ISSUER="$(echo | openssl s_client -connect "${SITE_DOMAIN}:443" -servername "${S
 case "$ISSUER" in *"Let's Encrypt"*) ok "Сертификат: ${ISSUER#issuer=}" ;; *) bad "Сертификат не от Let's Encrypt: ${ISSUER:-не получен}" ;; esac
 
 step "API заявок"
-RESP="$(curl -s --max-time 20 -X POST "https://${SITE_DOMAIN}/api/request" -H 'Content-Type: application/json' \
+RESP="$(curl -s --max-time 20 "${AUTH_ARGS[@]}" -X POST "https://${SITE_DOMAIN}/api/request" -H 'Content-Type: application/json' \
   -d '{"name":"Проверка check.sh","phone":"+70000000000","email":"","message":"автоматическая проверка","page":"/check"}' 2>/dev/null)"
 case "$RESP" in *'"ok":true'*) ok "POST /api/request -> ${RESP}" ;; *) bad "POST /api/request -> ${RESP:-нет ответа}" ;; esac
 
