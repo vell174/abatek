@@ -289,6 +289,10 @@
 
 @media (max-width: $phone) {
   .request-section {
+    background-image:
+      linear-gradient(105deg, $navy 0%, rgba($navy, 0.97) 52%, rgba($navy, 0.76)),
+      url('/images/contact-detail-premium-mobile.webp');
+
     &__grid {
       grid-template-columns: 1fr;
     }

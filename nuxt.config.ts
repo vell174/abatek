@@ -112,18 +112,13 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'ru' },
       link: [
+        // Preload только кириллицы: латиница нужна лишь для второстепенных
+        // подписей и не должна конкурировать с LCP-ресурсами.
         {
           rel: 'preload',
           as: 'font',
           type: 'font/woff2',
           href: '/fonts/montserrat-cyrillic-wght-normal.woff2',
-          crossorigin: 'anonymous',
-        },
-        {
-          rel: 'preload',
-          as: 'font',
-          type: 'font/woff2',
-          href: '/fonts/montserrat-latin-wght-normal.woff2',
           crossorigin: 'anonymous',
         },
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },

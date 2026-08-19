@@ -137,6 +137,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 @media (max-width: $phone) {
   .home-hero {
     min-height: 620px;
+    background-image:
+      linear-gradient(90deg, rgb(2 13 31 / 22%) 0%, transparent 58%), url('/images/home-hero-welding-2026-mobile.webp');
 
     &__content {
       padding-top: 76px;
