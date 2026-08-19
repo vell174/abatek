@@ -13,9 +13,19 @@ git pull --ff-only
 
 if ! grep -q '^BASIC_AUTH_USER=' .env; then
   BASIC_AUTH_PASSWORD="$(openssl rand -hex 16)"
-  printf '\nBASIC_AUTH_USER=abatek\nBASIC_AUTH_PASSWORD=%s\n' "$BASIC_AUTH_PASSWORD" >> .env
+  BASIC_AUTH_HASH="$(openssl passwd -apr1 "$BASIC_AUTH_PASSWORD")"
+  BASIC_AUTH_HASH="${BASIC_AUTH_HASH//$/\$\$}"
+  printf '\nBASIC_AUTH_USER=abatek\nBASIC_AUTH_PASSWORD=%s\nBASIC_AUTH_HASH=%s\n' \
+    "$BASIC_AUTH_PASSWORD" "$BASIC_AUTH_HASH" >> .env
   chmod 600 .env
   echo ">>> Basic Auth включён. Логин: abatek, пароль: ${BASIC_AUTH_PASSWORD}"
+fi
+
+if ! grep -q '^BASIC_AUTH_HASH=.' .env; then
+  BASIC_AUTH_PASSWORD="$(grep '^BASIC_AUTH_PASSWORD=' .env | cut -d= -f2-)"
+  BASIC_AUTH_HASH="$(openssl passwd -apr1 "$BASIC_AUTH_PASSWORD")"
+  BASIC_AUTH_HASH="${BASIC_AUTH_HASH//$/\$\$}"
+  sed -i "s|^BASIC_AUTH_HASH=.*|BASIC_AUTH_HASH=${BASIC_AUTH_HASH}|" .env
 fi
 
 echo ">>> Пересобираю и перезапускаю сайт..."

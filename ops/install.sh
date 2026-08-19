@@ -161,6 +161,7 @@ POSTGRES_USER=abatek
 POSTGRES_PASSWORD=$(openssl rand -hex 24)
 BASIC_AUTH_USER=abatek
 BASIC_AUTH_PASSWORD=$(openssl rand -hex 16)
+BASIC_AUTH_HASH=
 MAIL_FROM=${MAIL_FROM}
 MAIL_TO=${MAIL_TO}
 MAIL_ADMIN=${MAIL_ADMIN}
@@ -171,9 +172,20 @@ EOF
 fi
 
 if ! grep -q '^BASIC_AUTH_USER=' .env; then
-  printf '\nBASIC_AUTH_USER=abatek\nBASIC_AUTH_PASSWORD=%s\n' "$(openssl rand -hex 16)" >> .env
+  BASIC_AUTH_PASSWORD="$(openssl rand -hex 16)"
+  BASIC_AUTH_HASH="$(openssl passwd -apr1 "$BASIC_AUTH_PASSWORD")"
+  BASIC_AUTH_HASH="${BASIC_AUTH_HASH//$/\$\$}"
+  printf '\nBASIC_AUTH_USER=abatek\nBASIC_AUTH_PASSWORD=%s\nBASIC_AUTH_HASH=%s\n' \
+    "$BASIC_AUTH_PASSWORD" "$BASIC_AUTH_HASH" >> .env
   chmod 600 .env
   info "Добавлены настройки Basic Auth."
+fi
+
+if ! grep -q '^BASIC_AUTH_HASH=.' .env; then
+  BASIC_AUTH_PASSWORD="$(grep '^BASIC_AUTH_PASSWORD=' .env | cut -d= -f2-)"
+  BASIC_AUTH_HASH="$(openssl passwd -apr1 "$BASIC_AUTH_PASSWORD")"
+  BASIC_AUTH_HASH="${BASIC_AUTH_HASH//$/\$\$}"
+  sed -i "s|^BASIC_AUTH_HASH=.*|BASIC_AUTH_HASH=${BASIC_AUTH_HASH}|" .env
 fi
 
 # ------------------------------------------------------------------ 7.5 проверка DNS

@@ -63,8 +63,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     // Переопределяются переменными NUXT_DATABASE_URL, NUXT_SMTP_HOST и т.д.
-    basicAuthUser: '1111',
-    basicAuthPassword: '1111',
     databaseUrl: '',
     smtpHost: '',
     smtpPort: '25',
