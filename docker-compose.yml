@@ -39,6 +39,8 @@ services:
       - traefik.http.routers.abatek.rule=Host(`${SITE_DOMAIN}`) || Host(`www.${SITE_DOMAIN}`)
       - traefik.http.routers.abatek.entrypoints=websecure
       - traefik.http.routers.abatek.tls.certresolver=le
+      - traefik.http.routers.abatek.middlewares=abatek-compress@docker
+      - traefik.http.middlewares.abatek-compress.compress=true
       - traefik.http.services.abatek.loadbalancer.server.port=3000
     healthcheck:
       test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3000/']

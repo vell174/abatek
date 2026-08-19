@@ -2,8 +2,8 @@
   <div>
     <SiteHeader />
     <main><slot /></main>
-    <RequestSection />
+    <LazyRequestSection hydrate-on-visible />
     <SiteFooter />
-    <CookieBanner />
+    <LazyCookieBanner hydrate-on-idle />
   </div>
 </template>
