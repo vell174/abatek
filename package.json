@@ -14,6 +14,7 @@
     "lint:styles:fix": "stylelint \"app/**/*.{vue,scss}\" --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "images:optimize": "node scripts/optimize-images.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
@@ -46,6 +47,7 @@
     "lint-staged": "17.1.0",
     "prettier": "3.9.6",
     "sass-embedded": "1.100.0",
+    "sharp": "^0.35.3",
     "stylelint": "17.14.1",
     "stylelint-config-recess-order": "7.7.0",
     "stylelint-config-recommended-vue": "1.6.1",
