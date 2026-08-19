@@ -5,7 +5,7 @@ export default defineEventHandler((event) => {
     return;
   }
 
-  const { basicAuthUser, basicAuthPassword } = useRuntimeConfig(event);
+  const { basicAuthUser = '1111', basicAuthPassword = '1111' } = useRuntimeConfig(event);
 
   if (!basicAuthUser || !basicAuthPassword) {
     throw createError({
