@@ -1,11 +1,8 @@
 services:
   traefik:
-    image: traefik:v3.3
+    image: traefik:v3.7.11
     container_name: abatek-traefik
     restart: unless-stopped
-    environment:
-      # Docker Engine 28+ не принимает API старше 1.44, а Traefik по умолчанию просит 1.24
-      - DOCKER_API_VERSION=1.44
     command:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
