@@ -1,6 +1,10 @@
 import { timingSafeEqual } from 'node:crypto';
 
 export default defineEventHandler((event) => {
+  if (import.meta.prerender) {
+    return;
+  }
+
   const { basicAuthUser, basicAuthPassword } = useRuntimeConfig(event);
 
   if (!basicAuthUser || !basicAuthPassword) {
