@@ -13,19 +13,25 @@ MAIL_TO="${MAIL_TO:-zakaz@${SITE_DOMAIN}}"
 MAIL_ADMIN="${MAIL_ADMIN:-admin@${SITE_DOMAIN}}"
 
 ms() { docker exec abatek-mailserver "$@"; }
+# setup email list выводит результат в stderr, поэтому объединяем потоки
+list_boxes() { timeout 20 docker exec abatek-mailserver setup email list 2>&1 || true; }
 
 add_box() {
   local addr="$1" label="$2" pass
-  if ms setup email list 2>/dev/null | grep -q "$addr"; then
-    echo ">>> ${addr} уже существует, пропускаю."
-    return
+  if list_boxes | grep -qF "$addr"; then
+    echo ">>> ${addr} уже существует — пропускаю (сменить пароль: setup email update ${addr})."
+    return 0
   fi
   while :; do
     read -rsp "Пароль для ${addr} (${label}): " pass; echo
     [ -n "$pass" ] || { echo "    Пароль не может быть пустым."; continue; }
     break
   done
-  ms setup email add "$addr" "$pass"
+  if ms setup email add "$addr" "$pass"; then
+    echo ">>> ${addr} создан."
+  else
+    echo ">>> Не удалось создать ${addr}. Проверьте: sudo docker exec abatek-mailserver setup email list"
+  fi
 }
 
 add_box "$MAIL_FROM"  "отправитель писем сайта"

@@ -254,8 +254,9 @@ if [ "$MAIL_READY" -ne 1 ]; then
   warn "Почтовый сервер ещё не готов (статус: ${HS:-неизвестен})."
   warn "Создайте ящики позже командой: sudo bash ops/mail-setup.sh"
   warn "Диагностика: sudo docker compose logs --tail=50 mailserver"
-elif timeout 20 docker exec abatek-mailserver setup email list 2>/dev/null | grep -q "$MAIL_TO"; then
+elif timeout 20 docker exec abatek-mailserver setup email list 2>&1 | grep -qF "$MAIL_TO"; then
   info "Ящики уже созданы, пропускаю."
+  info "Показать DKIM или добавить ящики: sudo bash ops/mail-setup.sh"
 elif [ -t 0 ]; then
   bash ops/mail-setup.sh
 else

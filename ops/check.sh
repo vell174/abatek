@@ -98,7 +98,7 @@ case "$STATUS" in
 esac
 
 step "Почта"
-docker exec abatek-mailserver setup email list 2>/dev/null | grep -q "$MAIL_TO" \
+docker exec abatek-mailserver setup email list 2>&1 | grep -qF "$MAIL_TO" \
   && ok "Ящик ${MAIL_TO} существует" || bad "Ящик ${MAIL_TO} не создан — выполните: sudo bash ops/mail-setup.sh"
 
 step "Итог"
