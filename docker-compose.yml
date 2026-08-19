@@ -40,7 +40,7 @@ services:
       - traefik.http.routers.abatek.entrypoints=websecure
       - traefik.http.routers.abatek.tls.certresolver=le
       - traefik.http.routers.abatek.middlewares=abatek-auth@docker,abatek-compress@docker
-      - traefik.http.middlewares.abatek-auth.basicauth.users=${BASIC_AUTH_USER}:${BASIC_AUTH_HASH}
+      - traefik.http.middlewares.abatek-auth.basicauth.users=1111:{SHA}ARyUXzDOLLr8RS85hA8CVpMznEI=
       - traefik.http.middlewares.abatek-compress.compress=true
       - traefik.http.services.abatek.loadbalancer.server.port=3000
     healthcheck:
