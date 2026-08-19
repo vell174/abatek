@@ -54,13 +54,39 @@ info "Hostname сервера: ${FQDN}"
 info "Let's Encrypt   : ${ACME_EMAIL}"
 info "Почта           : ${MAIL_FROM} (отправитель), ${MAIL_TO} (заявки), ${MAIL_ADMIN} (системная)"
 
-# ------------------------------------------------------- 1. пакеты и hostname
-step "1/7 Обновление системы и базовые пакеты"
+# ------------------------------------------------------------------ 1. DNS-резолвер
+step "1/8 Проверка DNS-резолвера сервера"
+fix_resolv() {
+  cp /etc/resolv.conf "/etc/resolv.conf.bak.$(date +%Y%m%d%H%M%S)" 2>/dev/null || true
+  printf 'nameserver 8.8.8.8\nnameserver 1.1.1.1\nnameserver 77.88.8.8\n' > /etc/resolv.conf
+  info "Файл /etc/resolv.conf перезаписан рабочими DNS-серверами."
+}
+
+# на некоторых VPS (SolusVM) resolv.conf приходит битым: строки склеены без перевода строки
+if [ ! -s /etc/resolv.conf ]; then
+  warn "/etc/resolv.conf пуст или отсутствует."
+  fix_resolv
+elif grep -qE '[0-9]nameserver|^[^#[:space:]].*nameserver' /etc/resolv.conf; then
+  warn "В /etc/resolv.conf склеенные строки — DNS не работает."
+  fix_resolv
+elif ! getent hosts deb.debian.org >/dev/null 2>&1 && ! getent hosts github.com >/dev/null 2>&1; then
+  warn "Резолвер не отвечает."
+  fix_resolv
+else
+  info "Резолвер работает."
+fi
+
+if ! getent hosts github.com >/dev/null 2>&1; then
+  fail "DNS по-прежнему не работает. Проверьте /etc/resolv.conf и сетевые настройки VPS."
+fi
+
+# ------------------------------------------------------- 2. пакеты и hostname
+step "2/8 Обновление системы и базовые пакеты"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 apt-get install -y ca-certificates curl git openssl ufw gnupg dnsutils
 
-step "2/7 Hostname и /etc/hosts"
+step "3/8 Hostname и /etc/hosts"
 hostnamectl set-hostname "$FQDN"
 
 cp /etc/hosts "/etc/hosts.bak.$(date +%Y%m%d%H%M%S)"
@@ -76,7 +102,7 @@ printf '127.0.1.1 %s %s\n' "$FQDN" "$SHORT_NAME" >> /etc/hosts
 info "hostname -f: $(hostname -f 2>/dev/null || echo '—')"
 
 # ------------------------------------------------------------------- 3. swap
-step "3/7 Swap"
+step "4/8 Swap"
 MEM_MB="$(awk '/MemTotal/ {printf "%d", $2/1024}' /proc/meminfo)"
 if [ "$(swapon --show --noheadings | wc -l)" -gt 0 ]; then
   info "Swap уже включён, пропускаю."
@@ -94,7 +120,7 @@ else
 fi
 
 # ----------------------------------------------------------------- 4. docker
-step "4/7 Docker и Docker Compose"
+step "5/8 Docker и Docker Compose"
 if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
   info "Docker уже установлен: $(docker --version)"
 else
@@ -110,7 +136,7 @@ systemctl enable --now docker
 info "$(docker --version) / $(docker compose version)"
 
 # ------------------------------------------------------------------ 5. файрвол
-step "5/7 Файрвол (ufw)"
+step "6/8 Файрвол (ufw)"
 SSH_PORT="$(awk '/^[[:space:]]*Port[[:space:]]+[0-9]+/ {print $2; exit}' /etc/ssh/sshd_config 2>/dev/null || true)"
 ufw allow OpenSSH >/dev/null 2>&1 || true
 if [ -n "${SSH_PORT:-}" ] && [ "$SSH_PORT" != "22" ]; then
@@ -122,7 +148,7 @@ ufw --force enable >/dev/null
 info "Открыты порты: SSH, 80, 443, 25, 465, 587, 993."
 
 # --------------------------------------------------------------------- 6. .env
-step "6/7 Конфигурация .env"
+step "7/8 Конфигурация .env"
 if [ -f .env ]; then
   info ".env уже существует — оставляю без изменений."
 else
@@ -165,7 +191,7 @@ if [ "$DNS_OK" -ne 1 ]; then
 fi
 
 # --------------------------------------------------------------- 7. запуск стека
-step "7/7 Сборка и запуск контейнеров (3–10 минут при первом запуске)"
+step "8/8 Сборка и запуск контейнеров (3–10 минут при первом запуске)"
 docker compose up -d --build
 docker compose ps
 

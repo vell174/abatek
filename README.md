@@ -90,6 +90,7 @@ cd /opt/abatek && sudo bash ops/install.sh
 Что делает `ops/install.sh`:
 
 - обновляет систему, ставит утилиты;
+- чинит `/etc/resolv.conf`, если DNS-резолвер сервера сломан (частая беда VPS с SolusVM);
 - задаёт hostname `mail.abatek74.ru` и правит `/etc/hosts`;
 - ставит Docker и включает автозагрузку;
 - открывает порты: SSH, 80, 443, 25, 465, 587, 993;
@@ -238,6 +239,7 @@ sudo docker exec -it abatek-mailserver setup email update zakaz@abatek74.ru
 | Симптом | Что делать |
 | --- | --- |
 | Сайт не открывается или ошибка сертификата | DNS ещё не разошёлся. Проверьте: `sudo bash ops/check.sh`, затем `sudo docker compose logs traefik \| grep -i acme`. Исправив DNS, выполните `sudo docker compose restart traefik` |
+| `dig: parse of /etc/resolv.conf failed` | Битый резолвер VPS. Чинится автоматически: `sudo bash ops/install.sh`. Вручную: `printf 'nameserver 8.8.8.8\nnameserver 1.1.1.1\n' \| sudo tee /etc/resolv.conf` |
 | `too many failed authorizations` в логах Traefik | Лимит Let's Encrypt из-за повторных попыток при неверном DNS — подождите час |
 | Контейнер `app` перезапускается | `sudo docker compose logs --tail=200 app` |
 | Заявка отправилась, а письма нет | `sudo bash ops/requests.sh failed` и `sudo docker compose logs --tail=100 mailserver` |

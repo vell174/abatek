@@ -19,6 +19,9 @@ step() { printf '\n\033[1;34m==> %s\033[0m\n' "$1"; }
 command -v dig >/dev/null 2>&1 || apt-get install -y dnsutils >/dev/null 2>&1 || true
 
 step "DNS"
+if ! getent hosts github.com >/dev/null 2>&1; then
+  bad "Резолвер сервера не работает (проверьте /etc/resolv.conf) — выполните: sudo bash ops/install.sh"
+fi
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 echo "  IP сервера: ${SERVER_IP}"
 for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "mail.${SITE_DOMAIN}"; do
