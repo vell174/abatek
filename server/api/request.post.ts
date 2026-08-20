@@ -9,6 +9,7 @@ const requestSchema = z.object({
   email: z.union([z.string().trim().email('Некорректный e-mail').max(200), z.literal('')]).default(''),
   message: z.string().trim().max(2000).default(''),
   page: z.string().trim().max(500).default(''),
+  pageTitle: z.string().trim().max(500).default(''),
 });
 
 export default defineEventHandler(async (event) => {
@@ -19,22 +20,22 @@ export default defineEventHandler(async (event) => {
       statusMessage: parsed.error.issues[0]?.message ?? 'Некорректные данные формы',
     });
   }
-  const { name, phone, email, message, page } = parsed.data;
+  const { name, phone, email, message, page, pageTitle } = parsed.data;
 
   const db = getDbPool();
   if (db) {
     await ensureSchema(db);
     const result = await db.query(
-      'INSERT INTO requests (name, phone, email, message, page) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [name, phone, email, message, page],
+      'INSERT INTO requests (name, phone, email, message, page, page_title) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+      [name, phone, email, message, page, pageTitle],
     );
     const requestId = Number(result.rows[0]?.id);
     // Первая попытка отправки сразу; при неудаче статус 'failed' — добьёт фоновый повтор
-    await deliverRequestMail(db, { id: requestId, name, phone, email, message, page });
+    await deliverRequestMail(db, { id: requestId, name, phone, email, message, page, pageTitle });
   } else {
     // Без БД шлём напрямую, ошибку не скрываем в проде логов
     try {
-      await sendRequestMail({ id: null, name, phone, email, message, page });
+      await sendRequestMail({ id: null, name, phone, email, message, page, pageTitle });
     } catch (error) {
       console.error('[request] mail send failed:', error);
     }

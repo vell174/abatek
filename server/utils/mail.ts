@@ -25,6 +25,7 @@ export interface RequestMailPayload {
   email: string;
   message: string;
   page: string;
+  pageTitle: string;
 }
 
 function escapeHtml(value: string): string {
@@ -44,14 +45,18 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
   const mailer = getTransporter();
   if (!mailer) return;
 
-  const { mailFrom, mailTo } = useRuntimeConfig();
+  const { mailFrom, mailTo, siteDomain } = useRuntimeConfig();
 
   const name = escapeHtml(payload.name);
   const phone = escapeHtml(payload.phone);
   const phoneLink = phoneHref(payload.phone);
   const email = payload.email ? escapeHtml(payload.email) : '';
   const message = payload.message ? escapeHtml(payload.message) : '—';
-  const page = payload.page ? escapeHtml(payload.page) : '—';
+  const pagePath = payload.page.startsWith('/') ? payload.page : '/';
+  const pageUrl = `https://${siteDomain}${pagePath}`;
+  const pageUrlHtml = escapeHtml(pageUrl);
+  const pageTitle = escapeHtml(payload.pageTitle || (pagePath === '/' ? 'Главная страница' : 'Страница сайта'));
+  const pageDescription = `${pageUrl} | ${payload.pageTitle || (pagePath === '/' ? 'Главная страница' : 'Страница сайта')}`;
 
   const title = payload.id ? `Новая заявка с сайта №${payload.id}` : 'Новая заявка с сайта';
 
@@ -67,7 +72,7 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
       `Телефон: ${payload.phone}`,
       `E-mail: ${payload.email || '—'}`,
       `Сообщение: ${payload.message || '—'}`,
-      `Страница, откуда была отправлена заявка: ${payload.page === '/' ? 'Главная страница' : payload.page || '—'}`,
+      `Страница, откуда была отправлена заявка: ${pageDescription}`,
     ].join('\n'),
 
     // HTML-версия
@@ -221,18 +226,19 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
     Страница, откуда была отправлена заявка:
   </div>
 
-  <span style="
+  <a href="${pageUrlHtml}" style="
     display: inline-block;
     padding: 6px 10px;
     border: 1px solid #d1d5db;
     border-radius: 999px;
     background: #f9fafb;
-    color: #374151;
+    color: #2563eb;
     font-size: 13px;
-    line-height: 1;
+    line-height: 1.35;
+    text-decoration: none;
   ">
-    ${page === '/' ? 'Главная страница' : page}
-  </span>
+    ${pageUrlHtml} | ${pageTitle}
+  </a>
 </div>
 
             </div>

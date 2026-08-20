@@ -30,6 +30,7 @@ Docker Compose
 | A | `@` | `79.133.183.189` | — |
 | A | `www` | `79.133.183.189` | — |
 | A | `mail` | `79.133.183.189` | — |
+| A | `autoconfig` | `79.133.183.189` | — |
 | MX | `@` | `mail.abatek74.ru.` | `10` |
 | TXT | `@` | `v=spf1 mx -all` | — |
 | TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:admin@abatek74.ru` | — |
@@ -98,6 +99,7 @@ cd /opt/abatek && sudo bash ops/install.sh
 - проверяет, что DNS уже указывает на этот сервер;
 - собирает и запускает контейнеры, Traefik выпускает сертификат Let's Encrypt;
 - создаёт ящики `site@`, `zakaz@`, `admin@` и печатает DKIM-ключ.
+- публикует Thunderbird-конфигурацию на `autoconfig.abatek74.ru`.
 
 В конце скрипт покажет статус — все четыре сервиса должны быть `running` / `healthy`:
 
@@ -148,6 +150,40 @@ cd /opt/abatek && sudo bash ops/check.sh
 
 ### Подключить почту в почтовый клиент
 
+#### Thunderbird на новом Windows ПК
+
+1. Установите Thunderbird и выберите добавление существующей почты.
+2. Введите `zakaz@abatek74.ru`, имя пользователя и пароль ящика.
+3. Thunderbird автоматически скачает
+   `https://autoconfig.abatek74.ru/mail/config-v1.1.xml` и настроит IMAP/SMTP.
+4. Убедитесь, что Thunderbird показывает IMAP `993` (SSL/TLS) и SMTP `465` (SSL/TLS),
+   затем завершите добавление аккаунта.
+
+Домен `abatek74.ru` здесь тестовый. XML формируется из `SITE_DOMAIN`, поэтому после запуска
+`ops/switch-domain.sh abatek.ru` тот же адрес будет опубликован уже для `abatek.ru`. До перехода
+на боевой домен QR-код содержит именно тестовый ящик `zakaz@abatek74.ru`.
+
+#### Thunderbird на Android через QR-код
+
+1. Сначала полностью настройте и проверьте аккаунт в Thunderbird на Windows.
+2. В Thunderbird на Windows откройте «Настройки учётной записи» → «Экспорт для мобильного»
+   и покажите QR-код нужного аккаунта.
+3. В Thunderbird на Android выберите импорт по QR-коду и отсканируйте его.
+4. Пароль может потребоваться ввести на Android отдельно — это зависит от версии Thunderbird
+   и параметров экспорта.
+
+QR-код генерирует сам Thunderbird после успешной настройки Windows; сервер и сайт QR-код
+не создают.
+
+#### Централизованная HTML-подпись
+
+- шаблон подписи: `https://abatek74.ru/mail/signature.html`;
+- логотип подписи: `https://abatek74.ru/mail/logo.png`.
+
+Подпись использует абсолютные HTTPS-ссылки и inline-стили для совместимости с почтовыми
+клиентами. Адрес сайта, почта `zakaz@` и URL логотипа формируются из `SITE_DOMAIN`: на тестовом
+сервере используется `abatek74.ru`, после переключения — `abatek.ru`.
+
 | Параметр | Значение |
 | --- | --- |
 | Логин | `zakaz@abatek74.ru` (полностью, с доменом) |
@@ -168,7 +204,7 @@ sudo docker exec abatek-mailserver setup alias add admin@abatek74.ru vash@exampl
 
 Когда тест признан успешным:
 
-1. В reg.ru для `abatek.ru` создайте те же записи, что на шаге 1 (A `@`, A `www`, A `mail`,
+1. В reg.ru для `abatek.ru` создайте те же записи, что на шаге 1 (A `@`, A `www`, A `mail`, A `autoconfig`,
    MX, SPF, DMARC — везде домен `abatek.ru`), удалив записи прежнего хостинга.
    Заранее выставьте TTL 300 секунд, чтобы переключение прошло быстро.
 2. На сервере выполните одну команду:

@@ -31,6 +31,7 @@ services:
       - NUXT_SMTP_PORT=25
       - NUXT_MAIL_FROM=${MAIL_FROM:-site@${SITE_DOMAIN}}
       - NUXT_MAIL_TO=${MAIL_TO:-zakaz@${SITE_DOMAIN}}
+      - NUXT_SITE_DOMAIN=${SITE_DOMAIN}
     depends_on:
       postgres:
         condition: service_healthy
@@ -45,6 +46,17 @@ services:
       - traefik.http.services.abatek.loadbalancer.server.port=3000
       - traefik.http.routers.abatek.tls.domains[0].main=${SITE_DOMAIN}
       - traefik.http.routers.abatek.tls.domains[0].sans=www.${SITE_DOMAIN},mail.${SITE_DOMAIN}
+      - traefik.http.routers.abatek-autoconfig.rule=Host(`autoconfig.${SITE_DOMAIN}`) && Path(`/mail/config-v1.1.xml`)
+      - traefik.http.routers.abatek-autoconfig.entrypoints=websecure
+      - traefik.http.routers.abatek-autoconfig.tls.certresolver=le
+      - traefik.http.routers.abatek-autoconfig.middlewares=abatek-compress@docker
+      - traefik.http.routers.abatek-autoconfig.service=abatek
+      - traefik.http.routers.abatek-mail-assets.rule=Host(`${SITE_DOMAIN}`) && PathPrefix(`/mail/`)
+      - traefik.http.routers.abatek-mail-assets.priority=100
+      - traefik.http.routers.abatek-mail-assets.entrypoints=websecure
+      - traefik.http.routers.abatek-mail-assets.tls.certresolver=le
+      - traefik.http.routers.abatek-mail-assets.middlewares=abatek-compress@docker
+      - traefik.http.routers.abatek-mail-assets.service=abatek
     healthcheck:
       test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3000/']
       interval: 30s

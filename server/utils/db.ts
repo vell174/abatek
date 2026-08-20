@@ -23,11 +23,13 @@ export function ensureSchema(db: Pool): Promise<void> {
           email TEXT NOT NULL DEFAULT '',
           message TEXT NOT NULL DEFAULT '',
           page TEXT NOT NULL DEFAULT '',
+          page_title TEXT NOT NULL DEFAULT '',
           mail_status TEXT NOT NULL DEFAULT 'pending',
           mail_attempts INT NOT NULL DEFAULT 0,
           mail_error TEXT NOT NULL DEFAULT '',
           created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-        )`,
+        );
+        ALTER TABLE requests ADD COLUMN IF NOT EXISTS page_title TEXT NOT NULL DEFAULT ''`,
       )
       .then(() => undefined)
       .catch((error) => {

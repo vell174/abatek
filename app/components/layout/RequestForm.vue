@@ -45,6 +45,7 @@ async function submitRequest(event: Event) {
         email: data.get('email'),
         message: data.get('message'),
         page: route.fullPath,
+        pageTitle: document.title,
       },
     });
     sent.value = true;

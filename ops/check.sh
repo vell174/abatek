@@ -27,7 +27,7 @@ fi
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 echo "  IP сервера: ${SERVER_IP}"
 A_OK=1
-for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "mail.${SITE_DOMAIN}"; do
+for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "mail.${SITE_DOMAIN}" "autoconfig.${SITE_DOMAIN}"; do
   R="$(dig +short A "$host" | tail -n1)"
   if [ "$R" = "$SERVER_IP" ]; then ok "A ${host} -> ${R}"; else bad "A ${host} -> ${R:-нет записи} (ожидался ${SERVER_IP})"; A_OK=0; fi
 done
@@ -78,6 +78,15 @@ RCODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "http://${SITE_DOM
 case "$RCODE" in 30*) ok "http -> https редирект (${RCODE})" ;; *) warn "http вернул ${RCODE:-нет ответа}, ожидался редирект" ;; esac
 ISSUER="$(echo | openssl s_client -connect "${SITE_DOMAIN}:443" -servername "${SITE_DOMAIN}" 2>/dev/null | openssl x509 -noout -issuer 2>/dev/null)"
 case "$ISSUER" in *"Let's Encrypt"*) ok "Сертификат: ${ISSUER#issuer=}" ;; *) bad "Сертификат не от Let's Encrypt: ${ISSUER:-не получен}" ;; esac
+
+AUTOCONFIG_URL="https://autoconfig.${SITE_DOMAIN}/mail/config-v1.1.xml?emailaddress=zakaz@${SITE_DOMAIN}"
+AUTOCONFIG="$(curl -fsS --max-time 20 "$AUTOCONFIG_URL" 2>/dev/null || true)"
+case "$AUTOCONFIG" in
+  *"<domain>${SITE_DOMAIN}</domain>"*"<hostname>mail.${SITE_DOMAIN}</hostname>"*)
+    ok "Thunderbird autoconfig доступен"
+    ;;
+  *) bad "Thunderbird autoconfig недоступен или содержит неверный домен: ${AUTOCONFIG_URL}" ;;
+esac
 
 step "API заявок"
 RESP="$(curl -s --max-time 20 "${AUTH_ARGS[@]}" -X POST "https://${SITE_DOMAIN}/api/request" -H 'Content-Type: application/json' \

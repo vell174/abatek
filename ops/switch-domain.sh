@@ -25,7 +25,7 @@ step "Переключение ${OLD_DOMAIN} -> ${NEW_DOMAIN}"
 command -v dig >/dev/null 2>&1 || apt-get install -y dnsutils >/dev/null 2>&1 || true
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 DNS_OK=1
-for host in "$NEW_DOMAIN" "www.${NEW_DOMAIN}" "mail.${NEW_DOMAIN}"; do
+for host in "$NEW_DOMAIN" "www.${NEW_DOMAIN}" "mail.${NEW_DOMAIN}" "autoconfig.${NEW_DOMAIN}"; do
   R="$(dig +short A "$host" | tail -n1)"
   if [ "$R" = "$SERVER_IP" ]; then info "OK   ${host} -> ${R}"; else warn "${host} -> ${R:-нет записи}, ожидался ${SERVER_IP}"; DNS_OK=0; fi
 done

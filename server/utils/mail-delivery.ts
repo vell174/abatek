@@ -30,7 +30,7 @@ export async function retryFailedMail(): Promise<void> {
   if (!db) return;
   await ensureSchema(db);
   const { rows } = await db.query(
-    `SELECT id, name, phone, email, message, page FROM requests
+    `SELECT id, name, phone, email, message, page, page_title AS "pageTitle" FROM requests
      WHERE mail_status <> 'sent' AND mail_attempts < $1
      ORDER BY id
      LIMIT 20`,

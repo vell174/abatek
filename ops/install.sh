@@ -172,7 +172,7 @@ fi
 step "Проверка DNS перед выпуском сертификата"
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 DNS_OK=1
-for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "$FQDN"; do
+for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "$FQDN" "autoconfig.${SITE_DOMAIN}"; do
   RESOLVED="$(dig +short A "$host" | tail -n1)"
   if [ "$RESOLVED" = "$SERVER_IP" ]; then
     info "OK   ${host} -> ${RESOLVED}"
