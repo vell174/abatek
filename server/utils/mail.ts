@@ -53,7 +53,7 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
   const message = payload.message ? escapeHtml(payload.message) : '—';
   const page = payload.page ? escapeHtml(payload.page) : '—';
 
-  const title = payload.id ? `Новая заявка №${payload.id}` : 'Новая заявка';
+  const title = payload.id ? `Новая заявка с сайта №${payload.id}` : 'Новая заявка с сайта';
 
   await mailer.sendMail({
     from: `"Сайт АБАТЭК" <${mailFrom}>`,
@@ -140,7 +140,7 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
                   text-transform: uppercase;
                   margin-bottom: 5px;
                 ">
-                  Телефон
+                  Телефон:
                 </div>
 
                 <a
@@ -167,7 +167,7 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
                   text-transform: uppercase;
                   margin-bottom: 5px;
                 ">
-                  E-mail
+                  E-mail:
                 </div>
 
                 ${
@@ -198,7 +198,7 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
                   text-transform: uppercase;
                   margin-bottom: 7px;
                 ">
-                  Сообщение
+                  Сообщение пользователя:
                 </div>
 
                 <div style="
@@ -211,23 +211,29 @@ export async function sendRequestMail(payload: RequestMailPayload): Promise<void
               </div>
 
 
-              <div>
-                <div style="
-                  color: #6b7280;
-                  font-size: 12px;
-                  text-transform: uppercase;
-                  margin-bottom: 5px;
-                ">
-                  Страница, откуда была отправлена заявка:
-                </div>
+<div>
+  <div style="
+    color: #6b7280;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  ">
+    Страница, откуда была отправлена заявка:
+  </div>
 
-                <div style="
-                  color: #6b7280;
-                  font-size: 13px;
-                ">
-                  ${page === '/' ? 'Главная страница' : page}
-                </div>
-              </div>
+  <span style="
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: #f9fafb;
+    color: #374151;
+    font-size: 13px;
+    line-height: 1;
+  ">
+    ${page === '/' ? 'Главная страница' : page}
+  </span>
+</div>
 
             </div>
           </div>
