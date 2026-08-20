@@ -291,7 +291,7 @@ services:
       - dms-config:/tmp/docker-mailserver
 
       # общий ACME volume с Traefik
-      - traefik-letsencrypt:/etc/letsencrypt:ro
+      - traefik-letsencrypt:/etc/letsencrypt
 
       - /etc/localtime:/etc/localtime:ro
 
