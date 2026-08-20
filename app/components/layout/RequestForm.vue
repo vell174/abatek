@@ -38,6 +38,7 @@ async function submitRequest(event: Event) {
   try {
     await $fetch('/api/request', {
       method: 'POST',
+      credentials: 'same-origin',
       body: {
         name: data.get('name'),
         phone: data.get('phone'),
