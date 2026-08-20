@@ -1,3 +1,17 @@
+<script setup lang="ts">
+const email = 'zakaz@abatek.ru';
+const isEmailCopied = ref(false);
+let copyFeedbackTimeout: ReturnType<typeof setTimeout> | undefined;
+const copyEmail = async () => {
+  await navigator.clipboard.writeText(email);
+  isEmailCopied.value = true;
+  clearTimeout(copyFeedbackTimeout);
+  copyFeedbackTimeout = setTimeout(() => {
+    isEmailCopied.value = false;
+  }, 2000);
+};
+</script>
+
 <template>
   <footer class="footer">
     <div class="site-container footer__main">
@@ -32,7 +46,12 @@
           8 (800) 505-19-15
           <small class="footer__phone-note">бесплатный номер</small>
         </a>
-        <a class="footer__link" href="mailto:zakaz@abatek.ru">zakaz@abatek.ru</a>
+        <span class="footer__email">
+          <a class="footer__link" :href="`mailto:${email}`">{{ email }}</a>
+          <button class="footer__email-copy" type="button" @click="copyEmail">
+            {{ isEmailCopied ? '(скопировано)' : '(копировать)' }}
+          </button>
+        </span>
         <small class="footer__note">Заявки круглосуточно</small>
       </div>
     </div>
@@ -83,6 +102,27 @@
   &__phone-note {
     margin-left: 5px;
     color: #7f96aa;
+  }
+
+  &__email {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  &__email-copy {
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
+    }
   }
 }
 

@@ -1,3 +1,17 @@
+<script setup lang="ts">
+const email = 'zakaz@abatek.ru';
+const isEmailCopied = ref(false);
+let copyFeedbackTimeout: ReturnType<typeof setTimeout> | undefined;
+const copyEmail = async () => {
+  await navigator.clipboard.writeText(email);
+  isEmailCopied.value = true;
+  clearTimeout(copyFeedbackTimeout);
+  copyFeedbackTimeout = setTimeout(() => {
+    isEmailCopied.value = false;
+  }, 2000);
+};
+</script>
+
 <template>
   <section class="request-section">
     <div class="site-container request-section__grid">
@@ -28,16 +42,20 @@
             </span>
             <Icon class="request-section__contact-arrow" name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
           </a>
-          <a class="request-section__contact" href="mailto:zakaz@abatek.ru">
-            <span class="request-section__contact-icon">
-              <Icon name="lucide:mail" aria-hidden="true" mode="svg" />
-            </span>
-            <span class="request-section__contact-content">
-              <small class="request-section__contact-label">Напишите на почту</small>
-              <strong>zakaz@abatek.ru</strong>
-            </span>
-            <Icon class="request-section__contact-arrow" name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
-          </a>
+          <div class="request-section__contact request-section__contact--email">
+            <a class="request-section__email-link" :href="`mailto:${email}`">
+              <span class="request-section__contact-icon">
+                <Icon name="lucide:mail" aria-hidden="true" mode="svg" />
+              </span>
+              <span class="request-section__contact-content">
+                <small class="request-section__contact-label">Напишите на почту</small>
+                <strong>{{ email }}</strong>
+              </span>
+            </a>
+            <button class="request-section__email-copy" type="button" @click="copyEmail">
+              {{ isEmailCopied ? '(скопировано)' : '(копировать)' }}
+            </button>
+          </div>
         </div>
       </div>
       <RequestForm />
@@ -146,6 +164,33 @@
       background: rgb(255 255 255 / 11%);
       border-color: rgb(255 210 10 / 38%);
       transform: translateX(5px);
+    }
+
+    &--email {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  &__email-link {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  &__email-copy {
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9db1c5;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
     }
   }
 

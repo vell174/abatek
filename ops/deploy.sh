@@ -13,6 +13,7 @@ git pull --ff-only
 
 echo ">>> Пересобираю и перезапускаю сайт..."
 docker compose up -d --build
+bash ops/mailbox-localization.sh
 docker image prune -f >/dev/null
 
 echo ">>> Готово."

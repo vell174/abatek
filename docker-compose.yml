@@ -301,6 +301,8 @@ services:
       - dms-mail-state:/var/mail-state
       - dms-mail-logs:/var/log/mail
       - dms-config:/tmp/docker-mailserver
+      - ./ops/mailserver/15-mailboxes.conf:/tmp/docker-mailserver/15-mailboxes.conf:ro
+      - ./ops/mailserver/user-patches.sh:/tmp/docker-mailserver/user-patches.sh:ro
 
       # общий ACME volume с Traefik
       - traefik-letsencrypt:/etc/letsencrypt

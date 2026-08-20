@@ -38,6 +38,8 @@ add_box "$MAIL_FROM"  "отправитель писем сайта"
 add_box "$MAIL_TO"    "сюда приходят заявки"
 add_box "$MAIL_ADMIN" "системная почта"
 
+bash ops/mailbox-localization.sh
+
 # Служебные адреса домена ведут на системный ящик
 for a in postmaster abuse hostmaster; do
   ms setup alias add "${a}@${SITE_DOMAIN}" "$MAIL_ADMIN" >/dev/null 2>&1 || true

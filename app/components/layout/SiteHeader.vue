@@ -35,6 +35,17 @@ watch(
 const closeCatalogMenu = () => {
   (document.activeElement as HTMLElement | null)?.blur();
 };
+const email = 'zakaz@abatek.ru';
+const isEmailCopied = ref(false);
+let copyFeedbackTimeout: ReturnType<typeof setTimeout> | undefined;
+const copyEmail = async () => {
+  await navigator.clipboard.writeText(email);
+  isEmailCopied.value = true;
+  clearTimeout(copyFeedbackTimeout);
+  copyFeedbackTimeout = setTimeout(() => {
+    isEmailCopied.value = false;
+  }, 2000);
+};
 const links: Array<{ label: string; to: string; catalog?: boolean }> = [
   { label: 'Каталог', to: '/#catalog', catalog: true },
   { label: 'Примеры работ', to: '/primery-rabot' },
@@ -108,13 +119,18 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
               <small>бесплатный номер</small>
             </span>
           </a>
-          <a class="site-header__phone-link site-header__phone-link--email" href="mailto:zakaz@abatek.ru">
-            <Icon name="lucide:mail" aria-hidden="true" mode="svg" />
-            <span class="site-header__phone-details">
-              <strong>zakaz@abatek.ru</strong>
-              <small>приём заявок круглосуточно</small>
-            </span>
-          </a>
+          <span class="site-header__email">
+            <a class="site-header__phone-link site-header__phone-link--email" :href="`mailto:${email}`">
+              <Icon name="lucide:mail" aria-hidden="true" mode="svg" />
+              <span class="site-header__phone-details">
+                <strong>{{ email }}</strong>
+                <small>приём заявок круглосуточно</small>
+              </span>
+            </a>
+            <button class="site-header__email-copy" type="button" @click="copyEmail">
+              {{ isEmailCopied ? '(скопировано)' : '(копировать)' }}
+            </button>
+          </span>
         </span>
       </div>
       <DialogRoot v-model:open="isProjectRequestOpen">
@@ -203,7 +219,12 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
                 8 (800) 505-19-15
                 <small>бесплатный номер</small>
               </a>
-              <a class="mobile-menu__contact-link" href="mailto:zakaz@abatek.ru">zakaz@abatek.ru</a>
+              <span class="mobile-menu__email">
+                <a class="mobile-menu__contact-link" :href="`mailto:${email}`">{{ email }}</a>
+                <button class="mobile-menu__email-copy" type="button" @click="copyEmail">
+                  {{ isEmailCopied ? '(скопировано)' : '(копировать)' }}
+                </button>
+              </span>
             </div>
           </DialogContent>
         </DialogPortal>
@@ -300,6 +321,28 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
       font-weight: 500;
       color: $muted;
       letter-spacing: 0;
+    }
+  }
+
+  &__email {
+    display: flex;
+    grid-column: 1/-1;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &__email-copy {
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: $muted;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:hover,
+    &:focus-visible {
+      color: $blue;
     }
   }
 
@@ -479,7 +522,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
     position: relative;
     display: block;
     padding: 7px 8px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 650;
     line-height: 1.35;
     color: $ink;
@@ -763,6 +806,26 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
       font-size: 11px;
       font-weight: 500;
       color: #9db1c5;
+    }
+  }
+
+  &__email {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  &__email-copy {
+    padding: 0;
+    font-size: 12px;
+    color: #9db1c5;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
     }
   }
 }
