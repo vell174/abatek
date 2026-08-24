@@ -305,21 +305,21 @@ const users = [
   &__product {
     display: grid;
     grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
-    gap: clamp(28px, 5vw, 65px);
-    padding: clamp(24px, 4vw, 48px);
+    gap: clamp(24px, 3vw, 44px);
+    padding: clamp(22px, 3vw, 38px);
     background: #fff;
     border: 1px solid $line;
     border-radius: 20px;
   }
 
   &__product-media {
-    min-height: 430px;
-    padding: 25px;
+    min-height: 340px;
+    padding: 18px;
   }
 
   &__product-content h3,
   &__blade h3 {
-    margin: 0 0 24px;
+    margin: 0 0 18px;
     font-size: clamp(26px, 3vw, 38px);
     letter-spacing: -0.035em;
   }
@@ -341,8 +341,8 @@ const users = [
   &__spec {
     display: grid;
     grid-template-columns: minmax(150px, 0.8fr) 1.2fr;
-    gap: 22px;
-    padding-block: 11px;
+    gap: 18px;
+    padding-block: 8px;
     border-bottom: 1px solid $line;
 
     dt {
