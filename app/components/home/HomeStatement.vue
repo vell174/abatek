@@ -28,7 +28,7 @@ const stages = [
             Согласовываем технические вопросы, готовим предложение и чертежи, изготавливаем оборудование и организуем
             доставку.
           </p>
-          <UiButton as-child size="large" rounded="pill">
+          <UiButton as-child size="medium" rounded="pill">
             <button class="statement__action" type="button" @click="isProjectRequestOpen = true">
               Обсудить проект
               <Icon name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
@@ -63,8 +63,7 @@ const stages = [
 <style scoped lang="scss">
 .statement {
   position: relative;
-  min-height: 650px;
-  padding-block: clamp(80px, 8vw, 120px);
+  padding-block: clamp(48px, 5vw, 64px);
   overflow: hidden;
   color: #fff;
   background:
@@ -88,7 +87,7 @@ const stages = [
   &__layout {
     display: grid;
     grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
-    gap: clamp(40px, 7vw, 110px);
+    gap: clamp(28px, 4vw, 56px);
     align-items: end;
     max-width: 1120px;
   }
@@ -97,7 +96,7 @@ const stages = [
     display: flex;
     gap: 12px;
     align-items: center;
-    margin: 0 0 22px;
+    margin: 0 0 16px;
     font-size: 12px;
     font-weight: 850;
     color: $yellow;
@@ -114,7 +113,7 @@ const stages = [
   &__title {
     max-width: 820px;
     margin: 0;
-    font-size: clamp(44px, 5.1vw, 70px);
+    font-size: clamp(34px, 3.8vw, 50px);
     line-height: 1.05;
     letter-spacing: -0.045em;
   }
@@ -130,7 +129,7 @@ const stages = [
     padding-left: 22px;
     margin: 0 0 5px;
     font-size: 16px;
-    line-height: 1.75;
+    line-height: 1.6;
     color: #c4d5e5;
     border-left: 2px solid $yellow;
   }
@@ -138,7 +137,7 @@ const stages = [
   &__aside {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 20px;
     align-items: flex-start;
   }
 
@@ -156,16 +155,16 @@ const stages = [
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    max-width: 1020px;
-    margin-top: 54px;
+    max-width: calc(100% - 260px);
+    margin-top: 32px;
   }
 
   &__stage {
     display: flex;
-    gap: 14px;
+    gap: 10px;
     align-items: center;
-    min-height: 82px;
-    padding: 17px;
+    min-height: 64px;
+    padding: 12px;
     background: linear-gradient(135deg, rgb(255 255 255 / 11%), rgb(255 255 255 / 6%));
     border: 1px solid rgb(255 255 255 / 17%);
     border-radius: 14px;
@@ -191,9 +190,9 @@ const stages = [
     display: flex;
     gap: 14px;
     align-items: center;
-    min-width: 270px;
-    min-height: 82px;
-    padding: 12px 18px;
+    min-width: 240px;
+    min-height: 64px;
+    padding: 10px 14px;
     color: $navy;
     background: linear-gradient(135deg, #ffe04c, $yellow);
     border: 1px solid $yellow;
@@ -225,8 +224,8 @@ const stages = [
   &__cycle-icon {
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
+    width: 40px;
+    height: 40px;
     color: $yellow;
     background: $navy;
     border-radius: 50%;
@@ -241,8 +240,8 @@ const stages = [
     display: grid;
     flex: 0 0 auto;
     place-items: center;
-    width: 48px;
-    height: 48px;
+    width: 38px;
+    height: 38px;
     color: $navy;
     background: $yellow;
     border-radius: 9px;
@@ -266,7 +265,7 @@ const stages = [
     }
 
     strong {
-      font-size: 15px;
+      font-size: 14px;
     }
   }
 
@@ -298,7 +297,7 @@ const stages = [
   .statement {
     &__layout {
       grid-template-columns: 1fr;
-      gap: 28px;
+      gap: 20px;
     }
 
     &__layout > *,
@@ -312,6 +311,7 @@ const stages = [
 
     &__stages {
       grid-template-columns: repeat(2, 1fr);
+      max-width: none;
     }
 
     &__cycle {
@@ -323,7 +323,7 @@ const stages = [
 @media (max-width: $phone) {
   .statement {
     min-height: 0;
-    padding-block: 72px;
+    padding-block: 40px;
     background-position: 66% center;
 
     &::after {
@@ -332,7 +332,7 @@ const stages = [
 
     &__title {
       max-width: 100%;
-      font-size: clamp(30px, 10vw, 40px);
+      font-size: clamp(28px, 8vw, 36px);
       letter-spacing: -0.035em;
       overflow-wrap: anywhere;
     }
@@ -347,7 +347,7 @@ const stages = [
 
     &__stages {
       grid-template-columns: 1fr;
-      margin-top: 38px;
+      margin-top: 24px;
     }
   }
 }

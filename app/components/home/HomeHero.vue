@@ -32,7 +32,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 <style scoped lang="scss">
 .home-hero {
   position: relative;
-  min-height: 650px;
+  min-height: 500px;
   overflow: hidden;
   color: #fff;
   background:
@@ -53,7 +53,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__content {
     position: relative;
     z-index: 1;
-    padding-block: 96px 120px;
+    padding-block: 64px 72px;
   }
 
   &__eyebrow {
@@ -68,7 +68,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__title {
     max-width: 720px;
     margin: 0;
-    font-size: clamp(58px, 6.5vw, 88px);
+    font-size: clamp(48px, 5.5vw, 68px);
     line-height: 0.98;
     letter-spacing: -0.045em;
   }
@@ -84,8 +84,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__text {
     max-width: 620px;
-    margin: 30px 0;
-    font-size: 19px;
+    margin: 22px 0;
+    font-size: 17px;
     line-height: 1.6;
     color: #cfdae6;
   }
@@ -94,15 +94,15 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
     position: relative;
     z-index: 3;
     display: flex;
-    gap: 16px;
+    gap: 12px;
   }
 
   &__action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 58px;
-    padding: 0 32px;
+    min-height: 48px;
+    padding: 0 24px;
     font-size: 15px;
     font-weight: 800;
     color: $navy;
@@ -136,16 +136,16 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
 @media (max-width: $phone) {
   .home-hero {
-    min-height: 620px;
+    min-height: 0;
     background-image:
       linear-gradient(90deg, rgb(2 13 31 / 22%) 0%, transparent 58%), url('/images/home-hero-welding-2026-mobile.webp');
 
     &__content {
-      padding-top: 76px;
+      padding-block: 48px 64px;
     }
 
     &__title {
-      font-size: clamp(46px, 13vw, 64px);
+      font-size: clamp(38px, 10vw, 50px);
     }
 
     &__text {

@@ -23,7 +23,7 @@ const items = [
 .trust {
   position: relative;
   z-index: 2;
-  padding-block: 28px 0;
+  padding-block: 20px 0;
   background: #fff;
 
   &__grid {
@@ -37,32 +37,32 @@ const items = [
 
   &__item {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
-    min-height: 124px;
-    padding: 28px 30px;
+    min-height: 88px;
+    padding: 18px 20px;
     border-right: 1px solid rgb(255 255 255 / 14%);
   }
 
   &__icon {
     display: grid;
-    flex: 0 0 58px;
+    flex: 0 0 44px;
     place-items: center;
-    width: 58px;
-    height: 58px;
+    width: 44px;
+    height: 44px;
     color: $yellow;
     background: rgb(255 255 255 / 8%);
     border: 1px solid rgb(255 255 255 / 12%);
     border-radius: 12px;
 
     &-symbol {
-      width: 31px;
-      height: 31px;
+      width: 25px;
+      height: 25px;
     }
   }
 
   &__text {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.35;
   }
 }
@@ -82,7 +82,8 @@ const items = [
     }
 
     &__item {
-      padding: 20px;
+      min-height: 76px;
+      padding: 14px 18px;
       border-right: 0;
       border-bottom: 1px solid rgb(255 255 255 / 12%);
     }

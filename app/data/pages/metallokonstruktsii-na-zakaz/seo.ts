@@ -1,43 +1,37 @@
-import type { PageSeo } from '../_shared/types';
+﻿import type { PageSeo } from '../_shared/types';
+import { pageData } from './data';
 
 export const seo = {
-  title: 'Изготовление металлоконструкций на заказ | АБАТЭК',
-  description:
-    'Проектирование и изготовление металлоконструкций любых форм и размеров по чертежам и техническому заданию.',
+  title: pageData.seoTitle,
+  description: pageData.description,
   keywords: [
-    'металлоконструкции по чертежам заказчика',
-    'металлоконструкции по чертежам заказчика на заказ',
-    'промышленное оборудование',
-    'производитель АБАТЭК',
+    'завод нестандартных металлоизделий',
+    'завод нестандартных металлоизделий челябинск',
+    'изготовление изделий из металла по чертежам заказчика',
+    'изготовление металлоизделий по чертежам',
+    'изделие из металла по чертежу',
+    'изделия из металла по чертежам заказчика',
+    'металлические изделия по чертежам',
+    'металлоизделия на заказ',
+    'металлоизделия по чертежам заказчика',
+    'изготовление металлоизделий на заказ',
+    'сварные изделия по чертежам',
+    'нестандартные металлоизделия',
   ],
-  canonicalPath: '/metallokonstruktsii-na-zakaz/',
+  canonicalPath: '/metalloizdeliya-po-chertezham/',
   robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
-  image: {
-    src: '/images/26025719.webp',
-    alt: 'Металлоконструкции по чертежам заказчика',
-  },
+  image: { src: pageData.image, alt: pageData.imageAlt, width: 1440, height: 1081, type: 'image/webp' },
   openGraph: {
-    title: 'Изготовление металлоконструкций на заказ | АБАТЭК',
-    description:
-      'Проектирование и изготовление металлоконструкций любых форм и размеров по чертежам и техническому заданию.',
+    title: pageData.seoTitle,
+    description: pageData.description,
     type: 'website',
     locale: 'ru_RU',
     siteName: 'АБАТЭК',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Изготовление металлоконструкций на заказ | АБАТЭК',
-    description:
-      'Проектирование и изготовление металлоконструкций любых форм и размеров по чертежам и техническому заданию.',
-  },
+  twitter: { card: 'summary_large_image', title: pageData.seoTitle, description: pageData.description },
   breadcrumbs: [
     { name: 'Главная', path: '/' },
-    { name: 'Металлоконструкции по чертежам заказчика', path: '/metallokonstruktsii-na-zakaz/' },
+    { name: pageData.title, path: '/metalloizdeliya-po-chertezham/' },
   ],
-  schema: {
-    pageType: 'WebPage',
-    entityType: 'Product',
-    name: 'Металлоконструкции по чертежам заказчика',
-    category: 'Промышленное оборудование',
-  },
+  schema: { pageType: 'WebPage', name: pageData.title },
 } satisfies PageSeo;

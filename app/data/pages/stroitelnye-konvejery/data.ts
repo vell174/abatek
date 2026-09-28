@@ -1,5 +1,5 @@
 import { createProductPage, type ProductPageOptions } from '../_shared/create-product-page';
-import { pageData as bottleConveyorPageData } from '../konvejery-dlya-butylok/data';
+import { conveyorCapacityTable } from '../_shared/application-conveyor';
 
 export const options: ProductPageOptions = {
   slug: 'stroitelnye-konvejery',
@@ -18,7 +18,7 @@ export const options: ProductPageOptions = {
     ['по расчёту', 'цена и комплектация'],
   ],
   table: {
-    ...bottleConveyorPageData.table,
+    ...conveyorCapacityTable,
     title:
       'Максимально допустимая объёмная производительность строительного конвейера V₀ (м³/ч) при скорости ленты v (м/с)',
   },

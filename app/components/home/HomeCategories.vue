@@ -1,118 +1,62 @@
 <script setup lang="ts">
-const categories = [
-  {
-    label: 'Электроножи для резки конвейерных лент и технических пластин',
-    to: '/elektronoji-dlya-rezki-konveyernih-lent-tehnicheskih-plastin',
-    icon: 'lucide:scissors',
-    image: '/images/26025762.webp',
-  },
-  {
-    label: 'Конвейеры ленточные, питатели ленточные',
-    to: '/lentochnye-konvejery',
-    icon: 'lucide:move-right',
-    image: '/images/26007483.webp',
-  },
-  {
-    label: 'Конвейеры и питатели винтовые (шнековые)',
-    to: '/vintovye-konvejery',
-    icon: 'lucide:workflow',
-    image: '/images/26025489.webp',
-  },
-  {
-    label: 'Резервуары РГС (горизонтальные стальные) и РВС',
-    to: '/rezervuary',
-    icon: 'lucide:cylinder',
-    image: '/images/26007519.webp',
-  },
-  {
-    label: 'Силосы для хранения сыпучих материалов',
-    to: '/silosy',
-    icon: 'lucide:warehouse',
-    image: '/images/26025737.webp',
-  },
-  {
-    label: 'Рольганги',
-    to: '/rolgang',
-    icon: 'lucide:circle-dot-dashed',
-    image: '/images/26025724.webp',
-  },
-  {
-    label: 'Металлоконструкции и металлоизделия по чертежам Заказчика',
-    to: '/metallokonstruktsii-na-zakaz',
-    icon: 'lucide:blocks',
-    image: '/images/26025719.webp',
-  },
-  {
-    label: 'Циклоны систем аспирации (пылеудаления)',
-    to: '/ciklony',
-    icon: 'lucide:wind',
-    image: '/images/26007568.webp',
-  },
-  {
-    label: 'Комплектующие к ленточному конвейеру',
-    to: '/komplektuyushie-k-konvejeram',
-    icon: 'lucide:settings',
-    image: '/images/26009358.webp',
-  },
-  {
-    label: 'Затворы для выгрузки сыпучих материалов их бункеров и силосов',
-    to: '/shlyuzovyezatvory',
-    icon: 'lucide:panel-top-close',
-    image: '/images/26025795.webp',
-  },
-  {
-    label: 'Шнеки для конвейеров',
-    to: '/shneki-konveera',
-    icon: 'lucide:rotate-3d',
-    image: '/images/26775297.webp',
-  },
-  {
-    label: 'Элеваторы ковшовые (цепные и ленточные)',
-    to: '/elevatory',
-    icon: 'lucide:arrow-up-from-line',
-    image: '/images/26025838.webp',
-  },
-  {
-    label: 'Конвейеры (транспортеры) скребковые',
-    to: '/konveyery-skrebkovye',
-    icon: 'lucide:link',
-    image: '/images/26009368.webp',
-  },
-  {
-    label: 'Транспортёр для погрузки колотых дров',
-    to: '/transporterdlyadrov',
-    icon: 'lucide:truck',
-    image: '/images/26009373.webp',
-  },
-];
+import { NuxtLink } from '#components';
+import { CollapsibleContent, CollapsibleRoot, CollapsibleTrigger } from 'reka-ui';
+import { homeCatalog } from '~/data/home/catalog';
+import { catalogGroups } from '~/data/navigation/catalog';
 </script>
 
 <template>
   <section id="catalog" class="content-section site-container home-categories">
     <div class="home-categories__heading">
-      <div>
-        <h2 class="home-categories__title">Каталог оборудования</h2>
-        <p class="home-categories__subtitle">Каталог производимого и поставляемого конвейерного оборудования</p>
-      </div>
+      <h2 class="home-categories__title">{{ homeCatalog.title }}</h2>
+      <p class="home-categories__subtitle">{{ homeCatalog.description }}</p>
     </div>
     <div class="home-categories__grid">
-      <NuxtLink v-for="category in categories" :key="category.to" class="home-categories__item" :to="category.to">
-        <img
-          class="home-categories__image"
-          :src="category.image"
-          :alt="category.label"
-          width="720"
-          height="480"
-          loading="lazy"
-          decoding="async"
-        />
-        <span class="home-categories__shade" aria-hidden="true" />
-        <Icon class="home-categories__arrow" name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
-        <span class="home-categories__content">
-          <strong class="home-categories__name">{{ category.label }}</strong>
-          <span class="home-categories__caption">Открыть раздел каталога</span>
-        </span>
-      </NuxtLink>
+      <CollapsibleRoot
+        v-for="category in catalogGroups"
+        :key="category.title"
+        as="article"
+        class="home-categories__item"
+      >
+        <component
+          :is="category.items.length ? CollapsibleTrigger : NuxtLink"
+          class="home-categories__hero"
+          v-bind="!category.items.length && category.to ? { to: category.to } : {}"
+        >
+          <img
+            class="home-categories__image"
+            :src="category.image"
+            alt=""
+            width="720"
+            height="480"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="home-categories__content">
+            <span class="home-categories__name">{{ category.title }}</span>
+            <Icon
+              class="home-categories__arrow"
+              :class="[category.items.length ? 'home-categories__arrow--toggle' : '']"
+              :name="category.items.length ? 'lucide:chevron-down' : 'lucide:arrow-up-right'"
+              aria-hidden="true"
+              mode="svg"
+            />
+          </span>
+        </component>
+        <CollapsibleContent v-if="category.items.length" class="home-categories__panel">
+          <ul class="home-categories__list">
+            <li v-if="category.to" class="home-categories__subitem">
+              <NuxtLink class="home-categories__link" :to="category.to">
+                {{ category.overviewLabel || category.title }}
+              </NuxtLink>
+            </li>
+            <li v-for="item in category.items" :key="item.label" class="home-categories__subitem">
+              <NuxtLink v-if="item.to" class="home-categories__link" :to="item.to">{{ item.label }}</NuxtLink>
+              <span v-else class="home-categories__text">{{ item.label }}</span>
+            </li>
+          </ul>
+        </CollapsibleContent>
+      </CollapsibleRoot>
     </div>
   </section>
 </template>
@@ -120,9 +64,6 @@ const categories = [
 <style scoped lang="scss">
 .home-categories {
   &__heading {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
     margin-bottom: 38px;
   }
 
@@ -142,113 +83,178 @@ const categories = [
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
+    align-items: start;
   }
 
   &__item {
-    position: relative;
-    display: flex;
-    align-items: end;
-    min-height: 320px;
-    padding: 26px;
     overflow: hidden;
-    color: #fff;
+    background: #fff;
+    border: 1px solid $line;
+    border-radius: 16px;
+  }
+
+  &__hero {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    min-height: 290px;
+    padding: 18px;
+    overflow: hidden;
+    font: inherit;
+    color: $ink;
+    text-align: left;
     text-decoration: none;
-    background: $navy;
-    border: 1px solid rgb(255 255 255 / 8%);
-    border-radius: 20px;
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s,
-      transform 0.2s;
+    cursor: pointer;
+    background: #fff;
+    border: 0;
 
-    &:hover {
-      border-color: $blue;
-      box-shadow: 0 22px 50px rgb(3 35 68 / 12%);
-      transform: translateY(-5px);
-    }
-
-    &:hover .home-categories__image {
-      transform: scale(1.055);
+    &:focus-visible {
+      outline: 3px solid $blue;
+      outline-offset: -3px;
     }
   }
 
-  &__image,
-  &__shade {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+  &__hero:hover &__image {
+    transform: scale(1.035);
   }
 
   &__image {
-    object-fit: cover;
-    transition: transform 0.55s ease;
-  }
-
-  &__shade {
-    background: linear-gradient(180deg, rgb(3 22 43 / 22%) 0%, rgb(3 22 43 / 58%) 48%, rgb(3 17 34 / 98%) 100%);
+    display: block;
+    width: 100%;
+    height: 148px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
   }
 
   &__content {
-    position: relative;
-    z-index: 1;
     display: flex;
-    flex-direction: column;
+    gap: 10px;
+    align-items: start;
     width: 100%;
-    padding-top: 20px;
-    padding-right: 48px;
-    border-top: 1px solid rgb(255 255 255 / 28%);
+    padding-top: 16px;
+    border-top: 1px solid $line;
   }
 
   &__name {
     display: block;
-    max-width: 340px;
-    font-size: 22px;
-    font-weight: 750;
-    line-height: 1.25;
-    color: #fff;
-    text-shadow: 0 2px 14px rgb(0 0 0 / 65%);
-  }
-
-  &__caption {
-    margin-top: 9px;
-    font-size: 12px;
-    font-weight: 650;
-    color: rgb(255 255 255 / 72%);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    flex: 1;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: $ink;
   }
 
   &__arrow {
-    position: absolute;
-    right: 26px;
-    bottom: 28px;
-    z-index: 1;
-    width: 30px;
-    height: 30px;
-    color: $yellow;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    color: $blue;
+    transition: transform 0.25s ease;
+  }
+
+  &__hero[data-state='open'] &__arrow--toggle {
+    transform: rotate(180deg);
+  }
+
+  &__panel {
+    overflow: hidden;
+
+    &[data-state='open'] {
+      animation: home-categories-expand 0.25s ease-out;
+    }
+
+    &[data-state='closed'] {
+      animation: home-categories-collapse 0.25s ease-out;
+    }
+  }
+
+  &__list {
+    display: grid;
+    gap: 4px;
+    padding: 12px;
+    margin: 0;
+    list-style: none;
+    background: $soft;
+  }
+
+  &__link,
+  &__text {
+    display: block;
+    padding: 9px 10px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: $ink;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+
+  &__link {
+    &:hover,
+    &:focus-visible {
+      color: $blue;
+      background: #fff;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $blue;
+      outline-offset: 2px;
+    }
+  }
+
+  &__text {
+    color: $muted;
+  }
+}
+
+@keyframes home-categories-expand {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+
+  to {
+    height: var(--reka-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes home-categories-collapse {
+  from {
+    height: var(--reka-collapsible-content-height);
+    opacity: 1;
+  }
+
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-categories__image,
+  .home-categories__arrow {
+    transition: none;
+  }
+
+  .home-categories__panel[data-state] {
+    animation: none;
   }
 }
 
 @media (max-width: $tablet) {
   .home-categories__grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: $phone) {
-  .home-categories {
-    &__heading {
-      flex-direction: column;
-      gap: 12px;
-      align-items: start;
-    }
-
-    &__grid {
-      grid-template-columns: 1fr;
-    }
+  .home-categories__grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

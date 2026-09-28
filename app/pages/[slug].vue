@@ -26,10 +26,19 @@ const title = computed(
 );
 const h1 = computed(() => title.value);
 const description = computed(() => definition.value?.data?.description ?? definition.value?.seo.description ?? '');
+const heroAccents = computed(() => definition.value?.data?.heroAccents ?? []);
+const heroTitleVariant = computed(() => industrialPage.value?.heroTitleVariant);
+const heroImage = computed(() => {
+  if (['electron-knives', 'screw-conveyors'].includes(definition.value?.template ?? ''))
+    return definition.value?.data?.image;
+  if (definition.value?.template === 'custom-metal') return (definition.value.data as IndustrialPage).heroImage;
+  return industrialPage.value?.heroImage;
+});
 const kind = computed(() => {
   if (definition.value?.template === 'reservoir-model' || definition.value?.template === 'reservoirs')
     return 'Резервуарное оборудование';
   if (definition.value?.template === 'conveyor-application') return 'Конвейеры по назначению';
+  if (definition.value?.template === 'custom-metal') return 'Изготовление на заказ';
   if (/konvejer|konveyer|rolgang|transporter/.test(slug.value)) return 'Конвейерное оборудование';
   if (/shneki|komplektuyushie/.test(slug.value)) return 'Комплектующие';
   return 'Промышленное оборудование';
@@ -46,18 +55,34 @@ usePageSeo(definition.value.seo);
 
 <template>
   <div>
-    <PageHeroSection_01 :eyebrow="kind" :title="h1" :text="description" />
+    <PageHeroSection_01
+      :eyebrow="kind"
+      :title="h1"
+      :text="description"
+      :accent-texts="heroAccents"
+      :title-variant="heroTitleVariant"
+      :background-image="heroImage"
+      :background-variant="
+        ['custom-metal', 'screw-conveyors'].includes(definition?.template ?? '') ? 'drawing' : 'default'
+      "
+    />
     <LazyElectronKnivesPage v-if="isElectronKnivesPage" />
     <LazyScrewConveyorsPage v-else-if="isScrewConveyorsPage" />
     <LazyReservoirsPage v-else-if="isReservoirsPage" />
     <LazySilosPage v-else-if="isSilosPage" />
     <LazyRollerConveyorsPage v-else-if="isRollerConveyorsPage" />
     <LazyCyclonesPage v-else-if="isCyclonesPage" />
+    <LazyCustomMetalProductsPage v-else-if="definition?.template === 'custom-metal'" />
     <LazyConveyorApplicationPage v-else-if="applicationPage" :page="applicationPage" />
     <LazyReservoirModelPage v-else-if="reservoirModelPage" :page="reservoirModelPage" />
-    <LazyIndustrialEquipmentPage v-else-if="industrialPage" :page="industrialPage" :catalog="definition?.catalog" />
+    <LazyIndustrialEquipmentPage
+      v-else-if="industrialPage"
+      :page="industrialPage"
+      :catalog="definition?.catalog"
+      :gallery="definition?.gallery"
+    />
     <LazyProjectGallerySlider
-      v-if="definition?.gallery?.length"
+      v-if="!industrialPage && definition?.template !== 'custom-metal' && definition?.gallery?.length"
       :key="slug"
       :images="definition.gallery"
       :title="`Выполненные проекты: ${title}`"

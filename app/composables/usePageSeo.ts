@@ -87,34 +87,68 @@ export function usePageSeo(seo: PageSeo) {
                           '@type': 'ListItem',
                           position: index + 1,
                           item: {
-                            '@type': 'Product',
+                            '@type': seo.schema.itemType ?? 'Product',
                             name: item.name,
+                            ...(item.url ? { url: new URL(item.url, siteOrigin).href } : {}),
                             ...(item.description ? { description: item.description } : {}),
                             ...(item.image ? { image: new URL(item.image, siteOrigin).href } : {}),
-                            brand: { '@type': 'Brand', name: 'АБАТЭК' },
-                            manufacturer: { '@id': `${siteOrigin}/#organization` },
-                            ...(seo.schema.category ? { category: seo.schema.category } : {}),
+                            ...(seo.schema.itemType === 'WebPage'
+                              ? {}
+                              : {
+                                  brand: { '@type': 'Brand', name: 'АБАТЭК' },
+                                  manufacturer: { '@id': `${siteOrigin}/#organization` },
+                                  ...(seo.schema.category ? { category: seo.schema.category } : {}),
+                                }),
                           },
                         })),
                       }
-                    : {
-                        '@type': seo.schema.entityType,
-                        '@id': `${canonical.value}#main-entity`,
-                        name: seo.schema.name,
-                        description: seo.description,
-                        ...(imageUrl.value ? { image: imageUrl.value } : {}),
-                        ...(seo.schema.category ? { category: seo.schema.category } : {}),
-                        ...(seo.schema.entityType === 'Product'
-                          ? {
-                              brand: { '@type': 'Brand', name: 'АБАТЭК' },
-                              manufacturer: { '@id': `${siteOrigin}/#organization` },
-                              additionalProperty: seo.schema.properties?.map((property) => ({
-                                '@type': 'PropertyValue',
-                                ...property,
-                              })),
-                            }
-                          : {}),
-                      },
+                    : seo.schema.entityType === 'ProductGroup'
+                      ? {
+                          '@type': 'ProductGroup',
+                          '@id': `${canonical.value}#main-entity`,
+                          name: seo.schema.name,
+                          description: seo.description,
+                          ...(imageUrl.value ? { image: imageUrl.value } : {}),
+                          ...(seo.schema.category ? { category: seo.schema.category } : {}),
+                          ...(seo.schema.productGroupId ? { productGroupID: seo.schema.productGroupId } : {}),
+                          ...(seo.schema.variesBy ? { variesBy: seo.schema.variesBy } : {}),
+                          brand: { '@type': 'Brand', name: 'АБАТЭК' },
+                          manufacturer: { '@id': `${siteOrigin}/#organization` },
+                          hasVariant: (seo.schema.items ?? []).map((item) => ({
+                            '@type': 'Product',
+                            name: item.name,
+                            ...(item.url ? { url: new URL(item.url, siteOrigin).href } : {}),
+                            ...(item.sku ? { sku: item.sku } : {}),
+                            ...(item.description ? { description: item.description } : {}),
+                            ...(item.image ? { image: new URL(item.image, siteOrigin).href } : {}),
+                            ...(seo.schema.productGroupId ? { inProductGroupWithID: seo.schema.productGroupId } : {}),
+                            ...(seo.schema.category ? { category: seo.schema.category } : {}),
+                            brand: { '@type': 'Brand', name: 'АБАТЭК' },
+                            manufacturer: { '@id': `${siteOrigin}/#organization` },
+                            additionalProperty: item.properties?.map((property) => ({
+                              '@type': 'PropertyValue',
+                              ...property,
+                            })),
+                          })),
+                        }
+                      : {
+                          '@type': seo.schema.entityType,
+                          '@id': `${canonical.value}#main-entity`,
+                          name: seo.schema.name,
+                          description: seo.description,
+                          ...(imageUrl.value ? { image: imageUrl.value } : {}),
+                          ...(seo.schema.category ? { category: seo.schema.category } : {}),
+                          ...(seo.schema.entityType === 'Product'
+                            ? {
+                                brand: { '@type': 'Brand', name: 'АБАТЭК' },
+                                manufacturer: { '@id': `${siteOrigin}/#organization` },
+                                additionalProperty: seo.schema.properties?.map((property) => ({
+                                  '@type': 'PropertyValue',
+                                  ...property,
+                                })),
+                              }
+                            : {}),
+                        },
                 ]
               : []),
             {

@@ -25,7 +25,7 @@ const steps = [
 ];
 </script>
 <template>
-  <section class="content-section site-container home-process">
+  <section class="site-container home-process">
     <div class="home-process__heading">
       <div class="home-process__heading-content">
         <p class="home-process__eyebrow">Прозрачный процесс</p>
@@ -51,6 +51,7 @@ const steps = [
 <style scoped lang="scss">
 .home-process {
   position: relative;
+  padding-block: 56px;
 
   &::before {
     position: absolute;
@@ -71,14 +72,14 @@ const steps = [
     position: relative;
     z-index: 1;
     display: flex;
-    gap: 40px;
+    gap: 28px;
     align-items: end;
     justify-content: space-between;
-    margin-bottom: 44px;
+    margin-bottom: 28px;
   }
 
   &__eyebrow {
-    margin: 0 0 14px;
+    margin: 0 0 10px;
     font-size: 13px;
     font-weight: 900;
     color: $blue;
@@ -88,14 +89,14 @@ const steps = [
 
   &__title {
     margin: 0;
-    font-size: clamp(42px, 5vw, 64px);
+    font-size: clamp(32px, 3.6vw, 46px);
     letter-spacing: -0.045em;
   }
 
   &__lead {
     max-width: 470px;
     margin: 0 0 7px;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.65;
     color: $muted;
   }
@@ -103,13 +104,13 @@ const steps = [
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 14px;
   }
 
   &__step {
     position: relative;
-    min-height: 270px;
-    padding: 30px;
+    min-height: 210px;
+    padding: 22px;
     background: linear-gradient(145deg, #fff, #f8fbff);
     border: 1px solid $line;
     border-radius: 20px;
@@ -121,8 +122,8 @@ const steps = [
 
     &::after {
       position: absolute;
-      right: 30px;
-      bottom: 24px;
+      right: 22px;
+      bottom: 18px;
       width: 44px;
       height: 3px;
       content: '';
@@ -145,8 +146,8 @@ const steps = [
 
   &__index {
     position: absolute;
-    top: 30px;
-    right: 30px;
+    top: 22px;
+    right: 22px;
     font-size: 14px;
     color: $blue;
   }
@@ -154,12 +155,12 @@ const steps = [
   &__icon {
     display: grid;
     place-items: center;
-    width: 68px;
-    height: 68px;
-    margin-bottom: 34px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
     color: $blue;
     background: #edf5ff;
-    border-radius: 20px;
+    border-radius: 14px;
     box-shadow: inset 0 0 0 1px rgb(18 105 199 / 8%);
     transition:
       color 0.25s ease,
@@ -167,21 +168,21 @@ const steps = [
       transform 0.25s ease;
 
     &-symbol {
-      width: 36px;
-      height: 36px;
+      width: 27px;
+      height: 27px;
     }
   }
 
   &__step-name {
     margin: 0;
-    font-size: 19px;
+    font-size: 17px;
     font-weight: 800;
     line-height: 1.4;
   }
 
   &__step-text {
     max-width: 320px;
-    margin: 12px 0 0;
+    margin: 8px 0 0;
     font-size: 14px;
     line-height: 1.65;
     color: $muted;
@@ -190,6 +191,8 @@ const steps = [
 
 @media (max-width: $tablet) {
   .home-process {
+    padding-block: 40px;
+
     &__heading {
       align-items: start;
     }
@@ -204,7 +207,7 @@ const steps = [
   .home-process {
     &__heading {
       flex-direction: column;
-      gap: 18px;
+      gap: 14px;
     }
 
     &__grid {

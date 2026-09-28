@@ -1,37 +1,27 @@
 <script setup lang="ts">
+import { isValidPhone } from '~~/shared/utils/phone';
+import { phoneField } from '~/data/request-form';
+
+const { compact = false } = defineProps<{ compact?: boolean }>();
+
 const route = useRoute();
 const sent = ref(false);
 const sending = ref(false);
 const failed = ref(false);
+const requestContext = useState('project-request-context', () => '');
+const phoneHintId = useId();
 
-// Маски телефонов стран СНГ; страна определяется по введённому коду.
-// Без «+» в начале считаем номер российским/казахстанским.
-const cisPhoneMasks: Record<string, string> = {
-  '375': '+375 (##) ###-##-##', // Беларусь
-  '374': '+374 (##) ###-###', // Армения
-  '373': '+373 (##) ###-###', // Молдова
-  '992': '+992 (##) ###-##-##', // Таджикистан
-  '993': '+993 (##) ##-##-##', // Туркменистан
-  '994': '+994 (##) ###-##-##', // Азербайджан
-  '996': '+996 (###) ###-###', // Киргизия
-  '998': '+998 (##) ###-##-##', // Узбекистан
-  '7': '+7 (###) ###-##-##', // Россия, Казахстан
-};
-
-function phoneMask(value: string): string {
-  const compact = value.replace(/[^\d+]/g, '');
-  if (!compact.startsWith('+')) return cisPhoneMasks['7'];
-  const digits = compact.slice(1);
-  for (const code of Object.keys(cisPhoneMasks)) {
-    if (digits.startsWith(code)) return cisPhoneMasks[code];
-  }
-  // Код страны ещё не набран целиком — не навязываем формат
-  return '+###############';
+function validatePhone(event: Event) {
+  const input = event.target as HTMLInputElement;
+  input.setCustomValidity(!input.value || isValidPhone(input.value) ? '' : phoneField.error);
 }
 
 async function submitRequest(event: Event) {
   if (sending.value) return;
   const form = event.target as HTMLFormElement;
+  const phoneInput = form.elements.namedItem('phone') as HTMLInputElement;
+  phoneInput.setCustomValidity(isValidPhone(phoneInput.value) ? '' : phoneField.error);
+  if (!form.reportValidity()) return;
   const data = new FormData(form);
   sending.value = true;
   failed.value = false;
@@ -49,6 +39,7 @@ async function submitRequest(event: Event) {
       },
     });
     sent.value = true;
+    requestContext.value = '';
   } catch {
     failed.value = true;
   } finally {
@@ -58,7 +49,7 @@ async function submitRequest(event: Event) {
 </script>
 
 <template>
-  <form class="request-form" @submit.prevent="submitRequest">
+  <form class="request-form" :class="[compact ? 'request-form--compact' : '']" @submit.prevent="submitRequest">
     <template v-if="!sent">
       <label class="request-form__field">
         <span>
@@ -76,10 +67,14 @@ async function submitRequest(event: Event) {
           name="phone"
           type="tel"
           autocomplete="tel"
-          placeholder="+7 (___) ___-__-__"
-          :mask="phoneMask"
+          :placeholder="phoneField.placeholder"
+          :aria-describedby="phoneHintId"
+          maxlength="50"
           required
+          @input="validatePhone"
+          @change="validatePhone"
         />
+        <span :id="phoneHintId" class="request-form__hint">{{ phoneField.hint }}</span>
       </label>
       <label class="request-form__field request-form__field--wide">
         <span>
@@ -91,9 +86,10 @@ async function submitRequest(event: Event) {
       <label class="request-form__field request-form__field--wide">
         Кратко о задаче
         <textarea
+          v-model="requestContext"
           class="request-form__control request-form__control--textarea"
           name="message"
-          rows="6"
+          :rows="compact ? 3 : 6"
           placeholder="Опишите оборудование, производительность, условия эксплуатации и другие детали"
         />
       </label>
@@ -113,7 +109,13 @@ async function submitRequest(event: Event) {
         Принимаю
         <LegalPopup kind="privacy" />
       </UiCheckbox>
-      <UiButton class="request-form__submit" type="submit" size="large" rounded="pill" :disabled="sending">
+      <UiButton
+        class="request-form__submit"
+        type="submit"
+        :size="compact ? 'medium' : 'large'"
+        rounded="pill"
+        :disabled="sending"
+      >
         <span>{{ sending ? 'Отправляем…' : 'Отправить заявку' }}</span>
         <Icon name="lucide:send" aria-hidden="true" mode="svg" />
       </UiButton>
@@ -170,6 +172,13 @@ async function submitRequest(event: Event) {
   &__policy-link {
     font-weight: 800;
     color: $yellow;
+  }
+
+  &__hint {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: rgba(#fff, 0.8);
   }
 
   &__optional {
@@ -317,6 +326,44 @@ async function submitRequest(event: Event) {
     color: rgb(255 255 255 / 72%);
     animation: request-success-rise 0.5s ease-out 0.5s both;
   }
+
+  &--compact {
+    gap: 12px;
+    padding: 20px;
+  }
+
+  &--compact &__field {
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  &--compact &__control--textarea {
+    min-height: 96px;
+  }
+
+  &--compact &__submit {
+    min-height: 48px;
+  }
+
+  &--compact &__success {
+    padding: 28px 20px;
+  }
+
+  &--compact &__success-icon {
+    width: 76px;
+    height: 76px;
+    margin-bottom: 4px;
+  }
+
+  &--compact &__success-svg {
+    width: 52px;
+    height: 52px;
+  }
+
+  &--compact &__success-title {
+    font-size: 28px;
+  }
 }
 
 @keyframes request-success-pop {
@@ -379,6 +426,11 @@ async function submitRequest(event: Event) {
     &__success-icon {
       width: 96px;
       height: 96px;
+    }
+
+    &--compact {
+      gap: 10px;
+      padding: 16px;
     }
   }
 }

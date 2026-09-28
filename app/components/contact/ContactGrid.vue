@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const contacts = [
-  { label: 'WhatsApp, Viber', value: '8 (951) 117-22-10', href: 'tel:89511172210', icon: 'lucide:message-circle' },
+  { label: 'Telegramm, MAX', value: '8 (951) 117-22-10', href: 'tel:89511172210', icon: 'lucide:message-circle' },
   {
     label: 'Бесплатный номер',
     value: '8 (800) 505-19-15',

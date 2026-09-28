@@ -27,7 +27,7 @@ const copyEmail = async () => {
               <Icon name="lucide:phone-call" aria-hidden="true" mode="svg" />
             </span>
             <span class="request-section__contact-content">
-              <small class="request-section__contact-label">WhatsApp, Viber</small>
+              <small class="request-section__contact-label">Telegramm, MAX</small>
               <strong>8 (951) 117-22-10</strong>
             </span>
             <Icon class="request-section__contact-arrow" name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
@@ -58,7 +58,7 @@ const copyEmail = async () => {
           </div>
         </div>
       </div>
-      <RequestForm />
+      <RequestForm compact />
     </div>
   </section>
 </template>
@@ -66,7 +66,7 @@ const copyEmail = async () => {
 <style scoped lang="scss">
 .request-section {
   position: relative;
-  padding-block: clamp(78px, 8vw, 118px);
+  padding-block: clamp(40px, 4.5vw, 60px);
   overflow: hidden;
   color: #fff;
   background:
@@ -102,9 +102,9 @@ const copyEmail = async () => {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(360px, 0.9fr) minmax(520px, 1.1fr);
-    gap: clamp(55px, 7vw, 110px);
-    align-items: stretch;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(28px, 4vw, 56px);
+    align-items: start;
   }
 
   &__content {
@@ -115,7 +115,7 @@ const copyEmail = async () => {
   }
 
   &__eyebrow {
-    margin: 0 0 18px;
+    margin: 0 0 12px;
     font-size: 11px;
     font-weight: 900;
     color: $yellow;
@@ -125,32 +125,31 @@ const copyEmail = async () => {
 
   &__title {
     margin: 0;
-    font-size: clamp(44px, 5vw, 68px);
+    font-size: clamp(32px, 3.5vw, 46px);
     line-height: 1.03;
     letter-spacing: -0.05em;
   }
 
   &__text {
     max-width: 520px;
-    margin: 24px 0 0;
-    font-size: 16px;
-    line-height: 1.7;
+    margin: 16px 0 0;
+    font-size: 15px;
+    line-height: 1.6;
     color: #c2d1df;
   }
 
   &__contacts {
     display: grid;
-    gap: 12px;
-    padding-top: 34px;
-    margin-top: auto;
+    gap: 8px;
+    padding-top: 22px;
   }
 
   &__contact {
     display: grid;
     grid-template-columns: auto 1fr auto;
-    gap: 14px;
+    gap: 10px;
     align-items: center;
-    padding: 14px 16px;
+    padding: 10px 12px;
     text-decoration: none;
     background: rgb(255 255 255 / 7%);
     border: 1px solid rgb(255 255 255 / 12%);
@@ -174,7 +173,7 @@ const copyEmail = async () => {
   &__email-link {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 14px;
+    gap: 10px;
     align-items: center;
     text-decoration: none;
   }
@@ -197,15 +196,15 @@ const copyEmail = async () => {
   &__contact-icon {
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
+    width: 40px;
+    height: 40px;
     color: $navy;
     background: $yellow;
     border-radius: 10px;
 
     svg {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
     }
   }
 
@@ -233,127 +232,43 @@ const copyEmail = async () => {
   }
 }
 
-.request-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 17px;
-  padding: clamp(24px, 3vw, 38px);
-  background: rgb(255 255 255 / 9%);
-  border: 1px solid rgb(255 255 255 / 18%);
-  border-radius: 16px;
-  box-shadow: 0 28px 80px rgb(0 0 0 / 24%);
-  backdrop-filter: blur(14px);
-
-  &__field {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    font-size: 12px;
-    font-weight: 600;
-
-    &--wide {
-      grid-column: 1/-1;
-    }
-
-    &--consent {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-
-  &__required {
-    font-weight: 900;
-    color: $yellow;
-  }
-
-  &__policy-link {
-    font-weight: 700;
-    color: $yellow;
-    text-underline-offset: 3px;
-  }
-
-  &__control {
-    width: 100%;
-    min-height: 47px;
-    padding: 12px;
-    font-size: 14px;
-    color: $ink;
-    resize: vertical;
-    background: #fff;
-    border: 1px solid rgb(0 41 79 / 18%);
-    border-radius: 6px;
-
-    &::placeholder {
-      color: #7d8b98;
-      opacity: 1;
-    }
-
-    &--textarea {
-      min-height: 150px;
-    }
-  }
-
-  &__submit {
-    grid-column: 1/-1;
-    min-height: 56px;
-
-    :deep(svg) {
-      width: 20px;
-      height: 20px;
-      transition: transform 0.2s ease;
-    }
-
-    &:hover :deep(svg) {
-      transform: translate(3px, -3px);
-    }
-  }
-
-  &__success {
-    grid-column: 1/-1;
-    padding: 40px;
-    text-align: center;
-  }
-
-  &__success-title {
-    font-size: 28px;
-  }
-}
-
 @media (max-width: $tablet) {
   .request-section {
     &__grid {
       grid-template-columns: 1fr 1.15fr;
-      gap: 35px;
+      gap: 24px;
     }
 
     &__title {
-      font-size: 46px;
+      font-size: 36px;
+    }
+
+    &__contact--email {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    &__email-copy {
+      justify-self: start;
+      margin-left: 50px;
     }
   }
 }
 
 @media (max-width: $phone) {
   .request-section {
+    padding-block: 32px;
     background-image:
       linear-gradient(105deg, $navy 0%, rgba($navy, 0.97) 52%, rgba($navy, 0.76)),
       url('/images/contact-detail-premium-mobile.webp');
 
     &__grid {
       grid-template-columns: 1fr;
+      gap: 24px;
     }
 
     &__title {
-      font-size: 42px;
-    }
-  }
-
-  .request-form {
-    grid-template-columns: 1fr;
-    padding: 18px;
-
-    &__field--wide,
-    &__submit {
-      grid-column: auto;
+      font-size: 32px;
     }
   }
 }

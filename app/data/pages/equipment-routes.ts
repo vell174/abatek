@@ -1,5 +1,8 @@
 import { routes as knives } from './elektronoji-dlya-rezki-konveyernih-lent-tehnicheskih-plastin/name-routers';
 import { routes as screwConveyors } from './vintovye-konvejery/name-routers';
+import { routes as screwTrough } from './vintovoy-konveyer-v-zhelobe/name-routers';
+import { routes as screwTube } from './vintovoy-konveyer-v-trube/name-routers';
+import { routes as screwFeeder } from './vintovoy-pitatel/name-routers';
 import { routes as reservoirs } from './rezervuary/name-routers';
 import { routes as silos } from './silosy/name-routers';
 import { routes as rollerConveyors } from './rolgang/name-routers';
@@ -8,10 +11,22 @@ import { routes as scraperConveyors } from './konveyery-skrebkovye/name-routers'
 import { routes as elevators } from './elevatory/name-routers';
 import { routes as augers } from './shneki-konveera/name-routers';
 import { routes as rotaryValves } from './shlyuzovyezatvory/name-routers';
+import { routes as rotaryFeeders } from './shlyuzovye-pitateli-shp/name-routers';
+import { routes as shp150 } from './shp-150/name-routers';
+import { routes as shp200 } from './shp-200/name-routers';
+import { routes as shp260 } from './shp-260/name-routers';
+import { routes as shp300 } from './shp-300/name-routers';
+import { routes as shp350 } from './shp-350/name-routers';
+import { routes as shp400 } from './shp-400/name-routers';
+import { routes as shp450 } from './shp-450/name-routers';
+import { routes as shp500 } from './shp-500/name-routers';
+import { routes as shpCustom } from './shp-nestandartnyh-razmerov/name-routers';
 import { routes as conveyorParts } from './komplektuyushie-k-konvejeram/name-routers';
 import { routes as cyclones } from './ciklony/name-routers';
 import { routes as metalStructures } from './metallokonstruktsii-na-zakaz/name-routers';
 import { routes as beltConveyors } from './lentochnye-konvejery/name-routers';
+import { routes as conveyorTypes } from './konveyery-po-vidam/name-routers';
+import { routes as beltFeeders } from './lentochnye-pitateli/name-routers';
 import { routes as drums } from './barabany/name-routers';
 import { routes as chainConveyors } from './cepnye-konveyeri/name-routers';
 import { routes as buckets } from './kovshi/name-routers';
@@ -19,27 +34,15 @@ import { routes as conveyors } from './conveyors/name-routers';
 import { routes as gConveyors } from './g-obraznye-lentochnye-konvejery/name-routers';
 import { routes as horizontalConveyors } from './gorizontalnyj-lentochnyj-konvejer/name-routers';
 import { routes as gravityConveyors } from './gravitatcionnyj-konvejery/name-routers';
-import { routes as baggageConveyors } from './konvejery-dlya-bagazha/name-routers';
-import { routes as bottleConveyors } from './konvejery-dlya-butylok/name-routers';
-import { routes as woodPanelConveyors } from './konvejery-dlya-derevyannyh-plit/name-routers';
 import { routes as potatoConveyors } from './konvejery-dlya-kartofelya/name-routers';
-import { routes as candyConveyors } from './konvejery-dlya-konfet/name-routers';
 import { routes as markingConveyors } from './konvejery-dlya-markirovki/name-routers';
-import { routes as medicineConveyors } from './konvejery-dlya-medikamentov/name-routers';
 import { routes as bagConveyors } from './konvejery-dlya-meshkov/name-routers';
-import { routes as milkConveyors } from './konvejery-dlya-moloka/name-routers';
-import { routes as shoeConveyors } from './konvejery-dlya-obuvi/name-routers';
 import { routes as wasteConveyors } from './konvejery-dlya-othodov/name-routers';
 import { routes as vegetableConveyors } from './konvejery-dlya-ovoshchey/name-routers';
-import { routes as dumplingConveyors } from './konvejery-dlya-pelmeney/name-routers';
 import { routes as sandConveyors } from './konvejery-dlya-peska/name-routers';
-import { routes as dishConveyors } from './konvejery-dlya-posudy/name-routers';
-import { routes as seafoodConveyors } from './konvejery-dlya-ryby-i-moreproduktov/name-routers';
 import { routes as warehouseConveyors } from './konvejery-dlya-sklada/name-routers';
 import { routes as sortingConveyors } from './konvejery-dlya-sortirovki/name-routers';
-import { routes as detergentConveyors } from './konvejery-dlya-stiralnogo-poroshka/name-routers';
 import { routes as coalConveyors } from './konvejery-dlya-uglya/name-routers';
-import { routes as eggConveyors } from './konvejery-dlya-yaic/name-routers';
 import { routes as grainConveyors } from './konvejery-dlya-zerna/name-routers';
 import { routes as packagingConveyors } from './konveyer-dlya-upakovki/name-routers';
 import { routes as troughConveyors } from './konveyer-lentochnyy-zhelobchatyy/name-routers';
@@ -69,10 +72,14 @@ import { routes as rollerSupports } from './rolikoopory/name-routers';
 import { routes as ballTables } from './sharikovye-stoly/name-routers';
 import { routes as constructionConveyors } from './stroitelnye-konvejery/name-routers';
 import { routes as zConveyors } from './z-obraznyj-lentochnyj-konvejer/name-routers';
+import { beltVariantRouteGroups } from './_shared/create-belt-variant-page';
 
-export const equipmentRouteGroups = [
+const existingEquipmentRouteGroups = [
   knives,
   screwConveyors,
+  screwTrough,
+  screwTube,
+  screwFeeder,
   reservoirs,
   silos,
   rollerConveyors,
@@ -81,10 +88,22 @@ export const equipmentRouteGroups = [
   elevators,
   augers,
   rotaryValves,
+  rotaryFeeders,
+  shp150,
+  shp200,
+  shp260,
+  shp300,
+  shp350,
+  shp400,
+  shp450,
+  shp500,
+  shpCustom,
   conveyorParts,
   cyclones,
   metalStructures,
   beltConveyors,
+  conveyorTypes,
+  beltFeeders,
   drums,
   chainConveyors,
   buckets,
@@ -92,27 +111,15 @@ export const equipmentRouteGroups = [
   gConveyors,
   horizontalConveyors,
   gravityConveyors,
-  baggageConveyors,
-  bottleConveyors,
-  woodPanelConveyors,
   potatoConveyors,
-  candyConveyors,
   markingConveyors,
-  medicineConveyors,
   bagConveyors,
-  milkConveyors,
-  shoeConveyors,
   wasteConveyors,
   vegetableConveyors,
-  dumplingConveyors,
   sandConveyors,
-  dishConveyors,
-  seafoodConveyors,
   warehouseConveyors,
   sortingConveyors,
-  detergentConveyors,
   coalConveyors,
-  eggConveyors,
   grainConveyors,
   packagingConveyors,
   troughConveyors,
@@ -142,6 +149,13 @@ export const equipmentRouteGroups = [
   ballTables,
   constructionConveyors,
   zConveyors,
+];
+
+export const equipmentRouteGroups = [
+  ...existingEquipmentRouteGroups,
+  ...beltVariantRouteGroups.filter(
+    (routes) => !existingEquipmentRouteGroups.some((existing) => existing.root === routes.root),
+  ),
 ];
 
 export const equipmentRouteSlugs = equipmentRouteGroups.flatMap(({ slugs }) => slugs);

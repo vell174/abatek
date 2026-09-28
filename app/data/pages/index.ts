@@ -1,7 +1,15 @@
 import type { GalleryImage, IndustrialPage, IndustrialSection, PageRoutes, PageSeo } from './_shared/types';
 import { equipmentRouteGroups } from './equipment-routes';
+import { beltVariantDefinitions } from './_shared/belt-variant-definitions';
 
-type EquipmentPageData = IndustrialPage | { title: string; description: string; image: string };
+type EquipmentPageData =
+  | IndustrialPage
+  | {
+      title: string;
+      description: string;
+      heroAccents?: readonly string[];
+      image: string;
+    };
 
 export interface EquipmentPageDefinition {
   routes: PageRoutes;
@@ -11,6 +19,7 @@ export interface EquipmentPageDefinition {
   gallery?: readonly GalleryImage[];
   template:
     | 'industrial'
+    | 'custom-metal'
     | 'conveyor-application'
     | 'reservoir-model'
     | 'cyclones'
@@ -27,17 +36,32 @@ const catalogModules = import.meta.glob<{ catalog: IndustrialSection[] }>('./*/d
 const galleryModules = import.meta.glob<{ gallery: readonly GalleryImage[] }>('./*/gallery.ts');
 
 const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
+  ['konveyery-po-vidam', 'industrial'],
+  ['lentochnye-pitateli', 'industrial'],
   ['transporterdlyadrov', 'industrial'],
   ['konveyery-skrebkovye', 'industrial'],
   ['elevatory', 'industrial'],
   ['shneki-konveera', 'industrial'],
   ['shlyuzovyezatvory', 'industrial'],
+  ['shlyuzovye-pitateli-shp', 'industrial'],
+  ['shp-150', 'industrial'],
+  ['shp-200', 'industrial'],
+  ['shp-260', 'industrial'],
+  ['shp-300', 'industrial'],
+  ['shp-350', 'industrial'],
+  ['shp-400', 'industrial'],
+  ['shp-450', 'industrial'],
+  ['shp-500', 'industrial'],
+  ['shp-nestandartnyh-razmerov', 'industrial'],
   ['komplektuyushie-k-konvejeram', 'industrial'],
   ['ciklony', 'cyclones'],
-  ['metallokonstruktsii-na-zakaz', 'industrial'],
+  ['metallokonstruktsii-na-zakaz', 'custom-metal'],
   ['lentochnye-konvejery', 'industrial'],
   ['elektronoji-dlya-rezki-konveyernih-lent-tehnicheskih-plastin', 'electron-knives'],
   ['vintovye-konvejery', 'screw-conveyors'],
+  ['vintovoy-konveyer-v-zhelobe', 'industrial'],
+  ['vintovoy-konveyer-v-trube', 'industrial'],
+  ['vintovoy-pitatel', 'industrial'],
   ['rezervuary', 'reservoirs'],
   ['silosy', 'silos'],
   ['rolgang', 'roller-conveyors'],
@@ -48,27 +72,15 @@ const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['g-obraznye-lentochnye-konvejery', 'industrial'],
   ['gorizontalnyj-lentochnyj-konvejer', 'industrial'],
   ['gravitatcionnyj-konvejery', 'industrial'],
-  ['konvejery-dlya-bagazha', 'conveyor-application'],
-  ['konvejery-dlya-butylok', 'conveyor-application'],
-  ['konvejery-dlya-derevyannyh-plit', 'conveyor-application'],
   ['konvejery-dlya-kartofelya', 'conveyor-application'],
-  ['konvejery-dlya-konfet', 'conveyor-application'],
   ['konvejery-dlya-markirovki', 'conveyor-application'],
-  ['konvejery-dlya-medikamentov', 'conveyor-application'],
   ['konvejery-dlya-meshkov', 'conveyor-application'],
-  ['konvejery-dlya-moloka', 'conveyor-application'],
-  ['konvejery-dlya-obuvi', 'conveyor-application'],
   ['konvejery-dlya-othodov', 'conveyor-application'],
   ['konvejery-dlya-ovoshchey', 'conveyor-application'],
-  ['konvejery-dlya-pelmeney', 'conveyor-application'],
   ['konvejery-dlya-peska', 'conveyor-application'],
-  ['konvejery-dlya-posudy', 'conveyor-application'],
-  ['konvejery-dlya-ryby-i-moreproduktov', 'conveyor-application'],
   ['konvejery-dlya-sklada', 'conveyor-application'],
   ['konvejery-dlya-sortirovki', 'conveyor-application'],
-  ['konvejery-dlya-stiralnogo-poroshka', 'conveyor-application'],
   ['konvejery-dlya-uglya', 'conveyor-application'],
-  ['konvejery-dlya-yaic', 'conveyor-application'],
   ['konvejery-dlya-zerna', 'conveyor-application'],
   ['konveyer-dlya-upakovki', 'conveyor-application'],
   ['konveyer-lentochnyy-zhelobchatyy', 'industrial'],
@@ -98,6 +110,7 @@ const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['sharikovye-stoly', 'industrial'],
   ['stroitelnye-konvejery', 'industrial'],
   ['z-obraznyj-lentochnyj-konvejer', 'industrial'],
+  ...beltVariantDefinitions.map(({ slug }) => [slug, 'industrial'] as const),
 ]);
 
 function requiredModuleLoader<T>(modules: Record<string, () => Promise<T>>, key: string) {

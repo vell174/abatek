@@ -1,0 +1,53 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "name": "conveyor-types",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: A compact grouped composition of a horizontal belt conveyor with black belt, a short silver roller conveyor and an inclined enclosed screw conveyor. Plausible frames, drive motors and support legs.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-93c43cf3-33c8-4e46-9760-caa8a9c2dda8.png",
+      "output": "public/images/catalog/conveyor-types.webp"
+    },
+    {
+      "name": "conveyor-applications",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: One compact horizontal blue-framed black belt conveyor carrying three plain cardboard boxes and a plain filled industrial sack, illustrating transport of assorted goods.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-37974e87-bff2-4bc1-aa0f-762fcc7c0442.png",
+      "output": "public/images/catalog/conveyor-applications.webp"
+    },
+    {
+      "name": "conveyor-components",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: A conveyor drive drum, two conveyor rollers, a three-roller trough idler support, a steel elevator bucket and a short helical screw shaft arranged as a coherent equipment parts group.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-50ec4dbf-c71a-46df-baa3-bc90586ea29a.png",
+      "output": "public/images/catalog/conveyor-components.webp"
+    },
+    {
+      "name": "storage-equipment",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: A steel horizontal cylindrical storage tank on saddle supports beside a vertical cylindrical silo with conical bottom and a smaller rectangular receiving hopper on legs.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-eb0e6907-c2f1-438a-8573-286fe30e51f8.png",
+      "output": "public/images/catalog/storage-equipment.webp"
+    },
+    {
+      "name": "aspiration-cyclone",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: An industrial dust separation cyclone: cylindrical upper steel body, tall tapered conical lower body, tangential rectangular side inlet, central top exhaust pipe and support frame.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-775f8fbb-bdeb-4ba0-899f-da1c46fa0c6a.png",
+      "output": "public/images/catalog/aspiration-cyclone.webp"
+    },
+    {
+      "name": "rotary-valves",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: Two industrial rotary airlock feeder valves: blue cast cylindrical rotor housings with rectangular flanged top inlet and bottom outlet, one with compact side-mounted geared electric motor, one without drive.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-8e65d859-2edd-419c-a143-54d4b65136cd.png",
+      "output": "public/images/catalog/rotary-valves.webp"
+    },
+    {
+      "name": "custom-metal-products",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: Custom fabricated industrial metal products grouped together: a sturdy welded rectangular steel machine frame, a flanged pipe elbow and two precision steel mounting brackets. Visible plausible welds and bolt holes.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-e2b0d4c9-c1cf-479e-84b7-d53d4786763c.png",
+      "output": "public/images/catalog/custom-metal-products.webp"
+    },
+    {
+      "name": "electric-belt-knives",
+      "prompt": "Use case: product-mockup\nAsset type: compact industrial equipment category illustration for Abatek website.\nScene/backdrop: seamless pure white background, no environment.\nStyle/medium: clean realistic 3D catalog render, brushed silver steel and restrained blue painted framing, soft studio lighting and minimal contact shadows.\nComposition: landscape 3:2, centered complete object silhouettes, 10% white margins, equipment clearly recognizable when reduced to a thumbnail.\nConstraints: no text, labels, logos, watermark, people, decorative props or border.\nSubject: A handheld powered circular knife for cutting heavy conveyor rubber belts: compact blue and dark-gray motor body, grip handle, guarded round steel cutting blade and a flat shoe guide, short power cord. This is an industrial belt cutter, not a kitchen knife.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-57df44a3-6291-476c-bbe7-139e26108f6c.png",
+      "output": "public/images/catalog/electric-belt-knives.webp"
+    }
+  ]
+}

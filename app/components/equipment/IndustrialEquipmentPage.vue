@@ -1,67 +1,126 @@
 <script setup lang="ts">
-import type { IndustrialPage, IndustrialSection } from '~/data/pages/_shared/types';
+import type { GalleryImage, IndustrialPage, IndustrialSection } from '~/data/pages/_shared/types';
+import { createIndustrialFaq } from '~/data/pages/_shared/faq';
 import { industrialWorkflow } from '~/data/pages/_shared/workflow';
 import ScraperProductCard from '~/components/shared/card/ScraperProductCard.vue';
 
-const props = defineProps<{ page: IndustrialPage; catalog?: IndustrialSection[] }>();
+const props = defineProps<{
+  page: IndustrialPage;
+  catalog?: IndustrialSection[];
+  gallery?: readonly GalleryImage[];
+}>();
 
 const mediaSections = computed(() => (props.catalog ?? props.page.sections).filter((section) => section.image));
-const textSections = computed(() => props.page.sections.filter((section) => !section.image));
+const modelIds = computed(() => new Set(props.page.sectionLinks?.map((link) => link.id) ?? []));
+const modelSections = computed(() =>
+  props.page.sections.filter((section) => !section.image && section.id && modelIds.value.has(section.id)),
+);
+const textSections = computed(() =>
+  props.page.sections.filter((section) => !section.image && (!section.id || !modelIds.value.has(section.id))),
+);
 const scraperCatalogSections = computed(() => {
   if (props.page.theme === 'amber') return mediaSections.value.slice(1);
   if (props.page.theme === 'wine' || props.page.theme === 'teal') return mediaSections.value;
   return [];
 });
-const manufacturingStages = industrialWorkflow.map(([title, description]) => `${title}. ${description}`);
+const manufacturingStages = computed(
+  () => props.page.workflow?.items ?? industrialWorkflow.map(([title, description]) => `${title}. ${description}`),
+);
 
 const isProjectRequestOpen = useState('project-request-open', () => false);
-const faq = [
-  {
-    question: 'Можно ли изготовить оборудование по индивидуальным размерам?',
-    answer:
-      'Да. Конструкция, материалы, привод, габариты и производительность рассчитываются по техническому заданию и условиям эксплуатации.',
-  },
-  {
-    question: 'Какие данные нужны для расчета?',
-    answer:
-      'Нужны свойства и объем груза, требуемая производительность, схема трассы, точки загрузки и выгрузки, режим работы и условия окружающей среды.',
-  },
-  {
-    question: 'Как согласуется конструкция?',
-    answer:
-      'До запуска в производство мы предоставляем чертеж общего вида, обсуждаем узлы и фиксируем согласованную комплектацию.',
-  },
-  {
-    question: 'Организуете ли вы доставку?',
-    answer: 'Да, готовое оборудование отправляем транспортом подходящей грузоподъемности в регионы России.',
-  },
-];
+const requestContext = useState('project-request-context', () => '');
+const modelLabel = (section: IndustrialSection) =>
+  props.page.sectionLinks?.find((link) => link.id === section.id)?.label ?? section.title;
+const openRequest = () => {
+  requestContext.value = '';
+  isProjectRequestOpen.value = true;
+};
+const openModelRequest = (section: IndustrialSection) => {
+  requestContext.value = `Интересует расчёт шлюзового затвора ${modelLabel(section)}.`;
+  isProjectRequestOpen.value = true;
+};
+const faq = computed(
+  () =>
+    props.page.faq ??
+    createIndustrialFaq(
+      'Нужны свойства и объём груза, требуемая производительность, схема трассы, точки загрузки и выгрузки, режим работы и условия окружающей среды.',
+    ),
+);
 </script>
 
 <template>
   <div class="industrial-page" :class="`industrial-page--${page.theme}`">
     <ProductIntroSection_02
       :title="page.introTitle"
+      :variant="page.introVariant"
       :image="page.image"
-      :image-alt="page.title"
+      :image-alt="page.imageAlt || page.title"
+      :image-fit="page.imageFit"
+      :image-scale="page.imageScale"
+      :image-height="page.imageHeight"
       button-label="Заказать расчёт"
-      label="Собственное производство"
+      :label="page.imageCaption ? '' : 'Собственное производство'"
       label-icon="lucide:factory"
-      @action="isProjectRequestOpen = true"
+      @action="openRequest"
     >
       <template #breadcrumbs>
         <BreadcrumbsNavigation
           :items="[
             { label: 'Главная', to: '/' },
-            { label: page.theme === 'steel' ? 'Металлоконструкции' : 'Каталог оборудования', to: '/#catalog' },
-            { label: page.introTitle },
+            page.parentBreadcrumb ?? {
+              label: page.theme === 'steel' ? 'Металлоконструкции' : 'Каталог оборудования',
+              to: '/#catalog',
+            },
+            { label: page.catalogVariant === 'categories' ? page.title : page.introTitle },
           ]"
         />
       </template>
-      <p v-for="paragraph in page.intro" :key="paragraph">{{ paragraph }}</p>
+      <template v-if="page.imageCaption" #caption>{{ page.imageCaption }}</template>
+      <p
+        v-for="paragraph in page.intro"
+        :key="paragraph"
+        :class="[page.introVariant === 'text-only' && 'industrial-page__intro-paragraph--justified']"
+      >
+        {{ paragraph }}
+      </p>
     </ProductIntroSection_02>
 
-    <ProductFactsSection_03 :facts="page.facts" />
+    <ProductFactsSection_03 v-if="page.facts.length" :facts="page.facts" />
+
+    <section v-if="page.classificationGroups?.length" class="industrial-types">
+      <div class="site-container industrial-types__inner">
+        <h2 class="industrial-types__title">{{ page.galleryTitle }}</h2>
+        <section v-for="group in page.classificationGroups" :key="group.title" class="industrial-types__group">
+          <h3 class="industrial-types__group-title">{{ group.title }}</h3>
+          <p class="industrial-types__description">{{ group.description }}</p>
+          <div class="industrial-types__grid">
+            <ScraperProductCard
+              v-for="(product, index) in group.items"
+              :key="product.href"
+              :product="product"
+              :index="index"
+              variant="category"
+              heading-tag="h4"
+            />
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section v-else-if="page.catalogVariant === 'categories'" class="industrial-types">
+      <div class="site-container industrial-types__inner">
+        <h2 class="industrial-types__title">{{ page.galleryTitle }}</h2>
+        <div class="industrial-types__grid">
+          <ScraperProductCard
+            v-for="(product, index) in mediaSections"
+            :key="product.title"
+            :product="product"
+            :index="index"
+            variant="category"
+          />
+        </div>
+      </div>
+    </section>
 
     <SpecsTableSection
       v-if="page.table"
@@ -72,7 +131,79 @@ const faq = [
       tone="soft"
     />
 
-    <section v-if="textSections.length" class="industrial-editorial">
+    <SpecsTableSection
+      v-for="table in page.tables"
+      :key="table.title"
+      :title="table.title"
+      :columns="table.headers"
+      :rows="table.rows"
+      :eyebrow="table.eyebrow ?? 'Расчётные данные'"
+      tone="soft"
+    />
+
+    <section v-if="modelSections.length" class="industrial-models">
+      <div class="content-section site-container">
+        <div class="industrial-section-heading">
+          <div class="industrial-section-heading__intro">
+            <p>Модельный ряд</p>
+            <span>Сравните производительность и параметры моделей, затем отправьте запрос на расчёт</span>
+          </div>
+          <h2>
+            Шлюзовые затворы
+            <em>ШУ-6, ШУ-15, ШУ-22 и ШУ-30</em>
+          </h2>
+        </div>
+        <nav class="industrial-models__nav" aria-label="Модели шлюзовых затворов ШУ">
+          <a v-for="link in page.sectionLinks" :key="link.id" class="industrial-models__nav-link" :href="`#${link.id}`">
+            {{ link.label }}
+          </a>
+        </nav>
+        <div class="industrial-models__grid">
+          <article
+            v-for="section in modelSections"
+            :id="section.id"
+            :key="section.title"
+            class="industrial-models__card"
+          >
+            <h3 class="industrial-models__title">{{ section.title }}</h3>
+            <p v-for="paragraph in section.text" :key="paragraph" class="industrial-models__text">
+              {{ paragraph }}
+            </p>
+            <ul v-if="section.items" class="industrial-models__specs">
+              <li v-for="item in section.items" :key="item" class="industrial-models__spec">{{ item }}</li>
+            </ul>
+            <UiButton class="industrial-models__action" @click="openModelRequest(section)">
+              Запросить расчёт {{ modelLabel(section) }}
+            </UiButton>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <LazyProjectGallerySlider
+      v-if="gallery?.length && page.projectsPlacement !== 'before-workflow'"
+      :images="gallery"
+      :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
+    />
+
+    <FaqSection_last_01
+      v-if="textSections.length && page.sectionsCollapsible"
+      :items="
+        textSections.map((section) => ({
+          question: section.title,
+          answer: section.text ?? [],
+          image: section.cardImage,
+        }))
+      "
+      :title="page.sectionsTitle ?? page.title"
+      eyebrow="Инженерный разбор"
+      title-id="industrial-selection-title"
+      layout="cards"
+      tone="white"
+      preserve-content
+    />
+
+    <section v-else-if="textSections.length" class="industrial-editorial">
       <div class="content-section site-container">
         <div class="industrial-section-heading">
           <div class="industrial-section-heading__intro">
@@ -87,7 +218,9 @@ const faq = [
         <div class="industrial-editorial__grid">
           <article
             v-for="(section, index) in textSections"
+            :id="section.id"
             :key="section.title"
+            class="industrial-editorial__card"
             :class="{
               'industrial-editorial__card--wide':
                 index === 0 && textSections.length > 2 && textSections.length % 2 === 1 && section.text?.length,
@@ -110,13 +243,16 @@ const faq = [
     </section>
 
     <ScraperConveyorsCatalog
-      v-if="page.theme === 'copper'"
+      v-if="!page.hideCatalog && page.catalogVariant !== 'categories' && page.theme === 'copper'"
       :title="page.galleryTitle"
       :sections="mediaSections"
-      @action="isProjectRequestOpen = true"
+      @action="openRequest"
     />
 
-    <section v-else-if="mediaSections.length" class="industrial-catalog">
+    <section
+      v-else-if="!page.hideCatalog && page.catalogVariant !== 'categories' && mediaSections.length"
+      class="industrial-catalog"
+    >
       <div class="content-section site-container">
         <div class="industrial-section-heading industrial-section-heading--light">
           <p v-if="page.theme !== 'amber' && page.title !== 'Барабаны ленточного конвейера'">Модельный ряд</p>
@@ -150,7 +286,7 @@ const faq = [
             :key="product.title"
             :product="product"
             :index="index"
-            @action="isProjectRequestOpen = true"
+            @action="openRequest"
           />
 
           <template v-if="!['amber', 'wine', 'teal'].includes(page.theme)">
@@ -193,21 +329,89 @@ const faq = [
       </div>
     </section>
 
+    <LazyProjectGallerySlider
+      v-if="gallery?.length && page.projectsPlacement === 'before-workflow'"
+      :images="gallery"
+      :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
+    />
+
     <ManufacturingStagesSection_last_02
-      title="От задачи до готового оборудования"
+      :title="page.workflow?.title ?? 'От задачи до готового оборудования'"
       :items="manufacturingStages"
-      note="Каждый этап фиксируем до запуска следующего: от исходных данных и чертежей до контроля готового оборудования и доставки."
-      eyebrow="Производственный цикл АБАТЭК"
+      :note="
+        page.workflow?.note ??
+        'Каждый этап фиксируем до запуска следующего: от исходных данных и чертежей до контроля готового оборудования и доставки.'
+      "
+      :eyebrow="page.workflow?.eyebrow ?? 'Производственный цикл АБАТЭК'"
     />
     <FaqSection_last_01 :items="faq" :title="`Частые вопросы: ${page.title.toLowerCase()}`" tone="soft" />
   </div>
 </template>
 
 <style scoped lang="scss">
+.industrial-types {
+  padding-block: 48px;
+  background: $soft;
+
+  &__title {
+    margin: 0 0 28px;
+    font-size: clamp(30px, 3.5vw, 44px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: $ink;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  &__group {
+    margin-top: 36px;
+  }
+
+  &__group-title {
+    margin: 0 0 12px;
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 500;
+    line-height: 1.3;
+    color: $ink;
+  }
+
+  &__description {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: $muted;
+  }
+}
+
+@media (max-width: $tablet) {
+  .industrial-types__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: $phone) {
+  .industrial-types {
+    padding-block: 32px;
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
 .industrial-page {
   --page-accent: #1769aa;
   --page-deep: #082f52;
   --page-tint: #edf5fb;
+
+  &__intro-paragraph--justified {
+    text-align: justify;
+    hyphens: auto;
+  }
 }
 
 .industrial-page--forest {
@@ -497,6 +701,10 @@ const faq = [
   --page-accent: #0757a4;
   --page-deep: #052f55;
   --page-tint: #eef5fb;
+}
+
+.industrial-page--wine .industrial-editorial__grid {
+  grid-template-columns: 1fr;
 }
 
 .industrial-page--teal {
@@ -1034,6 +1242,98 @@ const faq = [
   color: var(--page-accent);
 }
 
+.industrial-models {
+  background: #fff;
+  border-bottom: 1px solid $line;
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  &__nav-link {
+    padding: 10px 18px;
+    font-weight: 700;
+    color: var(--page-deep);
+    text-decoration: none;
+    background: var(--page-tint);
+    border: 1px solid $line;
+    border-radius: 999px;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--page-accent);
+      border-color: var(--page-accent);
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(24px, 3vw, 38px);
+    scroll-margin-top: 120px;
+    background: var(--page-tint);
+    border: 1px solid color-mix(in srgb, var(--page-accent) 18%, transparent);
+    border-radius: 18px;
+  }
+
+  &__title {
+    margin: 0 0 14px;
+    font-size: clamp(24px, 2.4vw, 32px);
+    line-height: 1.16;
+    color: $ink;
+    letter-spacing: -0.035em;
+  }
+
+  &__text {
+    margin: 0;
+    line-height: 1.7;
+    color: $muted;
+  }
+
+  &__specs {
+    display: grid;
+    gap: 9px;
+    padding: 0;
+    margin: 22px 0 28px;
+    list-style: none;
+  }
+
+  &__spec {
+    position: relative;
+    padding-left: 20px;
+    line-height: 1.5;
+    color: $ink;
+
+    &::before {
+      position: absolute;
+      top: 0.62em;
+      left: 0;
+      width: 7px;
+      height: 7px;
+      content: '';
+      background: var(--page-accent);
+      border-radius: 50%;
+    }
+  }
+
+  &__action {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+}
+
 .industrial-editorial {
   position: relative;
   overflow: hidden;
@@ -1091,6 +1391,36 @@ const faq = [
 
 .industrial-editorial__card--wide {
   grid-column: 1 / -1;
+}
+
+.industrial-editorial__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.industrial-editorial__nav-link {
+  padding: 10px 18px;
+  font-weight: 700;
+  color: var(--page-deep);
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 999px;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--page-accent);
+    border-color: var(--page-accent);
+  }
+}
+
+.industrial-editorial__card[id] {
+  scroll-margin-top: 120px;
 }
 
 .industrial-editorial__card-head {
@@ -1846,6 +2176,14 @@ const faq = [
 }
 
 @media (width <= $phone) {
+  .industrial-models__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .industrial-models__card {
+    padding: 24px 20px;
+  }
+
   .industrial-content ul {
     grid-template-columns: 1fr;
   }

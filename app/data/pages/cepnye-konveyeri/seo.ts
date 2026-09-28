@@ -1,7 +1,7 @@
 import type { PageSeo } from '../_shared/types';
 
 export const seo = {
-  title: 'Цепные конвейеры-транспортеры от производителя | АБАТЭК',
+  title: 'Цепные конвейеры-транспортеры - АБАТЭК',
   description:
     'Изготовление цепных, ленточно-цепных, скребковых, пластинчатых и подвесных конвейеров по техническому заданию.',
   keywords: [
@@ -16,7 +16,7 @@ export const seo = {
   robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   image: { src: '/images/source-26553325.webp', alt: 'Цепные конвейеры-транспортеры' },
   openGraph: {
-    title: 'Цепные конвейеры-транспортеры от производителя | АБАТЭК',
+    title: 'Цепные конвейеры-транспортеры - АБАТЭК',
     description: 'Цепные конвейеры для тяжёлых нагрузок и крупногабаритных грузов по индивидуальному проекту.',
     type: 'website',
     locale: 'ru_RU',
@@ -24,7 +24,7 @@ export const seo = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Цепные конвейеры-транспортеры | АБАТЭК',
+    title: 'Цепные конвейеры-транспортеры - АБАТЭК',
     description: 'Проектирование и изготовление цепных конвейеров под задачу производства.',
   },
   breadcrumbs: [

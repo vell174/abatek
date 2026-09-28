@@ -40,7 +40,7 @@ const copyEmail = async () => {
         <h3 class="footer__title">Связаться</h3>
         <a class="footer__link" href="tel:89511172210">
           8 (951) 117-22-10
-          <small class="footer__phone-note">WhatsApp, Viber</small>
+          <small class="footer__phone-note">Telegramm, MAX</small>
         </a>
         <a class="footer__link" href="tel:88005051915">
           8 (800) 505-19-15

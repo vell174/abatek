@@ -1,0 +1,41 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "name": "belt-conveyor",
+      "prompt": "Use case: product-mockup.\nAsset type: industrial equipment catalog category card for the Abatek website.\nStyle: realistic clean CAD-style 3D product render, brushed silver steel, restrained deep blue painted frames, black rubber where relevant, soft uniform studio lighting, subtle contact shadow.\nBackdrop: seamless pure white; no workshop, no surrounding scene.\nComposition: landscape 3:2, centered complete equipment, clear three-quarter view, 10 percent white margins, mechanically plausible industrial proportions, readable at thumbnail size.\nConstraints: no text, logos, watermarks, people, decorative props. Do not create a collage or several product variants. Show only one complete equipment unit.\nSubject: A horizontal industrial belt conveyor with a smooth black rubber belt, blue steel support frame on four legs, silver end drums, return rollers and a compact geared electric drive at one end. No boxes or material.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-3f5882fd-3bb9-4135-bed0-113bc7774520.png",
+      "output": "public/images/conveyor-types/belt-conveyor.webp"
+    },
+    {
+      "name": "belt-feeder",
+      "prompt": "Use case: product-mockup.\nAsset type: industrial equipment catalog category card for the Abatek website.\nStyle: realistic clean CAD-style 3D product render, brushed silver steel, restrained deep blue painted frames, black rubber where relevant, soft uniform studio lighting, subtle contact shadow.\nBackdrop: seamless pure white; no workshop, no surrounding scene.\nComposition: landscape 3:2, centered complete equipment, clear three-quarter view, 10 percent white margins, mechanically plausible industrial proportions, readable at thumbnail size.\nConstraints: no text, logos, watermarks, people, decorative props. Do not create a collage or several product variants. Show only one complete equipment unit.\nSubject: A short heavy-duty industrial belt feeder for controlled bulk-material discharge: low wide blue frame, black belt with raised blue side skirts, substantial rectangular steel loading hopper above its rear half, visible belt outlet front half, adjustable discharge opening and side geared motor. Do not depict a long generic transport conveyor.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-38a5f404-c203-4997-a5c5-930bfafc41fd.png",
+      "output": "public/images/conveyor-types/belt-feeder.webp"
+    },
+    {
+      "name": "screw-conveyor",
+      "prompt": "Use case: product-mockup.\nAsset type: industrial equipment catalog category card for the Abatek website.\nStyle: realistic clean CAD-style 3D product render, brushed silver steel, restrained deep blue painted frames, black rubber where relevant, soft uniform studio lighting, subtle contact shadow.\nBackdrop: seamless pure white; no workshop, no surrounding scene.\nComposition: landscape 3:2, centered complete equipment, clear three-quarter view, 10 percent white margins, mechanically plausible industrial proportions, readable at thumbnail size.\nConstraints: no text, logos, watermarks, people, decorative props. Do not create a collage or several product variants. Show only one complete equipment unit.\nSubject: An inclined tubular screw conveyor for bulk materials: long closed silver cylindrical tube, top discharge outlet, lower rectangular loading hopper, electric gearmotor at top, blue braced supporting legs. Enclosed auger body, no exposed rotating screw.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-9b656ec3-f64c-4d1e-a65e-b5c29cef3298.png",
+      "output": "public/images/conveyor-types/screw-conveyor.webp"
+    },
+    {
+      "name": "roller-conveyor",
+      "prompt": "Use case: product-mockup.\nAsset type: industrial equipment catalog category card for the Abatek website.\nStyle: realistic clean CAD-style 3D product render, brushed silver steel, restrained deep blue painted frames, black rubber where relevant, soft uniform studio lighting, subtle contact shadow.\nBackdrop: seamless pure white; no workshop, no surrounding scene.\nComposition: landscape 3:2, centered complete equipment, clear three-quarter view, 10 percent white margins, mechanically plausible industrial proportions, readable at thumbnail size.\nConstraints: no text, logos, watermarks, people, decorative props. Do not create a collage or several product variants. Show only one complete equipment unit.\nSubject: A straight industrial non-powered roller conveyor (roller table): many aligned cylindrical silver steel rollers spanning a deep blue rectangular frame on four blue braced legs, clean unobstructed roller surface. No belt and no cargo.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-eb31ef60-b4bc-4e09-a902-7f547b8ed83a.png",
+      "output": "public/images/conveyor-types/roller-conveyor.webp"
+    },
+    {
+      "name": "scraper-chain-conveyor",
+      "prompt": "Use case: product-mockup.\nAsset type: industrial equipment catalog category card for the Abatek website.\nStyle: realistic clean CAD-style 3D product render, brushed silver steel, restrained deep blue painted frames, black rubber where relevant, soft uniform studio lighting, subtle contact shadow.\nBackdrop: seamless pure white; no workshop, no surrounding scene.\nComposition: landscape 3:2, centered complete equipment, clear three-quarter view, 10 percent white margins, mechanically plausible industrial proportions, readable at thumbnail size.\nConstraints: no text, logos, watermarks, people, decorative props. Do not create a collage or several product variants. Show only one complete equipment unit.\nSubject: A horizontal enclosed industrial scraper chain conveyor for bulk materials: long low rectangular blue steel trough casing with bolted top covers, feed flange on upper surface near one end, discharge opening below opposite end, geared electric drive and guarded chain sprocket housing at head, supported on blue legs. One small open inspection window reveals a plausible chain carrying steel scraper flights inside. Not a belt conveyor.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-b40ec027-7a28-4aec-8d00-ef764af614d6.png",
+      "output": "public/images/conveyor-types/scraper-chain-conveyor.webp"
+    },
+    {
+      "name": "bucket-elevator",
+      "prompt": "Use case: product-mockup.\nAsset type: industrial equipment catalog category card for the Abatek website.\nStyle: realistic clean CAD-style 3D product render, brushed silver steel, restrained deep blue painted frames, black rubber where relevant, soft uniform studio lighting, subtle contact shadow.\nBackdrop: seamless pure white; no workshop, no surrounding scene.\nComposition: landscape 3:2, centered complete equipment, clear three-quarter view, 10 percent white margins, mechanically plausible industrial proportions, readable at thumbnail size.\nConstraints: no text, logos, watermarks, people, decorative props. Do not create a collage or several product variants. Show only one complete equipment unit.\nSubject: A tall industrial vertical bucket elevator for bulk materials: narrow twin-leg blue rectangular enclosed casing, curved head cover at top with side motor gearbox, side upper discharge chute, boot housing with loading chute at bottom and access panel, stable blue base frame. Small vertical cutaway window reveals steel elevator buckets attached to an internal belt; casing otherwise fully enclosed. Single slim complete unit.",
+      "source": "C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-bc2e1842-8c32-4ff4-bcb7-aca351425fdc.png",
+      "output": "public/images/conveyor-types/bucket-elevator.webp"
+    }
+  ]
+}

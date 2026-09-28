@@ -28,7 +28,7 @@ const setDialogOpen = (open: boolean) => {
 </script>
 
 <template>
-  <section class="content-section content-section--soft home-projects">
+  <section class="home-projects">
     <div class="site-container home-projects__container">
       <div class="home-projects__heading">
         <div class="home-projects__heading-content">
@@ -91,16 +91,19 @@ const setDialogOpen = (open: boolean) => {
 
 <style scoped lang="scss">
 .home-projects {
+  padding-block: 56px;
+  background: $soft;
+
   &__heading {
     display: flex;
-    gap: 32px;
+    gap: 24px;
     align-items: end;
     justify-content: space-between;
-    margin-bottom: 34px;
+    margin-bottom: 26px;
   }
 
   &__eyebrow {
-    margin: 0 0 14px;
+    margin: 0 0 10px;
     font-size: 13px;
     font-weight: 900;
     color: $blue;
@@ -111,7 +114,7 @@ const setDialogOpen = (open: boolean) => {
   &__title {
     max-width: 920px;
     margin: 0;
-    font-size: clamp(42px, 5vw, 64px);
+    font-size: clamp(32px, 3.6vw, 46px);
     line-height: 1.06;
     letter-spacing: -0.045em;
   }
@@ -126,8 +129,8 @@ const setDialogOpen = (open: boolean) => {
   &__control {
     display: grid;
     place-items: center;
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     color: $navy;
     cursor: pointer;
@@ -161,21 +164,21 @@ const setDialogOpen = (open: boolean) => {
 
   &__track {
     display: flex;
-    margin-left: -20px;
+    margin-left: -16px;
     touch-action: pan-y pinch-zoom;
   }
 
   &__slide {
     flex: 0 0 33.333%;
     min-width: 0;
-    padding-left: 20px;
+    padding-left: 16px;
   }
 
   &__card {
     position: relative;
     display: block;
     width: 100%;
-    min-height: 390px;
+    min-height: 290px;
     padding: 0;
     overflow: hidden;
     color: inherit;
@@ -209,14 +212,14 @@ const setDialogOpen = (open: boolean) => {
 
   &__number {
     position: absolute;
-    top: 24px;
-    left: 26px;
+    top: 18px;
+    left: 20px;
     z-index: 1;
     display: grid;
     place-items: center;
-    width: 54px;
-    height: 54px;
-    font-size: 17px;
+    width: 42px;
+    height: 42px;
+    font-size: 15px;
     font-weight: 900;
     color: $yellow;
     letter-spacing: 0.06em;
@@ -231,12 +234,12 @@ const setDialogOpen = (open: boolean) => {
 
   &__name {
     position: absolute;
-    right: 28px;
-    bottom: 26px;
-    left: 28px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
     z-index: 1;
     margin: 0;
-    font-size: 21px;
+    font-size: 18px;
     line-height: 1.35;
     color: #fff;
   }
@@ -368,6 +371,8 @@ const setDialogOpen = (open: boolean) => {
 
 @media (max-width: $phone) {
   .home-projects {
+    padding-block: 40px;
+
     &__heading {
       flex-direction: column;
       align-items: start;
@@ -386,7 +391,7 @@ const setDialogOpen = (open: boolean) => {
     }
 
     &__card {
-      min-height: 360px;
+      min-height: 260px;
     }
   }
 

@@ -1,7 +1,7 @@
 import type { PageSeo } from '../_shared/types';
 
 export const seo = {
-  title: 'Купить электронож для резки конвейерных лент и резины | АБАТЭК',
+  title: 'Дисковый резак ДР20 — купить электронож для конвейерных лент | АБАТЭК',
   description:
     'Проводные и аккумуляторные электроножи АБАТЭК для продольной и поперечной резки конвейерных лент, резины и полиуретана толщиной до 25 мм.',
   keywords: [
@@ -13,8 +13,11 @@ export const seo = {
   canonicalPath: '/elektronoji-dlya-rezki-konveyernih-lent-tehnicheskih-plastin/',
   robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   image: {
-    src: '/images/52715351.webp',
-    alt: 'Электронож для резки конвейерных лент, резины и технических пластин',
+    src: '/images/rezka-konveyernoy-lenty-elektronozhom-dr20-abatek.webp',
+    alt: 'Резка конвейерной ленты дисковым электроножом ДР20 АБАТЭК',
+    width: 1536,
+    height: 1024,
+    type: 'image/webp',
   },
   openGraph: {
     title: 'Купить электронож для резки конвейерных лент и резины | АБАТЭК',
@@ -44,12 +47,12 @@ export const seo = {
     category: 'Конвейерное оборудование',
     items: [
       {
-        name: 'Электронож дисковой проводной Makita',
-        image: '/images/52715337.webp',
+        name: 'Дисковый резак ДР20 АБАТЭК с проводным перфоратором Makita',
+        image: '/images/diskovyy-rezak-dr20-abatek-provodnoy-makita.webp',
       },
       {
-        name: 'Электронож дисковой аккумуляторный Metabo',
-        image: '/images/52715351.webp',
+        name: 'Дисковый резак ДР20А АБАТЭК с аккумуляторным перфоратором Metabo',
+        image: '/images/diskovyy-rezak-dr20a-abatek-akkumulyatornyy-metabo.webp',
       },
     ],
   },

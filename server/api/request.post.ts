@@ -1,11 +1,12 @@
 ﻿import { z } from 'zod';
 import { getDbPool, ensureSchema } from '../utils/db';
+import { isValidPhone } from '../../shared/utils/phone';
 import { sendRequestMail } from '../utils/mail';
 import { deliverRequestMail } from '../utils/mail-delivery';
 
 const requestSchema = z.object({
   name: z.string().trim().min(1, 'Укажите имя').max(200),
-  phone: z.string().trim().min(5, 'Укажите телефон').max(50),
+  phone: z.string().trim().max(50).refine(isValidPhone, 'Укажите корректный телефон с кодом страны'),
   email: z.union([z.string().trim().email('Некорректный e-mail').max(200), z.literal('')]).default(''),
   message: z.string().trim().max(2000).default(''),
   page: z.string().trim().max(500).default(''),

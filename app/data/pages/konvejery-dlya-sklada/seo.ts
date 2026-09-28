@@ -1,3 +1,3 @@
-import { createApplicationSeo } from '../_shared/create-application-page';
-import { options } from './data';
-export const seo = createApplicationSeo(options);
+import { createBeltVariantSeo } from '../_shared/create-belt-variant-page';
+
+export const seo = createBeltVariantSeo('konvejery-dlya-sklada');

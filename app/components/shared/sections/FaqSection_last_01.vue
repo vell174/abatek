@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { AccordionContent, AccordionHeader, AccordionItem, AccordionRoot, AccordionTrigger } from 'reka-ui';
+import type { GalleryImage } from '~/data/pages/_shared/types';
 
 interface FaqItem {
   question: string;
-  answer: string;
+  answerTitle?: string;
+  image?: GalleryImage;
+  answer: string | string[];
 }
 
 withDefaults(
@@ -13,17 +16,21 @@ withDefaults(
     eyebrow?: string;
     titleId?: string;
     tone?: 'soft' | 'white';
+    layout?: 'split' | 'cards';
+    preserveContent?: boolean;
   }>(),
   {
     eyebrow: 'Ответы специалиста',
     titleId: 'faq-title',
     tone: 'soft',
+    layout: 'split',
+    preserveContent: false,
   },
 );
 </script>
 
 <template>
-  <section class="faq-section" :class="`faq-section--${tone}`" :aria-labelledby="titleId">
+  <section class="faq-section" :class="[`faq-section--${tone}`, `faq-section--${layout}`]" :aria-labelledby="titleId">
     <div class="content-section site-container faq-section__inner">
       <div>
         <p class="faq-section__eyebrow">{{ eyebrow }}</p>
@@ -45,8 +52,30 @@ withDefaults(
               </span>
             </AccordionTrigger>
           </AccordionHeader>
-          <AccordionContent class="faq-section__content">
-            <p>{{ item.answer }}</p>
+          <AccordionContent
+            class="faq-section__content"
+            :class="[preserveContent && 'faq-section__content--persistent']"
+            :force-mount="preserveContent"
+          >
+            <h3 v-if="item.answerTitle" class="faq-section__answer-title">{{ item.answerTitle }}</h3>
+            <img
+              v-if="item.image"
+              class="faq-section__image"
+              :src="item.image.src"
+              :alt="item.image.alt"
+              :width="item.image.width ?? 480"
+              :height="item.image.height ?? 320"
+              :style="item.image.imageFit ? { objectFit: item.image.imageFit } : undefined"
+              loading="lazy"
+              decoding="async"
+            />
+            <p
+              v-for="paragraph in Array.isArray(item.answer) ? item.answer : [item.answer]"
+              :key="paragraph"
+              class="faq-section__paragraph"
+            >
+              {{ paragraph }}
+            </p>
           </AccordionContent>
         </AccordionItem>
       </AccordionRoot>
@@ -126,16 +155,17 @@ withDefaults(
   color: $blue;
   background: #fff;
   border-radius: 50%;
+}
 
-  svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 17px;
-    height: 17px;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.18s ease;
-  }
+.faq-section__icon-plus,
+.faq-section__icon-minus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 17px;
+  height: 17px;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.18s ease;
 }
 
 .faq-section__icon-minus {
@@ -161,13 +191,54 @@ withDefaults(
     animation: faq-accordion-up 0.2s ease-out;
   }
 
-  p {
-    max-width: 720px;
-    padding: 0 48px 22px 0;
-    margin: 0;
-    line-height: 1.7;
-    color: $muted;
+  &--persistent[data-state='closed'] {
+    display: none;
   }
+}
+
+.faq-section__paragraph {
+  max-width: 720px;
+  padding: 0 48px 22px 0;
+  margin: 0;
+  line-height: 1.7;
+  color: $muted;
+}
+
+.faq-section__answer-title {
+  padding: 0 48px 16px 0;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.4;
+  color: $ink;
+}
+
+.faq-section__image {
+  display: block;
+  width: min(100%, 360px);
+  height: 200px;
+  margin: 0 0 18px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.faq-section--cards .faq-section__inner {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+}
+
+.faq-section--cards .faq-section__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+  border-top: 0;
+}
+
+.faq-section--cards .faq-section__item {
+  padding: 0 24px;
+  background: $soft;
+  border: 1px solid $line;
+  border-radius: 16px;
 }
 
 @keyframes faq-accordion-down {
@@ -197,6 +268,10 @@ withDefaults(
 }
 
 @media (width <= $phone) {
+  .faq-section--cards .faq-section__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .faq-section__inner {
     padding-top: 44px;
   }

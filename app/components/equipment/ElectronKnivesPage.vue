@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { catalog } from '~/data/pages/elektronoji-dlya-rezki-konveyernih-lent-tehnicheskih-plastin/data-catalog';
-import { electronKnivesFaq } from '~/data/pages/elektronoji-dlya-rezki-konveyernih-lent-tehnicheskih-plastin/data';
+import {
+  electronKnivesDemoVideo,
+  electronKnivesDriveAdvantages,
+  electronKnivesDriveAnimation,
+  electronKnivesFaq,
+} from '~/data/pages/elektronoji-dlya-rezki-konveyernih-lent-tehnicheskih-plastin/data';
 
 const isProjectRequestOpen = useState('project-request-open', () => false);
 
@@ -17,16 +22,8 @@ const materials = [
     text: 'Резинотканевые, полиуретановые и ПВХ-ленты, а также полиэфирные сетки. Подходит для продольного и поперечного раскроя без разлохмачивания слоёв и оплавления кромки.',
   },
   {
-    title: 'Технические пластины',
-    text: 'Текстолит, стеклотекстолит, гетинакс, фторопласт (PTFE), полиамид (капролон), полиацеталь, полипропилен и оргстекло. В зависимости от модели возможен раскрой листов толщиной от 0,5 до 20 мм и более.',
-  },
-  {
     title: 'Резинотехнические изделия',
     text: 'Листовая резина, эластомеры и силиконы. Инструмент не растягивает материал и помогает получать заготовки с точной геометрией.',
-  },
-  {
-    title: 'Ткани и композиты',
-    text: 'Стеклоткань, углеткань, кевлар и арамидные материалы для производственных и ремонтных задач.',
   },
 ];
 
@@ -49,7 +46,7 @@ const users = [
     <ProductIntroSection_02
       eyebrow="Профессиональный раскрой материалов"
       title="Электроножи для точной и быстрой резки"
-      image="/images/52715351.webp"
+      image="/images/elektronozh-dlya-rezki-konveyernoy-lenty-dr20.webp"
       image-alt="Аккумуляторный дисковой электронож АБАТЭК для резки конвейерных лент"
       button-label="Получить консультацию"
       label="Собственное производство"
@@ -80,7 +77,7 @@ const users = [
 
     <section class="knife-page__catalog">
       <div class="site-container">
-        <p class="knife-page__eyebrow">Производимые модели</p>
+        <p class="knife-page__eyebrow">Предлагаемые модели</p>
         <h2 class="knife-page__section-title">Проводные и аккумуляторные электроножи</h2>
         <div class="knife-page__product-list">
           <article v-for="product in catalog" :key="product.name" class="knife-page__product">
@@ -104,8 +101,8 @@ const users = [
         <article class="knife-page__blade">
           <div class="knife-page__blade-media">
             <img
-              src="/images/26552451.webp"
-              alt="Дисковой нож АРН-200-32-2"
+              src="/images/nozh-diskovyy-arn-200-32-2-abatek.webp"
+              alt="Дисковый нож АРН-200-32-2"
               width="800"
               height="600"
               loading="lazy"
@@ -114,10 +111,10 @@ const users = [
           </div>
           <div>
             <p class="knife-page__price">Расходный материал · цена по запросу</p>
-            <h3>Нож дисковой АРН-200-32-2</h3>
+            <h3>Нож дисковый АРН-200-32-2</h3>
             <p>
               Диск изготавливается из нержавеющей инструментальной стали и проходит криогенную термическую обработку,
-              которая увеличивает срок службы режущей кромки.
+              которая увеличивает срок службы режущей кромки. Твёрдость лезвия составляет 55–60 HRC.
             </p>
             <p>
               При интенсивной ежедневной работе рекомендуется проверять заточку и ориентировочно раз в два месяца
@@ -130,10 +127,23 @@ const users = [
       </div>
     </section>
 
+    <section class="knife-page__materials">
+      <div class="site-container">
+        <p class="knife-page__eyebrow">Возможности оборудования</p>
+        <h2 class="knife-page__section-title">Какие материалы можно резать</h2>
+        <div class="knife-page__card-grid">
+          <article v-for="material in materials" :key="material.title" class="knife-page__card">
+            <h3>{{ material.title }}</h3>
+            <p>{{ material.text }}</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="content-section site-container knife-page__details">
       <article class="knife-page__article">
         <p class="knife-page__eyebrow">Назначение</p>
-        <h2 class="knife-page__section-title">Кому подходит оборудование</h2>
+        <h2 class="knife-page__section-title">Кому подходит данный инструмент</h2>
         <p>
           Электронож ДР20 предназначен для быстрой и безопасной продольной и поперечной резки конвейерной ленты.
           Инструмент помогает провести рез по заданной линии и не испортить дорогостоящий материал.
@@ -146,45 +156,56 @@ const users = [
         <p class="knife-page__eyebrow">Принцип работы</p>
         <h2 class="knife-page__section-title">Как работает электронож</h2>
         <p>
-          Привод сообщает режущему элементу движение, благодаря которому инструмент проходит через вязкие, многослойные
-          и упругие материалы с меньшим усилием. Материал разделяется без сильной деформации и перегрева кромки. В
-          зависимости от задачи применяются прямые, сегментные или дисковые лезвия.
+          Электронож для резки конвейерных лент, резины и полиуретана — это инструмент с дисковым лезвием, своего рода
+          ручной станок. Благодаря высокому крутящему моменту и твёрдому острому лезвию он способен прорезать
+          многослойные и упругие материалы. В качестве режущего элемента используется дисковый нож АРН-200-32-2.
         </p>
         <p>
-          В отличие от обычного механического ножа лезвие не только давит на материал и раздвигает его структуру, но
-          аккуратно разделяет слои. Это особенно важно при работе с вязкими, упругими и многослойными полотнами.
+          В качестве привода используется перфоратор. Редуктор увеличивает крутящий момент в 25 раз, обеспечивая
+          уверенный и точный рез.
         </p>
+      </article>
+      <article class="knife-page__article knife-page__article--wide">
+        <div class="knife-page__article-content">
+          <p class="knife-page__eyebrow">Преимущества</p>
+          <h2 class="knife-page__section-title">
+            Преимущества использования перфоратора в качестве привода дискового резака ДР20
+          </h2>
+          <ul class="knife-page__list">
+            <li v-for="advantage in electronKnivesDriveAdvantages" :key="advantage">{{ advantage }}</li>
+          </ul>
+        </div>
+        <figure class="knife-page__advantages-media">
+          <img
+            class="knife-page__advantages-image"
+            :src="electronKnivesDriveAnimation.src"
+            :alt="electronKnivesDriveAnimation.alt"
+            width="400"
+            height="300"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
       </article>
     </section>
 
     <section class="knife-page__video-band">
       <div class="site-container knife-page__video-section">
         <div class="knife-page__video">
-          <iframe
-            src="https://rutube.ru/play/embed/75093ff18792eab437373d6fbebd8df8/?from=partner"
-            title="Электронож для резки конвейерных лент"
-            loading="lazy"
-            allow="autoplay; encrypted-media; fullscreen; screen-wake-lock; accelerometer; clipboard-write"
-            allowfullscreen
+          <video
+            class="knife-page__video-player"
+            :src="electronKnivesDemoVideo.src"
+            :poster="electronKnivesDemoVideo.poster"
+            :title="electronKnivesDemoVideo.title"
+            controls
+            preload="metadata"
+            playsinline
           />
         </div>
         <div>
-          <p class="knife-page__eyebrow">Электронож в работе</p>
-          <h2 class="knife-page__section-title">Резка конвейерной ленты</h2>
-          <p>Демонстрация работы оборудования на производственном материале.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="knife-page__materials">
-      <div class="site-container">
-        <p class="knife-page__eyebrow">Возможности оборудования</p>
-        <h2 class="knife-page__section-title">Какие материалы можно резать</h2>
-        <div class="knife-page__card-grid">
-          <article v-for="material in materials" :key="material.title" class="knife-page__card">
-            <h3>{{ material.title }}</h3>
-            <p>{{ material.text }}</p>
-          </article>
+          <p class="knife-page__eyebrow">{{ electronKnivesDemoVideo.eyebrow }}</p>
+          <h2 class="knife-page__section-title">{{ electronKnivesDemoVideo.heading }}</h2>
+          <p>{{ electronKnivesDemoVideo.description }}</p>
         </div>
       </div>
     </section>
@@ -206,7 +227,7 @@ const users = [
 
     <FaqSection_last_01
       :items="electronKnivesFaq"
-      title="Частые вопросы об электроножах"
+      title="Частые вопросы об электроножах для резки конвейерных лент, резины и полиуретана"
       title-id="electron-knives-faq-title"
     />
 
@@ -272,6 +293,7 @@ const users = [
       width: 100%;
       height: 100%;
       object-fit: contain;
+      border-radius: 12px;
     }
   }
 
@@ -279,9 +301,9 @@ const users = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 54px;
-    padding-inline: 28px;
-    margin-top: 14px;
+    min-height: 48px;
+    padding-inline: 24px;
+    margin-top: 10px;
     font-weight: 850;
     color: $navy;
     cursor: pointer;
@@ -296,31 +318,39 @@ const users = [
     background: $soft;
   }
 
+  &__catalog {
+    padding-bottom: 32px;
+  }
+
+  &__materials {
+    padding-top: 24px;
+  }
+
   &__product-list {
     display: grid;
-    gap: 26px;
-    margin-top: 42px;
+    gap: 20px;
+    margin-top: 32px;
   }
 
   &__product {
     display: grid;
     grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
-    gap: clamp(24px, 3vw, 44px);
-    padding: clamp(22px, 3vw, 38px);
+    gap: clamp(20px, 2.5vw, 34px);
+    padding: clamp(18px, 2.5vw, 28px);
     background: #fff;
     border: 1px solid $line;
     border-radius: 20px;
   }
 
   &__product-media {
-    min-height: 340px;
-    padding: 18px;
+    min-height: 280px;
+    padding: 14px;
   }
 
   &__product-content h3,
   &__blade h3 {
-    margin: 0 0 18px;
-    font-size: clamp(26px, 3vw, 38px);
+    margin: 0 0 12px;
+    font-size: clamp(24px, 2.6vw, 32px);
     letter-spacing: -0.035em;
   }
 
@@ -342,7 +372,8 @@ const users = [
     display: grid;
     grid-template-columns: minmax(150px, 0.8fr) 1.2fr;
     gap: 18px;
-    padding-block: 8px;
+    padding-block: 6px;
+    font-size: 14px;
     border-bottom: 1px solid $line;
 
     dt {
@@ -385,6 +416,28 @@ const users = [
   &__article {
     padding-top: 24px;
     border-top: 3px solid $yellow;
+  }
+
+  &__article--wide {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    grid-column: 1 / -1;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+
+  &__advantages-media {
+    margin: 0;
+    overflow: hidden;
+    background: $soft;
+    border-radius: 16px;
+  }
+
+  &__advantages-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
   }
 
   &__list {
@@ -451,11 +504,13 @@ const users = [
       content: '';
     }
 
-    iframe {
+    &-player {
       position: absolute;
       inset: 0;
+      display: block;
       width: 100%;
       height: 100%;
+      object-fit: cover;
       border: 0;
     }
   }
@@ -718,6 +773,14 @@ const users = [
     &__related-container {
       grid-template-columns: 1fr;
     }
+
+    &__article--wide {
+      grid-template-columns: 1fr;
+    }
+
+    &__advantages-media {
+      max-width: 520px;
+    }
   }
 }
 
@@ -729,9 +792,12 @@ const users = [
     }
 
     &__catalog,
-    &__materials,
     &__video-section {
       padding-top: 44px;
+    }
+
+    &__materials {
+      padding-top: 24px;
     }
 
     &__section-title {
@@ -765,7 +831,7 @@ const users = [
     }
 
     &__product-media {
-      min-height: 300px;
+      min-height: 240px;
     }
 
     &__spec {

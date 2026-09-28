@@ -1,5 +1,5 @@
 import { gallery as beltConveyors } from '../lentochnye-konvejery/gallery';
-import { gallery as foodLines } from '../konvejery-dlya-konfet/gallery';
+import { gallery as foodLines } from '../konvejery-dlya-kartofelya/gallery';
 import { gallery as industryLines } from '../konvejery-dlya-uglya/gallery';
 import { gallery as rollerConveyors } from '../rolgang/gallery';
 import { gallery as tanks } from '../rezervuary/gallery';

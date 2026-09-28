@@ -1,0 +1,16 @@
+[
+  {
+    "key": "sidewall",
+    "prompt": "Use case: product-mockup. Asset type: industrial conveyor catalog illustration. Pure white background, landscape 3:2, whole object visible with white margins, clean realistic CAD render, blue steel frame, black belt, silver rollers. Physically connected side-mounted gearmotor on drive drum shaft with torque arm. No logos, text, watermark or environment. Subject: a steeply inclined belt conveyor with a short horizontal receiving section and an upper horizontal discharge. The black rubber belt has clearly visible high CORRUGATED FLEXIBLE SIDEWALLS on BOTH long edges and many transverse black cleats joining them, forming real pockets. Show these pockets and corrugations prominently. Continuous closed belt loop, tall sturdy supports. Not a flat smooth belt. No cargo.",
+    "mode": "built-in imagegen",
+    "output": "public/images/belt-classification/sidewall.webp",
+    "source": "Generated images are saved to C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44 as C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-ec7b500c-0b19-4c3d-adfd-bf44517ce720.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "key": "telescopic",
+    "prompt": "Use case: product-mockup. Asset type: industrial conveyor catalog illustration. Pure white background, landscape 3:2, whole object visible with white margins, clean realistic CAD render, blue steel frame, black belt, silver rollers. Physically connected side-mounted gearmotor on drive drum shaft with torque arm. No logos, text, watermark or environment. Subject: horizontal telescopic belt conveyor for truck loading. Large fixed blue rear base and three progressively narrower telescoping blue nested boom sections extended forward, black flat conveying belt along the entire top. Distinct exposed nested stages and sliding guides, structurally plausible cantilever support from fixed base. Rear base has leveling feet, no legs under extended nose. Three-quarter view clearly showing extension mechanism. No truck, cargo or other machinery.",
+    "mode": "built-in imagegen",
+    "output": "public/images/belt-classification/telescopic.webp",
+    "source": "Generated images are saved to C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44 as C:\\Users\\Admin\\.codex\\generated_images\\01a0dc64-d4d0-7031-be96-49b6c8ba7e44\\exec-4103b850-d3ae-4f5e-ae51-a2bf776ca8da.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  }
+]

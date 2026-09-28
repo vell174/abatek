@@ -57,9 +57,9 @@ const setViewerOpen = (open: boolean) => {
   <section class="project-gallery" aria-labelledby="project-gallery-title">
     <div class="content-section site-container">
       <header class="project-gallery__heading">
-        <div>
-          <p>Реализованные решения</p>
-          <h2 id="project-gallery-title">{{ title }}</h2>
+        <div class="project-gallery__heading-content">
+          <p class="project-gallery__eyebrow">Реализованные решения</p>
+          <h2 id="project-gallery-title" class="project-gallery__title">{{ title }}</h2>
         </div>
         <div class="project-gallery__controls">
           <span>{{ String(selectedIndex + 1).padStart(2, '0') }} / {{ String(images.length).padStart(2, '0') }}</span>
@@ -76,7 +76,15 @@ const setViewerOpen = (open: boolean) => {
         <div class="project-gallery__track">
           <figure v-for="(image, index) in images" :key="`${image.src}-${index}`" class="project-gallery__slide">
             <button type="button" :aria-label="`Открыть фотографию: ${image.alt}`" @click="openImage(image)">
-              <img :src="image.src" :alt="image.alt" width="1200" height="800" loading="lazy" />
+              <img
+                :src="image.src"
+                :alt="image.alt"
+                :width="image.width ?? 1200"
+                :height="image.height ?? 800"
+                :style="image.imageFit ? { objectFit: image.imageFit } : undefined"
+                loading="lazy"
+                decoding="async"
+              />
               <span class="project-gallery__shade" aria-hidden="true" />
               <span class="project-gallery__number">{{ String(index + 1).padStart(2, '0') }}</span>
               <span class="project-gallery__caption">{{ image.alt }}</span>
@@ -107,7 +115,12 @@ const setViewerOpen = (open: boolean) => {
           <DialogDescription class="gallery-viewer__description">
             Фотография выполненного проекта АБАТЭК
           </DialogDescription>
-          <img :src="selectedImage.src" :alt="selectedImage.alt" width="1920" height="1280" />
+          <img
+            :src="selectedImage.fullSrc ?? selectedImage.src"
+            :alt="selectedImage.alt"
+            :width="selectedImage.fullWidth ?? 1920"
+            :height="selectedImage.fullHeight ?? 1280"
+          />
           <DialogClose class="gallery-viewer__close" aria-label="Закрыть фотографию">
             <Icon name="lucide:x" aria-hidden="true" mode="svg" />
           </DialogClose>
@@ -148,23 +161,28 @@ const setViewerOpen = (open: boolean) => {
     align-items: end;
     justify-content: space-between;
     margin-bottom: 38px;
+  }
 
-    p {
-      margin: 0 0 12px;
-      font-size: 11px;
-      font-weight: 900;
-      color: #f5c518;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
+  &__heading-content {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
 
-    h2 {
-      max-width: 900px;
-      margin: 0;
-      font-size: clamp(36px, 5vw, 64px);
-      line-height: 1.03;
-      letter-spacing: -0.05em;
-    }
+  &__eyebrow {
+    margin: 0 0 12px;
+    font-size: 11px;
+    font-weight: 900;
+    color: #f5c518;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  &__title {
+    max-width: 1120px;
+    margin: 0;
+    font-size: clamp(32px, 4vw, 54px);
+    line-height: 1;
+    letter-spacing: -0.045em;
   }
 
   &__controls {
@@ -405,6 +423,11 @@ const setViewerOpen = (open: boolean) => {
     &__heading {
       flex-direction: column;
       align-items: start;
+    }
+
+    &__title {
+      font-size: clamp(30px, 9vw, 40px);
+      line-height: 1.05;
     }
 
     &__controls {

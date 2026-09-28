@@ -1,33 +1,68 @@
 <script setup lang="ts">
 import type { IndustrialSection } from '~/data/pages/_shared/types';
 
-defineProps<{ product: IndustrialSection; index: number }>();
+const { variant = 'default', headingTag = 'h3' } = defineProps<{
+  product: IndustrialSection;
+  index: number;
+  variant?: 'default' | 'category';
+  headingTag?: 'h3' | 'h4';
+}>();
 defineEmits<{ action: [] }>();
 </script>
 
 <template>
-  <article class="scraper-product">
-    <figure>
-      <img :src="product.image" :alt="product.imageAlt || product.title" loading="lazy" width="900" height="700" />
-      <span>{{ String(index + 1).padStart(2, '0') }}</span>
-    </figure>
-    <div class="scraper-product__body">
-      <div class="scraper-product__content">
-        <h3>{{ product.title }}</h3>
-        <p v-for="paragraph in product.text" :key="paragraph">{{ paragraph }}</p>
-        <ul v-if="product.items?.length">
-          <li v-for="item in product.items" :key="item">{{ item }}</li>
-        </ul>
+  <article
+    :id="product.id"
+    class="scraper-product"
+    :class="[variant === 'category' ? 'scraper-product--category' : '']"
+  >
+    <NuxtLink v-if="variant === 'category' && product.href" class="scraper-product__category-link" :to="product.href">
+      <img
+        class="scraper-product__category-image"
+        :src="product.image"
+        :alt="product.imageAlt || product.title"
+        width="720"
+        height="480"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="scraper-product__category-heading">
+        <component :is="headingTag" class="scraper-product__category-title">{{ product.title }}</component>
+        <Icon class="scraper-product__category-arrow" name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
       </div>
-      <NuxtLink v-if="product.href" class="scraper-product__link" :to="product.href">
-        Подробнее о товаре
-        <Icon name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
-      </NuxtLink>
-      <button type="button" @click="$emit('action')">
-        Получить расчёт
-        <span aria-hidden="true">→</span>
-      </button>
-    </div>
+      <p v-for="paragraph in product.text" :key="paragraph" class="scraper-product__category-text">{{ paragraph }}</p>
+    </NuxtLink>
+    <template v-else>
+      <figure>
+        <img
+          class="scraper-product__image"
+          :class="{ 'scraper-product__image--contain': product.imageFit === 'contain' }"
+          :src="product.image"
+          :alt="product.imageAlt || product.title"
+          loading="lazy"
+          width="900"
+          height="700"
+        />
+        <span>{{ String(index + 1).padStart(2, '0') }}</span>
+      </figure>
+      <div class="scraper-product__body">
+        <div class="scraper-product__content">
+          <h3>{{ product.title }}</h3>
+          <p v-for="paragraph in product.text" :key="paragraph">{{ paragraph }}</p>
+          <ul v-if="product.items?.length">
+            <li v-for="item in product.items" :key="item">{{ item }}</li>
+          </ul>
+        </div>
+        <NuxtLink v-if="product.href" class="scraper-product__link" :to="product.href">
+          Подробнее о товаре
+          <Icon name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
+        </NuxtLink>
+        <button type="button" @click="$emit('action')">
+          Получить расчёт
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </template>
   </article>
 </template>
 
@@ -43,6 +78,67 @@ defineEmits<{ action: [] }>();
   transition:
     border-color 0.22s ease,
     transform 0.22s ease;
+
+  &--category {
+    min-height: 0;
+    background: #fff;
+    border: 1px solid $line;
+  }
+
+  &__category-link {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    color: $ink;
+    text-decoration: none;
+
+    &:focus-visible {
+      outline: 3px solid $blue;
+      outline-offset: -3px;
+    }
+  }
+
+  &__category-image {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+  }
+
+  &__category-heading {
+    display: flex;
+    gap: 12px;
+    align-items: start;
+    padding-top: 14px;
+    border-top: 1px solid $line;
+  }
+
+  &--category &__category-title {
+    flex: 1;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: $ink;
+    letter-spacing: normal;
+  }
+
+  &__category-arrow {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    color: $blue;
+  }
+
+  &--category &__category-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: $muted;
+  }
 }
 
 .scraper-product:hover {
@@ -57,11 +153,16 @@ defineEmits<{ action: [] }>();
   background: #fff;
 }
 
-.scraper-product img {
+.scraper-product__image {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.scraper-product__image--contain {
+  padding: 12px;
+  object-fit: contain;
 }
 
 .scraper-product figure > span {

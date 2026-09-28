@@ -4,12 +4,20 @@ withDefaults(
     title: string;
     image: string;
     imageAlt: string;
+    imageFit?: 'cover' | 'contain';
+    imageScale?: 'default' | '120';
+    imageHeight?: 'default' | 'tall';
+    variant?: 'default' | 'text-only';
     eyebrow?: string;
     buttonLabel?: string;
     label?: string;
     labelIcon?: string;
   }>(),
   {
+    imageFit: 'cover',
+    imageScale: 'default',
+    imageHeight: 'default',
+    variant: 'default',
     eyebrow: 'Производство АБАТЭК',
     buttonLabel: 'Получить консультацию',
     label: '',
@@ -20,18 +28,29 @@ defineEmits<{ action: [] }>();
 </script>
 
 <template>
-  <section class="product-intro-02 site-container">
+  <section class="product-intro-02 site-container" :class="[`product-intro-02--${variant}`]">
     <div class="product-intro-02__content">
       <div v-if="$slots.breadcrumbs" class="product-intro-02__breadcrumbs">
         <slot name="breadcrumbs" />
       </div>
       <p class="product-intro-02__eyebrow">{{ eyebrow }}</p>
-      <h2>{{ title }}</h2>
+      <h2 class="product-intro-02__title">{{ title }}</h2>
       <div class="product-intro-02__copy"><slot /></div>
       <button type="button" @click="$emit('action')">{{ buttonLabel }}</button>
     </div>
-    <figure>
-      <img :src="image" :alt="imageAlt" width="1920" height="1080" />
+    <figure v-if="variant !== 'text-only'">
+      <img
+        class="product-intro-02__image"
+        :class="{
+          'product-intro-02__image--contain': imageFit === 'contain',
+          'product-intro-02__image--scale-120': imageScale === '120',
+          'product-intro-02__image--tall': imageHeight === 'tall',
+        }"
+        :src="image"
+        :alt="imageAlt"
+        width="1920"
+        height="1080"
+      />
       <span v-if="label" class="product-intro-02__label">
         <Icon :name="labelIcon" mode="svg" aria-hidden="true" />
         {{ label }}
@@ -48,6 +67,12 @@ defineEmits<{ action: [] }>();
   gap: clamp(42px, 7vw, 94px);
   align-items: center;
   padding-block: clamp(52px, 7vw, 86px);
+
+  &--text-only {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-block: clamp(32px, 4vw, 52px);
+  }
 }
 
 .product-intro-02__content {
@@ -78,13 +103,21 @@ defineEmits<{ action: [] }>();
   letter-spacing: 0.16em;
 }
 
-.product-intro-02 h2 {
+.product-intro-02__title {
   max-width: 700px;
   margin: 0;
   font-size: clamp(35px, 4.5vw, 60px);
   line-height: 1.08;
   color: #052f55;
   letter-spacing: -0.045em;
+}
+
+.product-intro-02--text-only .product-intro-02__title {
+  max-width: 100%;
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
 }
 
 .product-intro-02__copy {
@@ -112,6 +145,7 @@ defineEmits<{ action: [] }>();
   position: relative;
   padding: 14px;
   margin: 0;
+  overflow: hidden;
   background: #eef5fb;
   border: 1px solid rgb(7 87 164 / 10%);
   border-radius: 22px;
@@ -156,13 +190,26 @@ defineEmits<{ action: [] }>();
   border-radius: inherit;
 }
 
-.product-intro-02 img {
+.product-intro-02__image {
   display: block;
   width: 100%;
   height: clamp(310px, 34vw, 430px);
   object-fit: cover;
   background: #fff;
   border-radius: 14px;
+}
+
+.product-intro-02__image--contain {
+  padding: 10px;
+  object-fit: contain;
+}
+
+.product-intro-02__image--scale-120 {
+  transform: scale(1.2);
+}
+
+.product-intro-02__image--tall {
+  height: clamp(400px, 44vw, 560px);
 }
 
 .product-intro-02 figcaption {
@@ -189,7 +236,7 @@ defineEmits<{ action: [] }>();
     max-width: 100%;
   }
 
-  .product-intro-02 h2 {
+  .product-intro-02__title {
     width: 100%;
     max-width: 100%;
     font-size: 32px;
@@ -206,8 +253,12 @@ defineEmits<{ action: [] }>();
     white-space: normal;
   }
 
-  .product-intro-02 img {
+  .product-intro-02__image {
     height: 280px;
+  }
+
+  .product-intro-02__image--tall {
+    height: 340px;
   }
 
   .product-intro-02__label {

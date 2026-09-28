@@ -1,3 +1,3 @@
-import { createProductSeo } from '../_shared/create-product-page';
-import { options } from './data';
-export const seo = createProductSeo(options);
+import { createBeltVariantSeo } from '../_shared/create-belt-variant-page';
+
+export const seo = createBeltVariantSeo('povorotnye-lentochnye-konvejery');

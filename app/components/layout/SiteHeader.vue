@@ -19,9 +19,12 @@ import { catalogGroups } from '~/data/navigation/catalog';
 const route = useRoute();
 const isProjectRequestOpen = useState('project-request-open', () => false);
 const normalizedRoutePath = computed(() => route.path.replace(/\/+$/, '') || '/');
-const isActiveCatalogItem = (to: string) => normalizedRoutePath.value === to;
+const isActiveCatalogItem = (to?: string) =>
+  Boolean(to && normalizedRoutePath.value === (to.replace(/\/+$/, '') || '/'));
 const activeCatalogGroup = computed(() => {
-  const index = catalogGroups.findIndex((group) => group.items.some((item) => isActiveCatalogItem(item.to)));
+  const index = catalogGroups.findIndex(
+    (group) => isActiveCatalogItem(group.to) || group.items.some((item) => isActiveCatalogItem(item.to)),
+  );
   return index >= 0 ? `catalog-${index}` : undefined;
 });
 const openCatalogGroup = ref<string>();
@@ -78,26 +81,54 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
             </NuxtLink>
             <div v-if="link.catalog" class="catalog-menu">
               <div class="catalog-menu__heading">
-                <strong>Каталог оборудования</strong>
-                <NuxtLink to="/#catalog" @click="closeCatalogMenu">Обзор каталога →</NuxtLink>
+                <strong class="catalog-menu__heading-title">Каталог оборудования</strong>
+                <NuxtLink class="catalog-menu__overview" to="/#catalog" @click="closeCatalogMenu">
+                  Обзор каталога →
+                </NuxtLink>
               </div>
               <div class="catalog-menu__grid">
-                <section v-for="group in catalogGroups" :key="group.title" class="catalog-menu__group">
-                  <h3 class="catalog-menu__title">{{ group.title }}</h3>
-                  <ul class="catalog-menu__list">
-                    <li v-for="item in group.items" :key="`${group.title}-${item.label}`">
-                      <NuxtLink
-                        class="catalog-menu__link"
-                        :class="{ 'catalog-menu__link--active': isActiveCatalogItem(item.to) }"
-                        :to="item.to"
-                        :aria-current="isActiveCatalogItem(item.to) ? 'page' : undefined"
-                        @click="closeCatalogMenu"
-                      >
-                        {{ item.label }}
-                      </NuxtLink>
-                    </li>
-                  </ul>
-                </section>
+                <template v-for="(group, groupIndex) in catalogGroups" :key="group.title">
+                  <details
+                    v-if="group.items.length"
+                    class="catalog-menu__group"
+                    :open="activeCatalogGroup === `catalog-${groupIndex}`"
+                  >
+                    <summary class="catalog-menu__title">
+                      <span>{{ group.title }}</span>
+                      <Icon class="catalog-menu__group-icon" name="lucide:chevron-down" aria-hidden="true" mode="svg" />
+                    </summary>
+                    <ul class="catalog-menu__list">
+                      <li v-if="group.to">
+                        <NuxtLink class="catalog-menu__link" :to="group.to" @click="closeCatalogMenu">
+                          {{ group.overviewLabel || group.title }}
+                        </NuxtLink>
+                      </li>
+                      <li v-for="item in group.items" :key="item.label">
+                        <NuxtLink
+                          v-if="item.to"
+                          class="catalog-menu__link"
+                          :class="{ 'catalog-menu__link--active': isActiveCatalogItem(item.to) }"
+                          :to="item.to"
+                          :aria-current="isActiveCatalogItem(item.to) ? 'page' : undefined"
+                          @click="closeCatalogMenu"
+                        >
+                          {{ item.label }}
+                        </NuxtLink>
+                        <span v-else class="catalog-menu__text">{{ item.label }}</span>
+                      </li>
+                    </ul>
+                  </details>
+                  <NuxtLink
+                    v-else
+                    class="catalog-menu__standalone"
+                    :class="{ 'catalog-menu__standalone--active': isActiveCatalogItem(group.to) }"
+                    :to="group.to"
+                    :aria-current="isActiveCatalogItem(group.to) ? 'page' : undefined"
+                    @click="closeCatalogMenu"
+                  >
+                    {{ group.title }}
+                  </NuxtLink>
+                </template>
               </div>
             </div>
           </li>
@@ -109,7 +140,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
             <Icon name="lucide:message-circle" aria-hidden="true" mode="svg" />
             <span class="site-header__phone-details">
               <strong>8 (951) 117-22-10</strong>
-              <small>WhatsApp, Viber</small>
+              <small>Telegramm, MAX</small>
             </span>
           </a>
           <a class="site-header__phone-link" href="tel:88005051915">
@@ -175,45 +206,65 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
             </nav>
             <div class="mobile-menu__catalog">
               <AccordionRoot v-model="openCatalogGroup" type="single" collapsible>
-                <AccordionItem
-                  v-for="(group, groupIndex) in catalogGroups"
-                  :key="group.title"
-                  class="mobile-menu__catalog-group"
-                  :value="`catalog-${groupIndex}`"
-                >
-                  <AccordionHeader class="mobile-menu__catalog-header">
-                    <AccordionTrigger
-                      class="mobile-menu__catalog-trigger"
-                      :class="{
-                        'mobile-menu__catalog-trigger--active': activeCatalogGroup === `catalog-${groupIndex}`,
-                      }"
+                <template v-for="(group, groupIndex) in catalogGroups" :key="group.title">
+                  <AccordionItem
+                    v-if="group.items.length"
+                    class="mobile-menu__catalog-group"
+                    :value="`catalog-${groupIndex}`"
+                  >
+                    <AccordionHeader class="mobile-menu__catalog-header">
+                      <AccordionTrigger
+                        class="mobile-menu__catalog-trigger"
+                        :class="{
+                          'mobile-menu__catalog-trigger--active': activeCatalogGroup === `catalog-${groupIndex}`,
+                        }"
+                      >
+                        <span>{{ group.title }}</span>
+                        <Icon name="lucide:chevron-down" aria-hidden="true" mode="svg" />
+                      </AccordionTrigger>
+                    </AccordionHeader>
+                    <AccordionContent class="mobile-menu__catalog-content">
+                      <ul class="mobile-menu__catalog-list">
+                        <li v-if="group.to">
+                          <DialogClose as-child>
+                            <NuxtLink class="mobile-menu__catalog-link" :to="group.to">
+                              {{ group.overviewLabel || group.title }}
+                            </NuxtLink>
+                          </DialogClose>
+                        </li>
+                        <li v-for="item in group.items" :key="item.label">
+                          <DialogClose v-if="item.to" as-child>
+                            <NuxtLink
+                              class="mobile-menu__catalog-link"
+                              :to="item.to"
+                              :class="{ 'mobile-menu__catalog-link--active': isActiveCatalogItem(item.to) }"
+                              :aria-current="isActiveCatalogItem(item.to) ? 'page' : undefined"
+                            >
+                              {{ item.label }}
+                            </NuxtLink>
+                          </DialogClose>
+                          <span v-else class="mobile-menu__catalog-text">{{ item.label }}</span>
+                        </li>
+                      </ul>
+                    </AccordionContent>
+                  </AccordionItem>
+                  <DialogClose v-else as-child>
+                    <NuxtLink
+                      class="mobile-menu__catalog-standalone"
+                      :class="{ 'mobile-menu__catalog-standalone--active': isActiveCatalogItem(group.to) }"
+                      :to="group.to"
+                      :aria-current="isActiveCatalogItem(group.to) ? 'page' : undefined"
                     >
-                      <span>{{ group.title }}</span>
-                      <Icon name="lucide:chevron-down" aria-hidden="true" mode="svg" />
-                    </AccordionTrigger>
-                  </AccordionHeader>
-                  <AccordionContent class="mobile-menu__catalog-content">
-                    <ul>
-                      <li v-for="item in group.items" :key="item.to">
-                        <DialogClose as-child>
-                          <NuxtLink
-                            :to="item.to"
-                            :class="{ 'mobile-menu__catalog-link--active': isActiveCatalogItem(item.to) }"
-                            :aria-current="isActiveCatalogItem(item.to) ? 'page' : undefined"
-                          >
-                            {{ item.label }}
-                          </NuxtLink>
-                        </DialogClose>
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
+                      {{ group.title }}
+                    </NuxtLink>
+                  </DialogClose>
+                </template>
               </AccordionRoot>
             </div>
             <div class="mobile-menu__contacts">
               <a class="mobile-menu__contact-link" href="tel:89511172210">
                 8 (951) 117-22-10
-                <small>WhatsApp, Viber</small>
+                <small>Telegramm, MAX</small>
               </a>
               <a class="mobile-menu__contact-link" href="tel:88005051915">
                 8 (800) 505-19-15
@@ -475,39 +526,93 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
     padding-bottom: 18px;
     margin-bottom: 22px;
     border-bottom: 1px solid rgb(3 35 68 / 10%);
+  }
 
-    strong {
-      font-size: 20px;
-      color: $navy;
-    }
+  &__heading-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: $navy;
+  }
 
-    a {
-      font-size: 13px;
-      font-weight: 800;
-      color: $blue;
-      text-decoration: none;
-    }
+  &__overview {
+    font-size: 13px;
+    font-weight: 500;
+    color: $blue;
+    text-decoration: none;
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 26px 34px;
+    align-items: start;
   }
 
-  &__group:nth-child(2) {
-    grid-row: span 2;
+  &__group-icon {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  &__group[open] &__group-icon {
+    transform: rotate(180deg);
   }
 
   &__title {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
     padding-bottom: 9px;
     margin: 0 0 7px;
-    font-size: 13px;
-    font-weight: 900;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
     color: $navy;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
+    cursor: pointer;
+    list-style: none;
     border-bottom: 2px solid $yellow;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $blue;
+      outline-offset: 4px;
+    }
+  }
+
+  &__standalone {
+    display: block;
+    padding-bottom: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: $navy;
+    text-decoration: none;
+    border-bottom: 2px solid $yellow;
+
+    &:hover,
+    &--active {
+      color: $blue;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $blue;
+      outline-offset: 4px;
+    }
+  }
+
+  &__text {
+    display: block;
+    padding: 7px 8px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: $muted;
   }
 
   &__list {
@@ -523,7 +628,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
     display: block;
     padding: 7px 8px;
     font-size: 14px;
-    font-weight: 650;
+    font-weight: 400;
     line-height: 1.35;
     color: $ink;
     text-decoration: none;
@@ -542,7 +647,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
     }
 
     &--active {
-      font-weight: 850;
+      font-weight: 600;
       box-shadow: inset 3px 0 $yellow;
     }
 
@@ -710,7 +815,9 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
       justify-content: space-between;
       width: 100%;
       padding: 14px 0;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.4;
       color: $yellow;
       cursor: pointer;
       background: transparent;
@@ -744,7 +851,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
       }
     }
 
-    &-content ul {
+    &-list {
       display: grid;
       gap: 2px;
       padding: 0 0 14px;
@@ -752,18 +859,52 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
       list-style: none;
     }
 
-    &-content a {
+    &-link,
+    &-text {
       display: block;
       padding: 8px 0 8px 12px;
       font-size: 14px;
+      font-weight: 400;
       line-height: 1.35;
-      color: #dce8f2;
+      color: #fff;
       text-decoration: none;
       border-left: 2px solid rgb(255 255 255 / 15%);
     }
 
-    &-content &-link--active {
-      font-weight: 800;
+    &-link {
+      &:hover,
+      &:focus-visible {
+        color: $yellow;
+      }
+    }
+
+    &-text {
+      opacity: 0.65;
+    }
+
+    &-standalone {
+      display: block;
+      padding: 14px 0;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: $yellow;
+      text-decoration: none;
+      border-bottom: 1px solid rgb(255 255 255 / 12%);
+
+      &:focus-visible {
+        outline: 2px solid $yellow;
+        outline-offset: 4px;
+      }
+
+      &:hover,
+      &--active {
+        color: #fff;
+      }
+    }
+
+    &-link--active {
+      font-weight: 600;
       color: $navy;
       background: $yellow;
       border-left-color: $yellow;

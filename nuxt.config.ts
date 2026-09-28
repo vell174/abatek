@@ -99,9 +99,15 @@ export default defineNuxtConfig({
     compressPublicAssets: { gzip: true, brotli: true },
     prerender: {
       crawlLinks: true,
-      routes: equipmentRouteSlugs.map((slug) => `/${slug}/`),
+      routes: ['/sitemap.xml', ...equipmentRouteSlugs.map((slug) => `/${slug}/`)],
     },
     routeRules: {
+      '/metallokonstruktsii-na-zakaz': {
+        redirect: { to: '/metalloizdeliya-po-chertezham/', statusCode: 301 },
+      },
+      '/metallokonstruktsii-na-zakaz/': {
+        redirect: { to: '/metalloizdeliya-po-chertezham/', statusCode: 301 },
+      },
       '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
       '/fonts/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
       '/images/**': { headers: { 'cache-control': 'public, max-age=2592000' } },
@@ -111,7 +117,9 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
-      htmlAttrs: { lang: 'ru' },
+      // Запрет наследуется всем содержимым, включая меню и формы в порталах.
+      htmlAttrs: { lang: 'ru', translate: 'no', class: 'notranslate' },
+      bodyAttrs: { translate: 'no', class: 'notranslate' },
       link: [
         // Preload только кириллицы: латиница нужна лишь для второстепенных
         // подписей и не должна конкурировать с LCP-ресурсами.
@@ -126,7 +134,11 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
       ],
-      meta: [{ name: 'theme-color', content: '#031d38' }],
+      meta: [
+        { name: 'theme-color', content: '#031d38' },
+        { name: 'google', content: 'notranslate' },
+        { name: 'googlebot', content: 'notranslate' },
+      ],
     },
   },
 });
