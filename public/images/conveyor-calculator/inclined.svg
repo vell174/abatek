@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 110" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Наклонная трасса ленточного конвейера</title>
+  <g stroke="#00294f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M31 74 189 29M36 91 194 46"/>
+    <circle cx="34" cy="83" r="10" fill="#fff"/>
+    <circle cx="192" cy="38" r="10" fill="#fff"/>
+  </g>
+  <g stroke="#526a82" stroke-width="1.5" stroke-linecap="round">
+    <path d="M29 67 22 41M188 21 181 1M22 38 181 5"/>
+    <path d="m22 38 4-5m-4 5 6 3M181 5l-6-2m6 2-4 5"/>
+    <path d="M34 98h62m-62 0 61-17m-25 17a36 36 0 0 0-3-10"/>
+  </g>
+  <text x="105" y="23" fill="#00294f" font-family="Montserrat,Arial,sans-serif" font-size="16" font-style="italic" text-anchor="middle">L₂</text>
+  <text x="76" y="100" fill="#00294f" font-family="Montserrat,Arial,sans-serif" font-size="15" font-style="italic">α</text>
+</svg>
