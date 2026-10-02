@@ -96,7 +96,7 @@ export const beltVariantDefinitions = [
     slug: 'povorotnye-lentochnye-konvejery',
     title: 'Поворотные ленточные конвейеры',
     group: 'route',
-    image: '/images/curve-belt-conveyor-33735791.webp',
+    image: '/images/belt-classification/curved-90-no-drive.webp',
     description: 'Изменение направления потока в плане с сохранением непрерывной передачи изделий между участками.',
     construction:
       'Поворотный участок проектируется с учётом радиуса, угла поворота и размеров изделия. Геометрия полотна и направляющих должна обеспечивать устойчивое движение; стыки с прямыми секциями проверяются по высоте и зазорам.',
@@ -109,7 +109,7 @@ export const beltVariantDefinitions = [
     slug: 'g-obraznye-lentochnye-konvejery',
     title: 'Г-образные (L-образные) ленточные конвейеры',
     group: 'route',
-    image: '/images/g-conveyor-24059550.webp',
+    image: '/images/belt-classification/l-shaped.webp',
     description: 'Комбинированная трасса с горизонтальным и наклонным участками для удобной загрузки или выгрузки.',
     construction:
       'Г-образная компоновка объединяет участки с разным направлением движения по высоте. Горизонтальный участок обеспечивает приём или выдачу продукта, а наклонный — подъём. Радиус перехода, профиль ленты и расстояние между перегородками выбираются под груз.',
@@ -123,7 +123,7 @@ export const beltVariantDefinitions = [
     slug: 'z-obraznyj-lentochnyj-konvejer',
     title: 'Z-образные ленточные конвейеры',
     group: 'route',
-    image: '/images/z-conveyor-33735055.webp',
+    image: '/images/belt-classification/sidewall.webp',
     description: 'Горизонтальная загрузка, подъём и горизонтальная выгрузка в одной комбинированной трассе.',
     construction:
       'Z-образный транспортер связывает два горизонтальных участка через наклонную или крутонаклонную часть. Верхний участок позволяет вынести место выгрузки за опоры или соседнее оборудование; переходы проектируются с учётом изгиба ленты и удержания продукта.',

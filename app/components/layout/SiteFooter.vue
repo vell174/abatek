@@ -27,6 +27,7 @@ const copyEmail = async () => {
         <h3 class="footer__title">Оборудование</h3>
         <NuxtLink class="footer__link" to="/#catalog">Каталог</NuxtLink>
         <NuxtLink class="footer__link" to="/primery-rabot">Примеры работ</NuxtLink>
+        <NuxtLink class="footer__link" to="/kalkulyator-vesa-metalla/">Калькулятор веса металла</NuxtLink>
         <NuxtLink class="footer__link" to="/kalkulyator-moshchnosti-privoda-lentochnogo-konveyera/">
           Калькулятор мощности привода
         </NuxtLink>
