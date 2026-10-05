@@ -61,9 +61,11 @@ usePageSeo(definition.value.seo);
       :text="description"
       :accent-texts="heroAccents"
       :title-variant="heroTitleVariant"
+      :compact="industrialPage?.heroCompact"
       :background-image="heroImage"
       :background-variant="
-        ['custom-metal', 'screw-conveyors'].includes(definition?.template ?? '') ? 'drawing' : 'default'
+        industrialPage?.heroBackgroundVariant ??
+        (['custom-metal', 'screw-conveyors'].includes(definition?.template ?? '') ? 'drawing' : 'default')
       "
     />
     <LazyElectronKnivesPage v-if="isElectronKnivesPage" />

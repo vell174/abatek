@@ -30,6 +30,8 @@ export const catalogGroups: CatalogGroup[] = [
     title: 'Конвейеры и транспортеры по назначению и типу груза',
     image: '/images/catalog/conveyor-applications.webp',
     items: [
+      { label: 'Мини ленточный конвейер', to: '/mini-lentochnyy-konveyer/' },
+      { label: 'Закрытый ленточный конвейер', to: '/zakrytyy-lentochnyy-konveyer/' },
       { label: 'Конвейер пищевой', to: '/pishchevye-lentochnye-konveyery/' },
       { label: 'Для производственных линий', to: '/proizvodstvennye-lentochnye-konveyery/' },
       { label: 'Для склада и сортировки', to: '/konvejery-dlya-sklada' },

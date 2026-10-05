@@ -4,7 +4,7 @@ import type { IndustrialSection } from '~/data/pages/_shared/types';
 const { variant = 'default', headingTag = 'h3' } = defineProps<{
   product: IndustrialSection;
   index: number;
-  variant?: 'default' | 'category';
+  variant?: 'default' | 'category' | 'showcase';
   headingTag?: 'h3' | 'h4';
 }>();
 defineEmits<{ action: [] }>();
@@ -14,9 +14,9 @@ defineEmits<{ action: [] }>();
   <article
     :id="product.id"
     class="scraper-product"
-    :class="[variant === 'category' ? 'scraper-product--category' : '']"
+    :class="[variant !== 'default' ? 'scraper-product--category' : '', `scraper-product--${variant}`]"
   >
-    <NuxtLink v-if="variant === 'category' && product.href" class="scraper-product__category-link" :to="product.href">
+    <NuxtLink v-if="variant !== 'default' && product.href" class="scraper-product__category-link" :to="product.href">
       <img
         class="scraper-product__category-image"
         :src="product.image"
@@ -83,6 +83,27 @@ defineEmits<{ action: [] }>();
     min-height: 0;
     background: #fff;
     border: 1px solid $line;
+  }
+
+  &--showcase &__category-link {
+    gap: 18px;
+    padding: 24px;
+  }
+
+  &--showcase &__category-image {
+    height: auto;
+    aspect-ratio: 3 / 2;
+    border-radius: 10px;
+  }
+
+  &--showcase &__category-title {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  &--showcase &__category-heading {
+    padding-top: 18px;
+    border-top: 3px solid $yellow;
   }
 
   &__category-link {

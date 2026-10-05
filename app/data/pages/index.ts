@@ -1,6 +1,7 @@
 import type { GalleryImage, IndustrialPage, IndustrialSection, PageRoutes, PageSeo } from './_shared/types';
 import { equipmentRouteGroups } from './equipment-routes';
 import { beltVariantDefinitions } from './_shared/belt-variant-definitions';
+import { gallery as screwFeederGallery } from './vintovoy-pitatel/gallery';
 
 type EquipmentPageData =
   | IndustrialPage
@@ -66,6 +67,15 @@ const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['silosy', 'silos'],
   ['rolgang', 'roller-conveyors'],
   ['barabany', 'industrial'],
+  ['privodnoy-baraban-konveyera', 'industrial'],
+  ['natyazhnoy-baraban-konveyera', 'industrial'],
+  ['otklonyayushchiy-baraban-konveyera', 'industrial'],
+  ['baraban-kovshovogo-elevatora', 'industrial'],
+  ['baraban-lentochnoy-norii', 'industrial'],
+  ['futerovannyy-baraban-transportera', 'industrial'],
+  ['planchatyy-baraban-transportera', 'industrial'],
+  ['nestandartnyy-baraban-po-chertezham', 'industrial'],
+  ['baraban-iz-nerzhaveyushchey-stali', 'industrial'],
   ['cepnye-konveyeri', 'industrial'],
   ['kovshi', 'industrial'],
   ['conveyors', 'industrial'],
@@ -147,7 +157,7 @@ export async function getEquipmentPage(slug: string): Promise<EquipmentPageDefin
     data: dataModule.pageData,
     seo: seoModule.seo,
     catalog: catalogModule?.catalog,
-    gallery: galleryModule?.gallery ?? [],
+    gallery: routes.root === 'vintovoy-pitatel' ? screwFeederGallery : (galleryModule?.gallery ?? []),
     template,
   };
 }

@@ -1,58 +1,61 @@
 import type { PageSeo } from '../_shared/types';
+import { pageData } from './data';
+import { catalog } from './data-catalog';
+
+const title = pageData.seoTitle;
+const description =
+  'Купить конвейерные барабаны для ленточных конвейеров, элеваторов и норий у АБАТЭК. Приводные, натяжные, футерованные и планчатые. Изготовление по чертежам и доставка.';
 
 export const seo = {
-  title: 'Барабаны ленточного конвейера — приводные и неприводные | АБАТЭК',
-  description:
-    'Приводные, неприводные, натяжные, отклоняющие и футерованные барабаны для ленточных конвейеров. Изготовление по ГОСТ и чертежам заказчика.',
+  title,
+  description,
   keywords: [
-    'барабаны ленточного конвейера',
-    'приводные барабаны',
-    'неприводные барабаны',
-    'натяжные барабаны',
+    'барабан конвейера',
+    'барабан транспортера',
+    'барабан ленточного конвейера',
+    'приводной барабан конвейера',
+    'натяжной барабан конвейера',
+    'обводной барабан конвейера',
+    'отклоняющий барабан ленточного конвейера',
+    'концевой барабан конвейера',
+    'хвостовой барабан конвейера',
+    'диаметр барабана ленточного конвейера',
+    'устройство барабана конвейера',
+    'производство барабанов для ленточных конвейеров',
+    'изготовление барабанов для конвейера',
+    'купить барабаны для конвейера',
+    'барабан нории',
+    'норийный барабан',
+    'барабан элеватора',
+    'футеровка барабана ленточного конвейера',
     'футерованные барабаны',
-    'производитель АБАТЭК',
+    'планчатые барабаны',
   ],
   canonicalPath: '/barabany/',
   robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
-  image: { src: '/images/source-26786961.webp', alt: 'Барабаны ленточного конвейера' },
-  openGraph: {
-    title: 'Барабаны ленточного конвейера — приводные и неприводные | АБАТЭК',
-    description: 'Изготовление барабанов ленточного конвейера по стандартным размерам и чертежам заказчика.',
-    type: 'website',
-    locale: 'ru_RU',
-    siteName: 'АБАТЭК',
+  image: {
+    src: pageData.heroImage,
+    alt: 'Конвейерные барабаны: гладкий, футерованный и планчатый',
+    type: 'image/webp',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Барабаны ленточного конвейера | АБАТЭК',
-    description: 'Приводные, неприводные и футерованные барабаны от производителя.',
-  },
+  openGraph: { title, description, type: 'website', locale: 'ru_RU', siteName: 'АБАТЭК' },
+  twitter: { card: 'summary_large_image', title, description },
   breadcrumbs: [
     { name: 'Главная', path: '/' },
-    { name: 'Комплектующие', path: '/komplektuyushie-k-konvejeram/' },
-    { name: 'Барабаны ленточного конвейера', path: '/barabany/' },
+    { name: 'Комплектующие к конвейерам и транспортерам', path: '/komplektuyushie-k-konvejeram/' },
+    { name: 'Барабаны конвейерные', path: '/barabany/' },
   ],
   schema: {
     pageType: 'CollectionPage',
     entityType: 'ItemList',
-    name: 'Барабаны ленточного конвейера',
-    category: 'Комплектующие для конвейеров',
-    items: [
-      {
-        name: 'Приводные барабаны',
-        description: 'Барабаны для передачи тягового усилия и движения ленты.',
-        image: '/images/source-26786961.webp',
-      },
-      {
-        name: 'Неприводные барабаны',
-        description: 'Натяжные и отклоняющие барабаны для ленточных конвейеров.',
-        image: '/images/source-26787011.webp',
-      },
-      {
-        name: 'Норийные барабаны',
-        description: 'Барабаны для ленточных норий и ковшовых элеваторов.',
-        image: '/images/source-26787063.webp',
-      },
-    ],
+    itemType: 'Product',
+    name: 'Барабаны конвейерные',
+    category: 'Комплектующие к конвейерам',
+    items: catalog.map((product) => ({
+      name: product.title,
+      url: product.href,
+      description: product.text?.join(' '),
+      image: product.image,
+    })),
   },
 } satisfies PageSeo;

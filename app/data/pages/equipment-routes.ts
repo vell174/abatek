@@ -28,6 +28,15 @@ import { routes as beltConveyors } from './lentochnye-konvejery/name-routers';
 import { routes as conveyorTypes } from './konveyery-po-vidam/name-routers';
 import { routes as beltFeeders } from './lentochnye-pitateli/name-routers';
 import { routes as drums } from './barabany/name-routers';
+import { routes as driveDrum } from './privodnoy-baraban-konveyera/name-routers';
+import { routes as tensionDrum } from './natyazhnoy-baraban-konveyera/name-routers';
+import { routes as deflectionDrum } from './otklonyayushchiy-baraban-konveyera/name-routers';
+import { routes as elevatorDrum } from './baraban-kovshovogo-elevatora/name-routers';
+import { routes as norianDrum } from './baraban-lentochnoy-norii/name-routers';
+import { routes as laggedDrum } from './futerovannyy-baraban-transportera/name-routers';
+import { routes as slatDrum } from './planchatyy-baraban-transportera/name-routers';
+import { routes as customDrum } from './nestandartnyy-baraban-po-chertezham/name-routers';
+import { routes as stainlessDrum } from './baraban-iz-nerzhaveyushchey-stali/name-routers';
 import { routes as chainConveyors } from './cepnye-konveyeri/name-routers';
 import { routes as buckets } from './kovshi/name-routers';
 import { routes as conveyors } from './conveyors/name-routers';
@@ -105,6 +114,15 @@ const existingEquipmentRouteGroups = [
   conveyorTypes,
   beltFeeders,
   drums,
+  driveDrum,
+  tensionDrum,
+  deflectionDrum,
+  elevatorDrum,
+  norianDrum,
+  laggedDrum,
+  slatDrum,
+  customDrum,
+  stainlessDrum,
   chainConveyors,
   buckets,
   conveyors,

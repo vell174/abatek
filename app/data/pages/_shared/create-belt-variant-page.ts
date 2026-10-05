@@ -14,7 +14,7 @@ const groupDefinitions = [
   {
     id: 'direction',
     title: 'По направлению транспортировки',
-    description: 'Движение на одной высоте, подъём или крутонаклонная трасса.',
+    description: 'Движение на одной высоте, подъём, крутонаклонная трасса или регулировка высоты выгрузки.',
   },
   {
     id: 'route',
@@ -35,11 +35,6 @@ const groupDefinitions = [
     id: 'material',
     title: 'По типу ленточного полотна',
     description: 'Материал и строение ленты выбираются по нагрузке, продукту и условиям очистки.',
-  },
-  {
-    id: 'adjustment',
-    title: 'По регулировке угла наклона',
-    description: 'Фиксированное положение или изменение высоты выгрузки.',
   },
   {
     id: 'length',
@@ -67,9 +62,14 @@ const toCard = (definition: (typeof beltVariantDefinitions)[number]): Industrial
   href: `/${definition.slug}/`,
 });
 
+const beltVariantCardDefinitions = beltVariantDefinitions.filter(
+  (definition) =>
+    definition.slug !== 'konveyery-s-poliuretanovoy-lentoy' && definition.slug !== 'konveyery-s-postoyannym-uglom',
+);
+
 export const beltClassificationGroups = groupDefinitions.map((group) => ({
   ...group,
-  items: beltVariantDefinitions.filter((definition) => definition.group === group.id).map(toCard),
+  items: beltVariantCardDefinitions.filter((definition) => definition.group === group.id).map(toCard),
 }));
 
 export const beltVariantRouteGroups = beltVariantDefinitions.map(({ slug }) => ({ root: slug, slugs: [slug] }));
@@ -156,7 +156,7 @@ export function createBeltVariantPage(slug: BeltVariantSlug): IndustrialPage {
       {
         title: group?.title ?? 'Варианты ленточных конвейеров',
         description: 'Сравните соседние варианты. Все признаки классификации собраны на странице ленточных конвейеров.',
-        items: beltVariantDefinitions
+        items: beltVariantCardDefinitions
           .filter((item) => item.group === definition.group && item.slug !== slug)
           .map(toCard),
       },

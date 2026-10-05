@@ -2,24 +2,34 @@
 withDefaults(
   defineProps<{
     title: string;
+    titleSize?: 'default' | 'compact';
     image: string;
     imageAlt: string;
     imageFit?: 'cover' | 'contain';
+    imageFrame?: 'default' | 'bare';
     imageScale?: 'default' | '120';
-    imageHeight?: 'default' | 'tall';
+    imageHeight?: 'default' | 'compact' | 'tall';
+    imageTone?: 'default' | 'dark';
     variant?: 'default' | 'text-only';
     eyebrow?: string;
     buttonLabel?: string;
+    downloadLabel?: string;
+    downloadUrl?: string;
     label?: string;
     labelIcon?: string;
   }>(),
   {
     imageFit: 'cover',
+    imageFrame: 'default',
+    titleSize: 'default',
     imageScale: 'default',
     imageHeight: 'default',
+    imageTone: 'default',
     variant: 'default',
     eyebrow: 'Производство АБАТЭК',
     buttonLabel: 'Получить консультацию',
+    downloadLabel: '',
+    downloadUrl: '',
     label: '',
     labelIcon: 'lucide:factory',
   },
@@ -34,16 +44,26 @@ defineEmits<{ action: [] }>();
         <slot name="breadcrumbs" />
       </div>
       <p class="product-intro-02__eyebrow">{{ eyebrow }}</p>
-      <h2 class="product-intro-02__title">{{ title }}</h2>
+      <h2 class="product-intro-02__title" :class="[`product-intro-02__title--${titleSize}`]">{{ title }}</h2>
       <div class="product-intro-02__copy"><slot /></div>
-      <button type="button" @click="$emit('action')">{{ buttonLabel }}</button>
+      <div class="product-intro-02__actions">
+        <button class="product-intro-02__primary-action" type="button" @click="$emit('action')">
+          {{ buttonLabel }}
+        </button>
+        <a v-if="downloadLabel && downloadUrl" class="product-intro-02__download-action" :href="downloadUrl" download>
+          <Icon name="lucide:download" aria-hidden="true" />
+          {{ downloadLabel }}
+        </a>
+      </div>
     </div>
-    <figure v-if="variant !== 'text-only'">
+    <figure v-if="variant !== 'text-only'" :class="`product-intro-02__figure--${imageFrame}`">
       <img
         class="product-intro-02__image"
         :class="{
           'product-intro-02__image--contain': imageFit === 'contain',
           'product-intro-02__image--scale-120': imageScale === '120',
+          'product-intro-02__image--compact': imageHeight === 'compact',
+          'product-intro-02__image--dark': imageTone === 'dark',
           'product-intro-02__image--tall': imageHeight === 'tall',
         }"
         :src="image"
@@ -129,16 +149,58 @@ defineEmits<{ action: [] }>();
   }
 }
 
-.product-intro-02 button {
+.product-intro-02__title--compact {
+  font-size: clamp(25px, 2.8vw, 38px);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+}
+
+.product-intro-02__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.product-intro-02__primary-action {
   min-height: 54px;
   padding-inline: 28px;
-  margin-top: 8px;
   font-weight: 850;
   color: #052f55;
   cursor: pointer;
   background: #f5c518;
   border: 1px solid #f5c518;
   border-radius: 7px;
+}
+
+.product-intro-02__download-action {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding-inline: 22px;
+  font-weight: 750;
+  color: #052f55;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid rgb(7 87 164 / 24%);
+  border-radius: 7px;
+
+  &:hover {
+    background: #eef5fb;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgb(7 87 164 / 30%);
+    outline-offset: 3px;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .product-intro-02 figure {
@@ -149,6 +211,17 @@ defineEmits<{ action: [] }>();
   background: #eef5fb;
   border: 1px solid rgb(7 87 164 / 10%);
   border-radius: 22px;
+}
+
+.product-intro-02__figure--bare {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.product-intro-02__figure--bare .product-intro-02__image {
+  border-radius: 0;
 }
 
 .product-intro-02__label {
@@ -208,6 +281,14 @@ defineEmits<{ action: [] }>();
   transform: scale(1.2);
 }
 
+.product-intro-02__image--compact {
+  height: clamp(240px, 25vw, 310px);
+}
+
+.product-intro-02__image--dark {
+  filter: brightness(0.76) saturate(0.9);
+}
+
 .product-intro-02__image--tall {
   height: clamp(400px, 44vw, 560px);
 }
@@ -259,6 +340,10 @@ defineEmits<{ action: [] }>();
 
   .product-intro-02__image--tall {
     height: 340px;
+  }
+
+  .product-intro-02__image--compact {
+    height: 230px;
   }
 
   .product-intro-02__label {

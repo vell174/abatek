@@ -57,4 +57,13 @@ export const gallery = [
     fullWidth: 2000,
     fullHeight: 1500,
   },
+  {
+    src: `${imageRoot}/07-vintovoy-konveyer-kvzh-posle-montazha.webp`,
+    fullSrc: `${imageRoot}/07-vintovoy-konveyer-kvzh-posle-montazha-full.webp`,
+    alt: 'Винтовой конвейер КВЖ после монтажа на производственной площадке',
+    width: 1200,
+    height: 724,
+    fullWidth: 1600,
+    fullHeight: 966,
+  },
 ] as const satisfies readonly GalleryImage[];

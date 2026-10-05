@@ -1,0 +1,139 @@
+{
+  "desktop": {
+    "h1": [
+      "Конвейерные барабаны для транспортеров от производителя"
+    ],
+    "cards": 9,
+    "horizontalOverflow": false,
+    "brokenImages": [],
+    "headings": [
+      "Изготовление и продажа барабанов для ленточных конвейеров, элеваторов и норий",
+      "Модельный ряд",
+      "Приводной барабан конвейера",
+      "Натяжной, концевой и хвостовой барабан",
+      "Неприводной, обводной и отклоняющий барабан",
+      "Барабан ковшового элеватора",
+      "Барабан ленточной нории",
+      "Футерованный барабан транспортёра",
+      "Планчатый барабан транспортёра",
+      "Нестандартный барабан по чертежам",
+      "Барабан из нержавеющей стали",
+      "Назначение, функции и конструкция",
+      "Назначение конвейерных барабанов",
+      "Функции барабанов в конвейере",
+      "Конструкция и устройство барабана конвейера",
+      "Как выбрать диаметр и заказать барабан",
+      "От чертежа до готового барабана",
+      "Частые вопросы: конвейерные барабаны для транспортеров от производителя",
+      "Чем приводной барабан отличается от натяжного?",
+      "Концевой и хвостовой барабан — это натяжной барабан?",
+      "Когда нужен футерованный барабан?",
+      "Можно ли заказать барабан нории по образцу?",
+      "От чего зависит цена конвейерного барабана?",
+      "Обсудим вашу задачу",
+      "Оборудование",
+      "Компания",
+      "Связаться"
+    ],
+    "canonical": "https://abatek.ru/barabany/",
+    "links": [
+      "/privodnoy-baraban-konveyera/",
+      "/natyazhnoy-baraban-konveyera/",
+      "/otklonyayushchiy-baraban-konveyera/",
+      "/baraban-kovshovogo-elevatora/",
+      "/baraban-lentochnoy-norii/",
+      "/futerovannyy-baraban-transportera/",
+      "/planchatyy-baraban-transportera/",
+      "/nestandartnyy-baraban-po-chertezham/",
+      "/baraban-iz-nerzhaveyushchey-stali/"
+    ]
+  },
+  "mobile": {
+    "width": 390,
+    "scrollWidth": 390,
+    "cards": 9
+  },
+  "leafPages": [
+    {
+      "url": "/privodnoy-baraban-konveyera/",
+      "status": 200,
+      "h1": "Приводной барабан конвейера",
+      "canonical": "https://abatek.ru/privodnoy-baraban-konveyera/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеПриводной барабан конвейера: изготовление под вашу задачу"
+    },
+    {
+      "url": "/natyazhnoy-baraban-konveyera/",
+      "status": 200,
+      "h1": "Натяжной барабан конвейера",
+      "canonical": "https://abatek.ru/natyazhnoy-baraban-konveyera/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеНатяжной барабан конвейера: изготовление под вашу задачу"
+    },
+    {
+      "url": "/otklonyayushchiy-baraban-konveyera/",
+      "status": 200,
+      "h1": "Отклоняющий барабан конвейера",
+      "canonical": "https://abatek.ru/otklonyayushchiy-baraban-konveyera/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеОтклоняющий барабан конвейера: изготовление под вашу задачу"
+    },
+    {
+      "url": "/baraban-kovshovogo-elevatora/",
+      "status": 200,
+      "h1": "Барабан ковшового элеватора",
+      "canonical": "https://abatek.ru/baraban-kovshovogo-elevatora/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеБарабан ковшового элеватора: изготовление под вашу задачу"
+    },
+    {
+      "url": "/baraban-lentochnoy-norii/",
+      "status": 200,
+      "h1": "Барабан ленточной нории",
+      "canonical": "https://abatek.ru/baraban-lentochnoy-norii/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеБарабан ленточной нории: изготовление под вашу задачу"
+    },
+    {
+      "url": "/futerovannyy-baraban-transportera/",
+      "status": 200,
+      "h1": "Футерованный барабан транспортёра",
+      "canonical": "https://abatek.ru/futerovannyy-baraban-transportera/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеФутерованный барабан транспортёра: изготовление под вашу задачу"
+    },
+    {
+      "url": "/planchatyy-baraban-transportera/",
+      "status": 200,
+      "h1": "Планчатый барабан транспортёра",
+      "canonical": "https://abatek.ru/planchatyy-baraban-transportera/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеПланчатый барабан транспортёра: изготовление под вашу задачу"
+    },
+    {
+      "url": "/nestandartnyy-baraban-po-chertezham/",
+      "status": 200,
+      "h1": "Нестандартный барабан по чертежам заказчика",
+      "canonical": "https://abatek.ru/nestandartnyy-baraban-po-chertezham/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеНестандартный барабан по чертежам заказчика: изготовление под вашу задачу"
+    },
+    {
+      "url": "/baraban-iz-nerzhaveyushchey-stali/",
+      "status": 200,
+      "h1": "Барабан транспортёра из нержавеющей стали",
+      "canonical": "https://abatek.ru/baraban-iz-nerzhaveyushchey-stali/",
+      "hasDetails": true,
+      "hasImage": true,
+      "breadcrumb": "ГлавнаяБарабаны конвейерныеБарабан транспортёра из нержавеющей стали: изготовление под вашу задачу"
+    }
+  ]
+}

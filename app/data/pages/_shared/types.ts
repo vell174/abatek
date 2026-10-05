@@ -9,6 +9,7 @@ export interface IndustrialSection {
   cardImage?: GalleryImage;
   imageFit?: 'cover' | 'contain';
   href?: string;
+  features?: Array<{ title: string; text: string }>;
 }
 
 export interface GalleryImage {
@@ -28,20 +29,31 @@ export interface IndustrialPage {
   description: string;
   heroAccents?: readonly string[];
   heroImage?: string;
+  heroBackgroundVariant?: 'default' | 'drawing' | 'product' | 'product-dark' | 'product-dark-contained';
+  heroCompact?: boolean;
   heroTitleVariant?: 'default' | 'wide-light';
   image: string;
   imageAlt?: string;
   imageFit?: 'cover' | 'contain';
+  imageFrame?: 'default' | 'bare';
   imageScale?: 'default' | '120';
   imageCaption?: string;
-  imageHeight?: 'default' | 'tall';
+  imageHeight?: 'default' | 'compact' | 'tall';
+  imageTone?: 'default' | 'dark';
   introTitle: string;
+  introTitleSize?: 'default' | 'compact';
   introVariant?: 'default' | 'text-only';
   intro: string[];
+  introLeadCompact?: boolean;
   facts: Array<[string, string]>;
   sections: IndustrialSection[];
   sectionsCollapsible?: boolean;
   sectionsTitle?: string;
+  sectionsVariant?: 'default' | 'technical';
+  hideProjects?: boolean;
+  catalogCardVariant?: 'category' | 'showcase';
+  catalogDescription?: string;
+  hideContentBeforeWorkflow?: boolean;
   table?: {
     title: string;
     headers: string[];
@@ -53,6 +65,16 @@ export interface IndustrialPage {
     headers: string[];
     rows: string[][];
   }>;
+  referenceCard?: {
+    title: string;
+    description: string;
+    actionLabel: string;
+    documentUrl: string;
+  };
+  introDownload?: {
+    label: string;
+    url: string;
+  };
   video?: { title: string; embedUrl: string };
   theme: 'forest' | 'copper' | 'blue' | 'graphite' | 'wine' | 'teal' | 'indigo' | 'steel' | 'amber';
   galleryTitle: string;
@@ -60,6 +82,7 @@ export interface IndustrialPage {
   projectsPlacement?: 'before-content' | 'before-workflow';
   hideCatalog?: boolean;
   catalogVariant?: 'default' | 'categories';
+  classificationTitle?: string;
   classificationGroups?: Array<{ title: string; description: string; items: IndustrialSection[] }>;
   sectionLinks?: Array<{ id: string; label: string }>;
   parentBreadcrumb?: { label: string; to: string };

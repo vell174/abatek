@@ -6,6 +6,7 @@ const {
   eyebrow = 'АБАТЭК',
   backgroundImage = '',
   backgroundVariant = 'default',
+  compact = false,
   titleVariant = 'default',
 } = defineProps<{
   title: string;
@@ -13,7 +14,8 @@ const {
   accentTexts?: readonly string[];
   eyebrow?: string;
   backgroundImage?: string;
-  backgroundVariant?: 'default' | 'drawing';
+  backgroundVariant?: 'default' | 'drawing' | 'product' | 'product-dark' | 'product-dark-contained';
+  compact?: boolean;
   titleVariant?: 'default' | 'wide-light';
 }>();
 </script>
@@ -21,7 +23,11 @@ const {
 <template>
   <section
     class="page-hero"
-    :class="[backgroundImage && 'page-hero--custom-background', `page-hero--${backgroundVariant}`]"
+    :class="[
+      backgroundImage && 'page-hero--custom-background',
+      compact && 'page-hero--compact',
+      `page-hero--${backgroundVariant}`,
+    ]"
     :style="backgroundImage ? { '--page-hero-background-image': `url('${backgroundImage}')` } : undefined"
   >
     <div class="site-container page-hero__container">
@@ -57,6 +63,53 @@ const {
     background:
       linear-gradient(90deg, rgba($navy, 0.94), rgba($navy, 0.8) 58%, rgba($navy, 0.35)),
       var(--page-hero-background-image) center 52% / cover;
+  }
+
+  &--product {
+    padding-block: clamp(64px, 8vw, 112px);
+    background:
+      linear-gradient(90deg, rgba($navy, 0.98), rgba($navy, 0.92) 35%, rgba($navy, 0.38) 80%),
+      var(--page-hero-background-image) center / cover;
+  }
+
+  &--product-dark {
+    padding-block: clamp(64px, 8vw, 112px);
+    background:
+      linear-gradient(90deg, rgba($navy, 0.99), rgba($navy, 0.95) 40%, rgba($navy, 0.72) 82%),
+      var(--page-hero-background-image) center / cover;
+  }
+
+  &--product-dark-contained {
+    padding-block: clamp(64px, 8vw, 112px);
+    color: #fff;
+    background:
+      linear-gradient(rgba($navy, 0.48), rgba($navy, 0.48)),
+      #fff var(--page-hero-background-image) 94% center / 55% auto no-repeat;
+  }
+
+  &--product &__title,
+  &--product-dark &__title,
+  &--product-dark-contained &__title {
+    max-width: 780px;
+    font-size: clamp(34px, 4.3vw, 58px);
+  }
+
+  &--product &__text,
+  &--product-dark &__text,
+  &--product-dark-contained &__text {
+    max-width: 670px;
+  }
+
+  &--product-dark-contained &__eyebrow {
+    color: #fff;
+  }
+
+  &--product-dark-contained &__text {
+    color: #fff;
+  }
+
+  &--compact {
+    padding-block: 40px;
   }
 
   &::after {
@@ -136,6 +189,10 @@ const {
       line-height: 1.1;
       letter-spacing: -0.03em;
       overflow-wrap: anywhere;
+    }
+
+    &--compact {
+      padding-block: 36px;
     }
   }
 }

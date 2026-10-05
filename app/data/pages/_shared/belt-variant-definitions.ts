@@ -33,7 +33,7 @@ export const beltVariantDefinitions = [
     slug: 'gorizontalnyj-lentochnyj-konvejer',
     title: 'Горизонтальные ленточные конвейеры',
     group: 'direction',
-    image: '/images/horizontal-conveyor-33734355.webp',
+    image: '/images/belt-classification/horizontal-long-with-sideboards.webp',
     description:
       'Перемещение сыпучих и штучных грузов между участками на одной высоте. Изготовление под размеры вашей линии.',
     construction:
@@ -47,7 +47,7 @@ export const beltVariantDefinitions = [
     slug: 'naklonnyj-lentochnyj-konvejer',
     title: 'Наклонные ленточные конвейеры',
     group: 'direction',
-    image: '/images/inclined-conveyor-33734723.webp',
+    image: '/images/belt-classification/inclined-smooth-belt-downward-drive.webp',
     description:
       'Ленточный транспортер для подачи груза на другую высоту. Угол и поверхность ленты подбираются по материалу.',
     construction:
@@ -64,7 +64,7 @@ export const beltVariantDefinitions = [
     slug: 'krutonaklonnye-lentochnye-konveyery',
     title: 'Крутонаклонные ленточные конвейеры',
     group: 'direction',
-    image: '/images/belt-classification/sidewall.webp',
+    image: '/images/belt-classification/steep-incline-80.webp',
     description:
       'Подъём материала при ограниченной площади установки. Удерживающие элементы ленты выбираются расчётом.',
     construction:
@@ -149,7 +149,7 @@ export const beltVariantDefinitions = [
     slug: 'konveyer-lentochnyy-zhelobchatyy',
     title: 'Желобчатые ленточные конвейеры',
     group: 'surface',
-    image: '/images/troughed-conveyor-33736028.webp',
+    image: '/images/belt-classification/troughed-truss-corrected.webp',
     description: 'Желобчатая несущая поверхность для формирования потока сыпучего материала и ограничения просыпания.',
     construction:
       'Роликоопоры формируют поперечный желоб рабочей ветви. Загрузочный узел направляет материал в центральную часть, а параметры желоба, ширина и скорость ленты выбираются по свойствам продукта и объёму потока. В переходах к барабанам учитывается изменение формы ленты.',
@@ -175,7 +175,7 @@ export const beltVariantDefinitions = [
     slug: 'shevronnye-lentochnye-konveyery',
     title: 'Шевронные ленточные конвейеры',
     group: 'profile',
-    image: '/images/belt-classification/chevron.webp',
+    image: '/images/belt-classification/chevron-without-tray.webp',
     description: 'Лента с выступающим шевронным рисунком для увеличения удержания материала на наклонной трассе.',
     construction:
       'Повторяющиеся V-образные или другие согласованные профили работают вместе со свойствами полотна и груза. Высота и шаг рисунка выбираются по размеру частиц, загрузке и наклону; конструкция очистки учитывает выступы на поверхности.',
@@ -228,7 +228,7 @@ export const beltVariantDefinitions = [
     slug: 'konveyery-s-pvh-lentoy',
     title: 'Конвейеры с ПВХ-лентой',
     group: 'material',
-    image: '/images/source-26553552.webp',
+    image: '/images/conveyor-types/pvc-belt-conveyor-green.webp',
     description:
       'Транспортеры с ПВХ-полотном для упаковки и технологических операций с согласованными требованиями к поверхности.',
     construction:
@@ -269,7 +269,7 @@ export const beltVariantDefinitions = [
   {
     slug: 'konveyery-s-postoyannym-uglom',
     title: 'Конвейеры с постоянным углом наклона',
-    group: 'adjustment',
+    group: 'direction',
     image: '/images/inclined-conveyor-33734723.webp',
     description: 'Фиксированная геометрия для линии с неизменными отметками загрузки и выгрузки.',
     construction:
@@ -282,7 +282,7 @@ export const beltVariantDefinitions = [
   {
     slug: 'konveyery-s-reguliruemym-uglom',
     title: 'Конвейеры с регулируемым углом наклона',
-    group: 'adjustment',
+    group: 'direction',
     image: '/images/belt-classification/mobile.webp',
     description: 'Изменение высоты выгрузки за счёт регулируемого положения наклонной части конвейера.',
     construction:
@@ -326,7 +326,7 @@ export const beltVariantDefinitions = [
     slug: 'konveyer-dlya-upakovki',
     title: 'Ленточные конвейеры для штучных грузов',
     group: 'cargo',
-    image: '/images/package-conveyor-26553552.webp',
+    image: '/images/conveyor-types/unit-load-boxes-conveyor.webp',
     description: 'Перемещение коробок, мешков, деталей и упакованных изделий между рабочими участками.',
     construction:
       'Для отдельных изделий важно устойчивое основание и непрерывная опора на стыках. Ширина ленты и зазоры выбираются по самым маленьким и самым большим изделиям; направляющие, остановы и скорость согласуются с технологией.',
@@ -339,7 +339,7 @@ export const beltVariantDefinitions = [
     slug: 'lentochnye-konveyery-dlya-sypuchih-materialov',
     title: 'Ленточные конвейеры для сыпучих материалов',
     group: 'cargo',
-    image: '/images/troughed-conveyor-33736028.webp',
+    image: '/images/conveyor-types/troughed-sand-conveyor.webp',
     description: 'Непрерывная подача насыпного продукта с расчётом загрузки, удержания потока и очистки.',
     construction:
       'Груз поступает на ленту потоком. Для выбора учитываются плотность, крупность, влажность и подвижность материала; плоская или желобчатая поверхность и профиль подбираются под расход и направление трассы.',
@@ -356,7 +356,7 @@ export const beltVariantDefinitions = [
     slug: 'lentochnye-konveyery-dlya-kuskovyh-gruzov',
     title: 'Ленточные конвейеры для кусковых грузов',
     group: 'cargo',
-    image: '/images/troughed-conveyor-33736028.webp',
+    image: '/images/conveyor-types/troughed-ore-conveyor.webp',
     description: 'Транспортировка кускового материала с учётом ударов при загрузке и размеров крупных включений.',
     construction:
       'Крупные куски создают локальные нагрузки на полотно, ролики и раму. Загрузочный узел, амортизирующая поддержка и защитные элементы выбираются с учётом высоты падения, формы и массы максимального куска.',
@@ -366,10 +366,42 @@ export const beltVariantDefinitions = [
     selection: ['Размер и масса максимального куска', 'Высота падения на ленту', 'Абразивность и форма включений'],
   },
   {
+    slug: 'mini-lentochnyy-konveyer',
+    title: 'Мини ленточный конвейер',
+    group: 'purpose',
+    image: '/images/belt-classification/mini-belt-conveyor-v6.webp',
+    description:
+      'Компактный ленточный транспортер длиной до 1,5 м для передачи небольших грузов между соседними операциями.',
+    construction:
+      'Короткая рама с замкнутой лентой, концевыми барабанами и компактным приводом размещается рядом со станком или рабочим постом. Рабочую ширину, высоту и опоры подбирают по грузу и месту установки; борта и направляющие добавляют по необходимости.',
+    applications: 'Передача деталей, упаковки и небольших изделий между станком, столом и упаковочным постом.',
+    limitations:
+      'Длина до 1,5 м относится к габариту конкретного исполнения, а не к допустимой массе груза. Нагрузку и скорость рассчитывают отдельно; малый размер не отменяет защиту движущихся узлов.',
+    selection: ['Длина конвейера в пределах 1,5 м', 'Размер и масса изделия', 'Высота соседнего оборудования'],
+  },
+  {
+    slug: 'zakrytyy-lentochnyy-konveyer',
+    title: 'Закрытый ленточный конвейер',
+    group: 'purpose',
+    image: '/images/belt-classification/enclosed-belt-conveyor-v2.webp',
+    description: 'Ленточный транспортер с укрытием для ограничения выхода пыли либо защиты груза от дождя и снега.',
+    construction:
+      'Несущая ветвь ленты закрывается крышками или секционным кожухом. Для пылящего материала прорабатывают примыкания загрузки и выгрузки, уплотнение стыков и патрубки подключения аспирации. Для уличной трассы важны форма крышек, водоотвод и защита открытых переходных узлов.',
+    applications:
+      'Перевозка пылящего сырья внутри цеха и транспортировка чувствительного к осадкам груза на открытом участке.',
+    limitations:
+      'Крышки сами по себе не делают линию герметичной и не заменяют аспирацию. Защита от осадков зависит также от исполнения загрузки, выгрузки и стыков секций.',
+    selection: [
+      'Пыление и требования к аспирации',
+      'Расположение патрубков и точек перегрузки',
+      'Уличная или внутренняя установка',
+    ],
+  },
+  {
     slug: 'proizvodstvennye-lentochnye-konveyery',
     title: 'Производственные ленточные конвейеры',
     group: 'purpose',
-    image: '/images/horizontal-conveyor-33734355.webp',
+    image: '/images/belt-classification/production-line-conveyor.webp',
     description: 'Связь технологических операций в единую линию с согласованным потоком продукции.',
     construction:
       'Конвейер встраивается между рабочими постами и машинами. Скорость, высота и логика управления согласуются с производительностью соседних операций; точки накопления и остановки предусматриваются только при необходимости процесса.',
@@ -382,7 +414,7 @@ export const beltVariantDefinitions = [
     slug: 'konvejery-dlya-sklada',
     title: 'Складские ленточные конвейеры',
     group: 'purpose',
-    image: '/images/warehouse-conveyor-50027645.webp',
+    image: '/images/belt-classification/warehouse-transfer-conveyor-tires.webp',
     description: 'Передача грузов между зонами приёмки, хранения, комплектации и отгрузки.',
     construction:
       'Компоновка выбирается по плану склада и маршрутам движения персонала. Для коробок и мешков учитываются зазоры, масса и частота подачи; передвижное или стационарное исполнение согласуется с изменением рабочих зон.',
@@ -408,7 +440,7 @@ export const beltVariantDefinitions = [
     slug: 'konvejery-dlya-sortirovki',
     title: 'Сортировочные ленточные конвейеры',
     group: 'purpose',
-    image: '/images/sorting-conveyor-50027645.webp',
+    image: '/images/belt-classification/sorting-conveyor-worker.webp',
     description: 'Транспортная основа для разделения потока по заданным признакам на производстве или складе.',
     construction:
       'Лента перемещает изделия через зоны контроля и отбора. Ручная или автоматическая сортировка требует согласования скорости, доступности постов, датчиков и исполнительных механизмов; транспортная часть не определяет алгоритм отбора сама по себе.',
@@ -421,7 +453,7 @@ export const beltVariantDefinitions = [
     slug: 'pishchevye-lentochnye-konveyery',
     title: 'Пищевые ленточные конвейеры',
     group: 'purpose',
-    image: '/images/source-26553552.webp',
+    image: '/images/belt-classification/food-stainless-pasta-conveyor.webp',
     description:
       'Транспортеры для пищевых процессов с подбором контактных материалов и конструкции под санитарную обработку.',
     construction:

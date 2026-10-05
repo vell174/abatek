@@ -52,13 +52,18 @@ const faq = computed(
   <div class="industrial-page" :class="`industrial-page--${page.theme}`">
     <ProductIntroSection_02
       :title="page.introTitle"
+      :title-size="page.introTitleSize"
       :variant="page.introVariant"
       :image="page.image"
       :image-alt="page.imageAlt || page.title"
       :image-fit="page.imageFit"
+      :image-frame="page.imageFrame"
       :image-scale="page.imageScale"
       :image-height="page.imageHeight"
+      :image-tone="page.imageTone"
       button-label="Заказать расчёт"
+      :download-label="page.introDownload?.label"
+      :download-url="page.introDownload?.url"
       :label="page.imageCaption ? '' : 'Собственное производство'"
       label-icon="lucide:factory"
       @action="openRequest"
@@ -77,230 +82,178 @@ const faq = computed(
       </template>
       <template v-if="page.imageCaption" #caption>{{ page.imageCaption }}</template>
       <p
-        v-for="paragraph in page.intro"
+        v-for="(paragraph, index) in page.intro"
         :key="paragraph"
-        :class="[page.introVariant === 'text-only' && 'industrial-page__intro-paragraph--justified']"
+        :class="[
+          page.introVariant === 'text-only' && 'industrial-page__intro-paragraph--justified',
+          page.introLeadCompact && index === 0 && 'industrial-page__intro-paragraph--compact',
+        ]"
       >
         {{ paragraph }}
       </p>
     </ProductIntroSection_02>
 
-    <ProductFactsSection_03 v-if="page.facts.length" :facts="page.facts" />
+    <template v-if="!page.hideContentBeforeWorkflow">
+      <ProductFactsSection_03 v-if="page.facts.length" :facts="page.facts" />
 
-    <section v-if="page.classificationGroups?.length" class="industrial-types">
-      <div class="site-container industrial-types__inner">
-        <h2 class="industrial-types__title">{{ page.galleryTitle }}</h2>
-        <section v-for="group in page.classificationGroups" :key="group.title" class="industrial-types__group">
-          <h3 class="industrial-types__group-title">{{ group.title }}</h3>
-          <p class="industrial-types__description">{{ group.description }}</p>
+      <TechnicalReferenceCard v-if="page.referenceCard" v-bind="page.referenceCard" />
+
+      <section v-if="page.classificationGroups?.length" class="industrial-types">
+        <div class="site-container industrial-types__inner">
+          <h2 class="industrial-types__title">{{ page.classificationTitle ?? page.galleryTitle }}</h2>
+          <section v-for="group in page.classificationGroups" :key="group.title" class="industrial-types__group">
+            <h3 class="industrial-types__group-title">{{ group.title }}</h3>
+            <p class="industrial-types__description">{{ group.description }}</p>
+            <div class="industrial-types__grid">
+              <ScraperProductCard
+                v-for="(product, index) in group.items"
+                :key="product.href"
+                :product="product"
+                :index="index"
+                variant="category"
+                heading-tag="h4"
+              />
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section v-else-if="page.catalogVariant === 'categories'" class="industrial-types">
+        <div class="site-container industrial-types__inner">
+          <h2 class="industrial-types__title">{{ page.galleryTitle }}</h2>
+          <p v-if="page.catalogDescription" class="industrial-types__description">{{ page.catalogDescription }}</p>
           <div class="industrial-types__grid">
             <ScraperProductCard
-              v-for="(product, index) in group.items"
-              :key="product.href"
+              v-for="(product, index) in mediaSections"
+              :key="product.title"
               :product="product"
               :index="index"
-              variant="category"
-              heading-tag="h4"
+              :variant="page.catalogCardVariant ?? 'category'"
             />
           </div>
-        </section>
-      </div>
-    </section>
-
-    <section v-else-if="page.catalogVariant === 'categories'" class="industrial-types">
-      <div class="site-container industrial-types__inner">
-        <h2 class="industrial-types__title">{{ page.galleryTitle }}</h2>
-        <div class="industrial-types__grid">
-          <ScraperProductCard
-            v-for="(product, index) in mediaSections"
-            :key="product.title"
-            :product="product"
-            :index="index"
-            variant="category"
-          />
         </div>
-      </div>
-    </section>
+      </section>
 
-    <SpecsTableSection
-      v-if="page.table"
-      :title="page.table.title"
-      :columns="page.table.headers"
-      :rows="page.table.rows"
-      eyebrow="Расчётные данные"
-      tone="soft"
-    />
+      <SpecsTableSection
+        v-if="page.table"
+        :title="page.table.title"
+        :columns="page.table.headers"
+        :rows="page.table.rows"
+        eyebrow="Расчётные данные"
+        tone="soft"
+      />
 
-    <SpecsTableSection
-      v-for="table in page.tables"
-      :key="table.title"
-      :title="table.title"
-      :columns="table.headers"
-      :rows="table.rows"
-      :eyebrow="table.eyebrow ?? 'Расчётные данные'"
-      tone="soft"
-    />
+      <SpecsTableSection
+        v-for="table in page.tables"
+        :key="table.title"
+        :title="table.title"
+        :columns="table.headers"
+        :rows="table.rows"
+        :eyebrow="table.eyebrow ?? 'Расчётные данные'"
+        tone="soft"
+      />
 
-    <section v-if="modelSections.length" class="industrial-models">
-      <div class="content-section site-container">
-        <div class="industrial-section-heading">
-          <div class="industrial-section-heading__intro">
-            <p>Модельный ряд</p>
-            <span>Сравните производительность и параметры моделей, затем отправьте запрос на расчёт</span>
+      <section v-if="modelSections.length" class="industrial-models">
+        <div class="content-section site-container">
+          <div class="industrial-section-heading">
+            <div class="industrial-section-heading__intro">
+              <p>Модельный ряд</p>
+              <span>Сравните производительность и параметры моделей, затем отправьте запрос на расчёт</span>
+            </div>
+            <h2>
+              Шлюзовые затворы
+              <em>ШУ-6, ШУ-15, ШУ-22 и ШУ-30</em>
+            </h2>
           </div>
-          <h2>
-            Шлюзовые затворы
-            <em>ШУ-6, ШУ-15, ШУ-22 и ШУ-30</em>
-          </h2>
-        </div>
-        <nav class="industrial-models__nav" aria-label="Модели шлюзовых затворов ШУ">
-          <a v-for="link in page.sectionLinks" :key="link.id" class="industrial-models__nav-link" :href="`#${link.id}`">
-            {{ link.label }}
-          </a>
-        </nav>
-        <div class="industrial-models__grid">
-          <article
-            v-for="section in modelSections"
-            :id="section.id"
-            :key="section.title"
-            class="industrial-models__card"
-          >
-            <h3 class="industrial-models__title">{{ section.title }}</h3>
-            <p v-for="paragraph in section.text" :key="paragraph" class="industrial-models__text">
-              {{ paragraph }}
-            </p>
-            <ul v-if="section.items" class="industrial-models__specs">
-              <li v-for="item in section.items" :key="item" class="industrial-models__spec">{{ item }}</li>
-            </ul>
-            <UiButton class="industrial-models__action" @click="openModelRequest(section)">
-              Запросить расчёт {{ modelLabel(section) }}
-            </UiButton>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <LazyProjectGallerySlider
-      v-if="gallery?.length && page.projectsPlacement !== 'before-workflow'"
-      :images="gallery"
-      :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
-    />
-
-    <FaqSection_last_01
-      v-if="textSections.length && page.sectionsCollapsible"
-      :items="
-        textSections.map((section) => ({
-          question: section.title,
-          answer: section.text ?? [],
-          image: section.cardImage,
-        }))
-      "
-      :title="page.sectionsTitle ?? page.title"
-      eyebrow="Инженерный разбор"
-      title-id="industrial-selection-title"
-      layout="cards"
-      tone="white"
-      preserve-content
-    />
-
-    <section v-else-if="textSections.length" class="industrial-editorial">
-      <div class="content-section site-container">
-        <div class="industrial-section-heading">
-          <div class="industrial-section-heading__intro">
-            <p>Инженерный разбор</p>
-            <span>Ключевые сведения для выбора оборудования под вашу производственную задачу</span>
+          <nav class="industrial-models__nav" aria-label="Модели шлюзовых затворов ШУ">
+            <a
+              v-for="link in page.sectionLinks"
+              :key="link.id"
+              class="industrial-models__nav-link"
+              :href="`#${link.id}`"
+            >
+              {{ link.label }}
+            </a>
+          </nav>
+          <div class="industrial-models__grid">
+            <article
+              v-for="section in modelSections"
+              :id="section.id"
+              :key="section.title"
+              class="industrial-models__card"
+            >
+              <h3 class="industrial-models__title">{{ section.title }}</h3>
+              <p v-for="paragraph in section.text" :key="paragraph" class="industrial-models__text">
+                {{ paragraph }}
+              </p>
+              <ul v-if="section.items" class="industrial-models__specs">
+                <li v-for="item in section.items" :key="item" class="industrial-models__spec">{{ item }}</li>
+              </ul>
+              <UiButton class="industrial-models__action" @click="openModelRequest(section)">
+                Запросить расчёт {{ modelLabel(section) }}
+              </UiButton>
+            </article>
           </div>
-          <h2>
-            Конструкция, применение
-            <em>и подбор</em>
-          </h2>
         </div>
-        <div class="industrial-editorial__grid">
-          <article
-            v-for="(section, index) in textSections"
-            :id="section.id"
-            :key="section.title"
-            class="industrial-editorial__card"
-            :class="{
-              'industrial-editorial__card--wide':
-                index === 0 && textSections.length > 2 && textSections.length % 2 === 1 && section.text?.length,
-            }"
-          >
-            <div class="industrial-editorial__card-head">
-              <span class="industrial-editorial__number">{{ String(index + 1).padStart(2, '0') }}</span>
-              <span class="industrial-editorial__label">Практика и технология</span>
+      </section>
+
+      <LazyProjectGallerySlider
+        v-if="!page.hideProjects && gallery?.length && page.projectsPlacement !== 'before-workflow'"
+        :images="gallery"
+        :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
+      />
+
+      <EquipmentDetailsSection
+        v-if="page.sectionsVariant === 'technical'"
+        :title="page.sectionsTitle ?? page.title"
+        :sections="page.sections"
+      />
+
+      <FaqSection_last_01
+        v-else-if="textSections.length && page.sectionsCollapsible"
+        :items="
+          textSections.map((section) => ({
+            question: section.title,
+            answer: section.text ?? [],
+            image: section.cardImage,
+          }))
+        "
+        :title="page.sectionsTitle ?? page.title"
+        eyebrow="Инженерный разбор"
+        title-id="industrial-selection-title"
+        layout="cards"
+        tone="white"
+        preserve-content
+      />
+
+      <section v-else-if="textSections.length" class="industrial-editorial">
+        <div class="content-section site-container">
+          <div class="industrial-section-heading">
+            <div class="industrial-section-heading__intro">
+              <p>Инженерный разбор</p>
+              <span>Ключевые сведения для выбора оборудования под вашу производственную задачу</span>
             </div>
-            <div class="industrial-editorial__body">
-              <h3>{{ section.title }}</h3>
-              <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
-              <ul v-if="section.items">
-                <li v-for="item in section.items" :key="item">{{ item }}</li>
-              </ul>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <ScraperConveyorsCatalog
-      v-if="!page.hideCatalog && page.catalogVariant !== 'categories' && page.theme === 'copper'"
-      :title="page.galleryTitle"
-      :sections="mediaSections"
-      @action="openRequest"
-    />
-
-    <section
-      v-else-if="!page.hideCatalog && page.catalogVariant !== 'categories' && mediaSections.length"
-      class="industrial-catalog"
-    >
-      <div class="content-section site-container">
-        <div class="industrial-section-heading industrial-section-heading--light">
-          <p v-if="page.theme !== 'amber' && page.title !== 'Барабаны ленточного конвейера'">Модельный ряд</p>
-          <p v-else-if="page.title === 'Барабаны ленточного конвейера'" class="industrial-section-heading__kicker">
-            Точная комплектация для стабильного движения ленты
-          </p>
-          <h2>{{ page.galleryTitle }}</h2>
-        </div>
-        <div class="industrial-catalog__grid">
-          <article v-if="page.theme === 'amber' && mediaSections[0]" class="industrial-catalog__card">
-            <figure>
-              <img
-                :src="mediaSections[0].image"
-                :alt="mediaSections[0].imageAlt || mediaSections[0].title"
-                loading="lazy"
-                width="1200"
-                height="900"
-              />
-            </figure>
-            <div>
-              <h3>{{ mediaSections[0].title }}</h3>
-              <p v-for="paragraph in mediaSections[0].text" :key="paragraph">{{ paragraph }}</p>
-              <ul v-if="mediaSections[0].items">
-                <li v-for="item in mediaSections[0].items" :key="item">{{ item }}</li>
-              </ul>
-            </div>
-          </article>
-
-          <ScraperProductCard
-            v-for="(product, index) in scraperCatalogSections"
-            :key="product.title"
-            :product="product"
-            :index="index"
-            @action="openRequest"
-          />
-
-          <template v-if="!['amber', 'wine', 'teal'].includes(page.theme)">
-            <article v-for="section in mediaSections" :key="section.title" class="industrial-catalog__card">
-              <figure>
-                <img
-                  :src="section.image"
-                  :alt="section.imageAlt || section.title"
-                  loading="lazy"
-                  width="1200"
-                  height="900"
-                />
-              </figure>
-              <div>
+            <h2>
+              Конструкция, применение
+              <em>и подбор</em>
+            </h2>
+          </div>
+          <div class="industrial-editorial__grid">
+            <article
+              v-for="(section, index) in textSections"
+              :id="section.id"
+              :key="section.title"
+              class="industrial-editorial__card"
+              :class="{
+                'industrial-editorial__card--wide':
+                  index === 0 && textSections.length > 2 && textSections.length % 2 === 1 && section.text?.length,
+              }"
+            >
+              <div class="industrial-editorial__card-head">
+                <span class="industrial-editorial__number">{{ String(index + 1).padStart(2, '0') }}</span>
+                <span class="industrial-editorial__label">Практика и технология</span>
+              </div>
+              <div class="industrial-editorial__body">
                 <h3>{{ section.title }}</h3>
                 <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
                 <ul v-if="section.items">
@@ -308,32 +261,103 @@ const faq = computed(
                 </ul>
               </div>
             </article>
-          </template>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section v-if="page.video" class="industrial-video">
-      <div class="content-section site-container">
-        <p class="industrial-content__eyebrow">Видео оборудования</p>
-        <h2>{{ page.video.title }}</h2>
-        <div class="industrial-video__frame">
-          <iframe
-            :src="page.video.embedUrl"
-            :title="page.video.title"
-            loading="lazy"
-            allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen
-          />
+      <ScraperConveyorsCatalog
+        v-if="!page.hideCatalog && page.catalogVariant !== 'categories' && page.theme === 'copper'"
+        :title="page.galleryTitle"
+        :sections="mediaSections"
+        @action="openRequest"
+      />
+
+      <section
+        v-else-if="!page.hideCatalog && page.catalogVariant !== 'categories' && mediaSections.length"
+        class="industrial-catalog"
+      >
+        <div class="content-section site-container">
+          <div class="industrial-section-heading industrial-section-heading--light">
+            <p v-if="page.theme !== 'amber' && page.title !== 'Барабаны ленточного конвейера'">Модельный ряд</p>
+            <p v-else-if="page.title === 'Барабаны ленточного конвейера'" class="industrial-section-heading__kicker">
+              Точная комплектация для стабильного движения ленты
+            </p>
+            <h2>{{ page.galleryTitle }}</h2>
+          </div>
+          <div class="industrial-catalog__grid">
+            <article v-if="page.theme === 'amber' && mediaSections[0]" class="industrial-catalog__card">
+              <figure>
+                <img
+                  :src="mediaSections[0].image"
+                  :alt="mediaSections[0].imageAlt || mediaSections[0].title"
+                  loading="lazy"
+                  width="1200"
+                  height="900"
+                />
+              </figure>
+              <div>
+                <h3>{{ mediaSections[0].title }}</h3>
+                <p v-for="paragraph in mediaSections[0].text" :key="paragraph">{{ paragraph }}</p>
+                <ul v-if="mediaSections[0].items">
+                  <li v-for="item in mediaSections[0].items" :key="item">{{ item }}</li>
+                </ul>
+              </div>
+            </article>
+
+            <ScraperProductCard
+              v-for="(product, index) in scraperCatalogSections"
+              :key="product.title"
+              :product="product"
+              :index="index"
+              @action="openRequest"
+            />
+
+            <template v-if="!['amber', 'wine', 'teal'].includes(page.theme)">
+              <article v-for="section in mediaSections" :key="section.title" class="industrial-catalog__card">
+                <figure>
+                  <img
+                    :src="section.image"
+                    :alt="section.imageAlt || section.title"
+                    loading="lazy"
+                    width="1200"
+                    height="900"
+                  />
+                </figure>
+                <div>
+                  <h3>{{ section.title }}</h3>
+                  <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
+                  <ul v-if="section.items">
+                    <li v-for="item in section.items" :key="item">{{ item }}</li>
+                  </ul>
+                </div>
+              </article>
+            </template>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <LazyProjectGallerySlider
-      v-if="gallery?.length && page.projectsPlacement === 'before-workflow'"
-      :images="gallery"
-      :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
-    />
+      <section v-if="page.video" class="industrial-video">
+        <div class="content-section site-container">
+          <p class="industrial-content__eyebrow">Видео оборудования</p>
+          <h2>{{ page.video.title }}</h2>
+          <div class="industrial-video__frame">
+            <iframe
+              :src="page.video.embedUrl"
+              :title="page.video.title"
+              loading="lazy"
+              allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            />
+          </div>
+        </div>
+      </section>
+
+      <LazyProjectGallerySlider
+        v-if="!page.hideProjects && gallery?.length && page.projectsPlacement === 'before-workflow'"
+        :images="gallery"
+        :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
+      />
+    </template>
 
     <ManufacturingStagesSection_last_02
       :title="page.workflow?.title ?? 'От задачи до готового оборудования'"
@@ -407,6 +431,10 @@ const faq = computed(
   --page-accent: #1769aa;
   --page-deep: #082f52;
   --page-tint: #edf5fb;
+
+  &__intro-paragraph--compact {
+    font-size: 14px;
+  }
 
   &__intro-paragraph--justified {
     text-align: justify;
