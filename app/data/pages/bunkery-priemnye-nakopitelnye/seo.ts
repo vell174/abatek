@@ -1,0 +1,63 @@
+import type { PageSeo } from '../_shared/types';
+import { pageData } from './data';
+
+export const seo = {
+  title: pageData.seoTitle,
+  description: pageData.description,
+  keywords: [
+    'приёмный бункер',
+    'накопительный бункер',
+    'бункер для сыпучих материалов',
+    'приёмный бункер для сыпучих материалов',
+    'бункер для песка',
+    'бункер для угля',
+    'бункер для опилок',
+    'бункер для дробилки',
+    'приёмный бункер дробилки',
+    'бункер для транспортёра',
+    'приёмный бункер конвейера',
+    'приёмный бункер питателя',
+    'приёмный бункер вибрационного питателя',
+    'бункер для погрузчика',
+    'бункер для щебня',
+    'бункер для руды',
+    'бункер для грунта',
+    'бункер для извести',
+    'решётка приёмного бункера',
+    'пирамидальный бункер',
+    'приёмный бункер цена',
+  ],
+  canonicalPath: '/bunkery-priemnye-nakopitelnye/',
+  robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  image: {
+    src: pageData.heroImage,
+    alt: 'Стальной бункер в производственном цехе АБАТЭК',
+    width: 2000,
+    height: 1000,
+    type: 'image/webp',
+  },
+  openGraph: {
+    title: pageData.seoTitle,
+    description: pageData.description,
+    type: 'website',
+    locale: 'ru_RU',
+    siteName: 'АБАТЭК',
+  },
+  twitter: { card: 'summary_large_image', title: pageData.seoTitle, description: pageData.description },
+  breadcrumbs: [
+    { name: 'Главная', path: '/' },
+    { name: pageData.title, path: '/bunkery-priemnye-nakopitelnye/' },
+  ],
+  schema: {
+    pageType: 'WebPage',
+    entityType: 'ProductGroup',
+    name: pageData.title,
+    category: 'Ёмкостное оборудование для сыпучих материалов',
+    productGroupId: 'bunkery-priemnye-nakopitelnye',
+    variesBy: ['Назначение', 'Материал', 'Объём', 'Комплектация'],
+    items: [
+      { name: 'Приёмный бункер', description: 'Для загрузки сыпучих материалов в производственную линию' },
+      { name: 'Накопительный бункер', description: 'Для промежуточного запаса сыпучих материалов' },
+    ],
+  },
+} satisfies PageSeo;

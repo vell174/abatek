@@ -7,6 +7,14 @@ export interface IndustrialSection {
   image?: string;
   imageAlt?: string;
   cardImage?: GalleryImage;
+  illustrations?: Array<GalleryImage & { caption: string }>;
+  table?: {
+    title: string;
+    headers: string[];
+    rows?: string[][];
+    groupHeaders?: Array<{ label: string; colspan?: number; rowspan?: number }>;
+    groups?: Array<{ label: string; description: string; image: GalleryImage; rows: string[][] }>;
+  };
   imageFit?: 'cover' | 'contain';
   href?: string;
   features?: Array<{ title: string; text: string }>;
@@ -29,11 +37,25 @@ export interface IndustrialPage {
   description: string;
   heroAccents?: readonly string[];
   heroImage?: string;
-  heroBackgroundVariant?: 'default' | 'drawing' | 'product' | 'product-dark' | 'product-dark-contained';
+  heroImageAlt?: string;
+  heroActionLabel?: string;
+  heroRequestContext?: string;
+  heroBackgroundVariant?:
+    | 'default'
+    | 'drawing'
+    | 'photo'
+    | 'product'
+    | 'product-dark'
+    | 'product-dark-contained'
+    | 'rgs-photo'
+    | 'rvs-photo'
+    | 'screw-flight-photo';
   heroCompact?: boolean;
   heroTitleVariant?: 'default' | 'wide-light';
   image: string;
   imageAlt?: string;
+  imageWidthPx?: number;
+  imageHeightPx?: number;
   imageFit?: 'cover' | 'contain';
   imageFrame?: 'default' | 'bare';
   imageScale?: 'default' | '120';
@@ -46,8 +68,17 @@ export interface IndustrialPage {
   intro: string[];
   introLeadCompact?: boolean;
   facts: Array<[string, string]>;
+  visualGuides?: Array<{
+    id: string;
+    eyebrow: string;
+    title: string;
+    description?: string;
+    layout: 'cards' | 'feature';
+    items: Array<{ title: string; description: string; image: GalleryImage }>;
+  }>;
   sections: IndustrialSection[];
   sectionsCollapsible?: boolean;
+  editorialAccordion?: boolean;
   sectionsTitle?: string;
   sectionsVariant?: 'default' | 'technical';
   hideProjects?: boolean;
@@ -86,6 +117,8 @@ export interface IndustrialPage {
   classificationGroups?: Array<{ title: string; description: string; items: IndustrialSection[] }>;
   sectionLinks?: Array<{ id: string; label: string }>;
   parentBreadcrumb?: { label: string; to: string };
+  relatedLinks?: Array<{ label: string; to: string; description: string }>;
+  relatedLinksTitle?: string;
   workflow?: {
     eyebrow: string;
     title: string;

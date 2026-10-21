@@ -34,6 +34,12 @@ const openRequest = () => {
       <p v-for="paragraph in pageData.intro" :key="paragraph" class="screw-page__text">{{ paragraph }}</p>
     </ProductIntroSection_02>
 
+    <RelatedProductLinks
+      v-if="pageData.relatedLinks?.length && pageData.relatedLinksTitle"
+      :title="pageData.relatedLinksTitle"
+      :links="pageData.relatedLinks"
+    />
+
     <section class="content-section site-container">
       <p class="screw-page__eyebrow">{{ pageLabels.catalog }}</p>
       <h2 class="screw-page__title">{{ pageData.galleryTitle }}</h2>

@@ -1,0 +1,38 @@
+export const gallery = [
+  {
+    src: '/images/barabany/elevator-projects/baraban-kovshovogo-elevatora-na-podshipnikah.webp',
+    fullSrc: '/images/barabany/elevator-projects/baraban-kovshovogo-elevatora-na-podshipnikah-full.webp',
+    alt: 'Барабан ковшового элеватора с ромбовидной футеровкой на подшипниковых опорах',
+    width: 1440,
+    height: 1080,
+    fullWidth: 2400,
+    fullHeight: 1800,
+  },
+  {
+    src: '/images/barabany/elevator-projects/privodnoy-baraban-kovshovogo-elevatora.webp',
+    fullSrc: '/images/barabany/elevator-projects/privodnoy-baraban-kovshovogo-elevatora-full.webp',
+    alt: 'Приводной барабан ковшового элеватора с футерованной поверхностью и валом',
+    width: 1440,
+    height: 1080,
+    fullWidth: 2000,
+    fullHeight: 1500,
+  },
+  {
+    src: '/images/barabany/elevator-projects/razbornyy-val-privodnogo-barabana-elevatora.webp',
+    fullSrc: '/images/barabany/elevator-projects/razbornyy-val-privodnogo-barabana-elevatora-full.webp',
+    alt: 'Разборное соединение вала приводного барабана ковшового элеватора',
+    width: 1440,
+    height: 1080,
+    fullWidth: 2000,
+    fullHeight: 1500,
+  },
+  {
+    src: '/images/barabany/elevator-projects/futerovannyy-natyazhnoy-baraban-kovshovogo-elevatora.webp',
+    fullSrc: '/images/barabany/elevator-projects/futerovannyy-natyazhnoy-baraban-kovshovogo-elevatora-full.webp',
+    alt: 'Футерованный натяжной барабан ковшового элеватора с валом',
+    width: 1080,
+    height: 1440,
+    fullWidth: 1500,
+    fullHeight: 2000,
+  },
+] as const;

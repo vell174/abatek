@@ -1,0 +1,35 @@
+export const gallery = [
+  {
+    src: '/images/barabany/slatted-projects/izgotovlenie-planchatogo-barabana-norii.webp',
+    alt: 'Планчатый барабан ленточной нории на этапе изготовления в цехе',
+    width: 720,
+    height: 1280,
+    fullWidth: 720,
+    fullHeight: 1280,
+  },
+  {
+    src: '/images/barabany/slatted-projects/otgruzka-planchatogo-barabana-lentochnogo-transportera.webp',
+    alt: 'Планчатый барабан ленточного транспортёра с валом упакован на поддоне для отгрузки',
+    width: 1280,
+    height: 957,
+    fullWidth: 1280,
+    fullHeight: 957,
+  },
+  {
+    src: '/images/barabany/slatted-projects/planchatyy-baraban-kovshovogo-elevatora.webp',
+    fullSrc: '/images/barabany/slatted-projects/planchatyy-baraban-kovshovogo-elevatora-full.webp',
+    alt: 'Планчатый барабан ковшового элеватора с отверстиями в боковине',
+    width: 1440,
+    height: 1080,
+    fullWidth: 2400,
+    fullHeight: 1800,
+  },
+  {
+    src: '/images/barabany/slatted-projects/planchatyy-privodnoy-baraban-lentochnogo-transportera.webp',
+    alt: 'Планчатый приводной барабан ленточного транспортёра с валом',
+    width: 720,
+    height: 1280,
+    fullWidth: 720,
+    fullHeight: 1280,
+  },
+] as const;

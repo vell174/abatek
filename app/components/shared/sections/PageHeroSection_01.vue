@@ -5,6 +5,10 @@ const {
   accentTexts = [],
   eyebrow = 'АБАТЭК',
   backgroundImage = '',
+  backgroundImageAlt = '',
+  backgroundImageWidth = 1920,
+  backgroundImageHeight = 720,
+  actionLabel = '',
   backgroundVariant = 'default',
   compact = false,
   titleVariant = 'default',
@@ -14,10 +18,24 @@ const {
   accentTexts?: readonly string[];
   eyebrow?: string;
   backgroundImage?: string;
-  backgroundVariant?: 'default' | 'drawing' | 'product' | 'product-dark' | 'product-dark-contained';
+  backgroundImageAlt?: string;
+  backgroundImageWidth?: number;
+  backgroundImageHeight?: number;
+  actionLabel?: string;
+  backgroundVariant?:
+    | 'default'
+    | 'drawing'
+    | 'photo'
+    | 'product'
+    | 'product-dark'
+    | 'product-dark-contained'
+    | 'rgs-photo'
+    | 'rvs-photo'
+    | 'screw-flight-photo';
   compact?: boolean;
   titleVariant?: 'default' | 'wide-light';
 }>();
+defineEmits<{ action: [] }>();
 </script>
 
 <template>
@@ -25,11 +43,23 @@ const {
     class="page-hero"
     :class="[
       backgroundImage && 'page-hero--custom-background',
+      backgroundImageAlt && 'page-hero--image-element',
       compact && 'page-hero--compact',
       `page-hero--${backgroundVariant}`,
     ]"
     :style="backgroundImage ? { '--page-hero-background-image': `url('${backgroundImage}')` } : undefined"
   >
+    <img
+      v-if="backgroundImage && backgroundImageAlt"
+      class="page-hero__background-image"
+      :src="backgroundImage"
+      :alt="backgroundImageAlt"
+      :width="backgroundImageWidth"
+      :height="backgroundImageHeight"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
     <div class="site-container page-hero__container">
       <p class="page-hero__eyebrow">{{ eyebrow }}</p>
       <h1 class="page-hero__title" :class="`page-hero__title--${titleVariant}`">{{ title }}</h1>
@@ -39,6 +69,7 @@ const {
           <strong v-for="accent in accentTexts" :key="accent" class="page-hero__text-accent">{{ accent }}</strong>
         </span>
       </p>
+      <UiButton v-if="actionLabel" class="page-hero__action" @click="$emit('action')">{{ actionLabel }}</UiButton>
     </div>
   </section>
 </template>
@@ -65,6 +96,12 @@ const {
       var(--page-hero-background-image) center 52% / cover;
   }
 
+  &--photo {
+    background:
+      linear-gradient(90deg, rgba($navy, 0.95), rgba($navy, 0.78) 58%, rgba($navy, 0.45)),
+      var(--page-hero-background-image) center 52% / cover;
+  }
+
   &--product {
     padding-block: clamp(64px, 8vw, 112px);
     background:
@@ -85,6 +122,59 @@ const {
     background:
       linear-gradient(rgba($navy, 0.48), rgba($navy, 0.48)),
       #fff var(--page-hero-background-image) 94% center / 55% auto no-repeat;
+  }
+
+  &--rgs-photo {
+    background:
+      linear-gradient(90deg, rgba($navy, 1) 0%, rgba($navy, 0.98) 36%, rgba($navy, 0.68) 58%, rgba($navy, 0.12) 100%),
+      var(--page-hero-background-image) right center / 68% auto no-repeat,
+      $navy;
+  }
+
+  &--rvs-photo {
+    background:
+      linear-gradient(90deg, rgba($navy, 1) 0%, rgba($navy, 0.98) 36%, rgba($navy, 0.76) 60%, rgba($navy, 0.2) 100%),
+      var(--page-hero-background-image) right center / 72% auto no-repeat,
+      $navy;
+  }
+
+  &--image-element {
+    background: $navy;
+
+    &::before {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      content: '';
+      background: linear-gradient(90deg, rgba($navy, 0.97), rgba($navy, 0.82) 52%, rgba($navy, 0.34));
+    }
+  }
+
+  &--screw-flight-photo::before {
+    background: linear-gradient(
+      90deg,
+      rgba($navy, 0.96) 0%,
+      rgba($navy, 0.84) 37%,
+      rgba($navy, 0.28) 74%,
+      rgba($navy, 0.12) 100%
+    );
+  }
+
+  &--screw-flight-photo &__background-image {
+    object-position: 62% center;
+  }
+
+  &__background-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 52%;
+  }
+
+  &--image-element &__container {
+    z-index: 2;
   }
 
   &--product &__title,
@@ -177,6 +267,10 @@ const {
     background: $yellow;
     border-radius: 7px;
   }
+
+  &__action {
+    margin-top: 24px;
+  }
 }
 
 @media (max-width: $phone) {
@@ -193,6 +287,26 @@ const {
 
     &--compact {
       padding-block: 36px;
+    }
+
+    &--image-element::before {
+      background: linear-gradient(90deg, rgba($navy, 0.94), rgba($navy, 0.72));
+    }
+
+    &--screw-flight-photo::before {
+      background: linear-gradient(90deg, rgba($navy, 0.93), rgba($navy, 0.78));
+    }
+
+    &--screw-flight-photo &__background-image {
+      object-position: 72% center;
+    }
+
+    &--rgs-photo,
+    &--rvs-photo {
+      background:
+        linear-gradient(90deg, rgba($navy, 0.96), rgba($navy, 0.8)),
+        var(--page-hero-background-image) 72% center / cover,
+        $navy;
     }
   }
 }

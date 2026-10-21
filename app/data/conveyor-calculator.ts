@@ -9,7 +9,7 @@ export const conveyorCalculatorContent = {
   resultTitle: 'Результат расчёта',
   resultKicker: '04 / Результат',
   homeBreadcrumb: 'Главная',
-  pageBreadcrumb: 'Калькулятор мощности привода',
+  pageBreadcrumb: 'Калькулятор мощности привода ленточного конвейера',
   emptyResult: 'Заполните параметры и нажмите «Рассчитать».',
   calculate: 'Рассчитать',
   reset: 'Сбросить',

@@ -1,14 +1,14 @@
 export const gallery = [
   {
-    src: '/images/gallery/26775049.webp',
+    src: '/images/gallery/izgotovlenie-gorizontalnogo-stalnogo-rezervuara-rgs-40.webp',
     alt: 'Изготовление горизонтальных резервуаров типа РГС и РГЦ от производителя',
   },
   {
-    src: '/images/gallery/26775057.webp',
+    src: '/images/gallery/otgruzka-rezervuara-rgs-40.webp',
     alt: 'Изготовление горизонтальных резервуаров типа РГС и РГЦ от производителя',
   },
   {
-    src: '/images/gallery/26775058.webp',
+    src: '/images/gallery/okrashennyy-rezervuar-rgs-40-poliuretanovoy-grunt-emalyu.webp',
     alt: 'Изготовление горизонтальных резервуаров типа РГС и РГЦ от производителя',
   },
   {

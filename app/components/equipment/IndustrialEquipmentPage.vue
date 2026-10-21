@@ -18,6 +18,12 @@ const modelSections = computed(() =>
 const textSections = computed(() =>
   props.page.sections.filter((section) => !section.image && (!section.id || !modelIds.value.has(section.id))),
 );
+const expandedEditorialSections = ref<number[]>([]);
+const toggleEditorialSection = (index: number) => {
+  expandedEditorialSections.value = expandedEditorialSections.value.includes(index)
+    ? expandedEditorialSections.value.filter((expandedIndex) => expandedIndex !== index)
+    : [...expandedEditorialSections.value, index];
+};
 const scraperCatalogSections = computed(() => {
   if (props.page.theme === 'amber') return mediaSections.value.slice(1);
   if (props.page.theme === 'wine' || props.page.theme === 'teal') return mediaSections.value;
@@ -56,6 +62,8 @@ const faq = computed(
       :variant="page.introVariant"
       :image="page.image"
       :image-alt="page.imageAlt || page.title"
+      :image-width-px="page.imageWidthPx"
+      :image-height-px="page.imageHeightPx"
       :image-fit="page.imageFit"
       :image-frame="page.imageFrame"
       :image-scale="page.imageScale"
@@ -95,6 +103,37 @@ const faq = computed(
 
     <template v-if="!page.hideContentBeforeWorkflow">
       <ProductFactsSection_03 v-if="page.facts.length" :facts="page.facts" />
+
+      <RelatedProductLinks
+        v-if="page.relatedLinks?.length && page.relatedLinksTitle"
+        :title="page.relatedLinksTitle"
+        :links="page.relatedLinks"
+      />
+
+      <section v-for="guide in page.visualGuides" :id="guide.id" :key="guide.id" class="industrial-visual-guide">
+        <div class="content-section site-container">
+          <p class="industrial-visual-guide__eyebrow">{{ guide.eyebrow }}</p>
+          <h2 class="industrial-visual-guide__title">{{ guide.title }}</h2>
+          <p v-if="guide.description" class="industrial-visual-guide__description">{{ guide.description }}</p>
+          <div class="industrial-visual-guide__grid" :class="[`industrial-visual-guide__grid--${guide.layout}`]">
+            <article v-for="item in guide.items" :key="item.title" class="industrial-visual-guide__card">
+              <img
+                class="industrial-visual-guide__image"
+                :src="item.image.src"
+                :alt="item.image.alt"
+                :width="item.image.width"
+                :height="item.image.height"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="industrial-visual-guide__copy">
+                <h3 class="industrial-visual-guide__card-title">{{ item.title }}</h3>
+                <p class="industrial-visual-guide__card-description">{{ item.description }}</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
 
       <TechnicalReferenceCard v-if="page.referenceCard" v-bind="page.referenceCard" />
 
@@ -238,7 +277,10 @@ const faq = computed(
               <em>и подбор</em>
             </h2>
           </div>
-          <div class="industrial-editorial__grid">
+          <div
+            class="industrial-editorial__grid"
+            :class="{ 'industrial-editorial__grid--stacked': page.editorialAccordion }"
+          >
             <article
               v-for="(section, index) in textSections"
               :id="section.id"
@@ -246,19 +288,77 @@ const faq = computed(
               class="industrial-editorial__card"
               :class="{
                 'industrial-editorial__card--wide':
-                  index === 0 && textSections.length > 2 && textSections.length % 2 === 1 && section.text?.length,
+                  !page.editorialAccordion &&
+                  index === 0 &&
+                  textSections.length > 2 &&
+                  textSections.length % 2 === 1 &&
+                  section.text?.length,
+                'industrial-editorial__card--collapsed':
+                  page.editorialAccordion && !expandedEditorialSections.includes(index),
               }"
             >
               <div class="industrial-editorial__card-head">
                 <span class="industrial-editorial__number">{{ String(index + 1).padStart(2, '0') }}</span>
-                <span class="industrial-editorial__label">Практика и технология</span>
+                <span v-if="!page.editorialAccordion" class="industrial-editorial__label">Практика и технология</span>
               </div>
               <div class="industrial-editorial__body">
-                <h3>{{ section.title }}</h3>
-                <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
-                <ul v-if="section.items">
-                  <li v-for="item in section.items" :key="item">{{ item }}</li>
-                </ul>
+                <h3 v-if="page.editorialAccordion">
+                  <button
+                    class="industrial-editorial__toggle"
+                    type="button"
+                    :aria-expanded="expandedEditorialSections.includes(index)"
+                    :aria-controls="`editorial-content-${index}`"
+                    @click="toggleEditorialSection(index)"
+                  >
+                    <span>{{ section.title }}</span>
+                    <Icon
+                      class="industrial-editorial__toggle-icon"
+                      :class="{ 'industrial-editorial__toggle-icon--open': expandedEditorialSections.includes(index) }"
+                      name="lucide:chevron-down"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </h3>
+                <h3 v-else>{{ section.title }}</h3>
+                <div
+                  v-show="!page.editorialAccordion || expandedEditorialSections.includes(index)"
+                  :id="page.editorialAccordion ? `editorial-content-${index}` : undefined"
+                >
+                  <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
+                  <div v-if="section.illustrations?.length" class="industrial-editorial__illustrations">
+                    <figure
+                      v-for="illustration in section.illustrations"
+                      :key="illustration.src"
+                      class="industrial-editorial__illustration"
+                    >
+                      <img
+                        class="industrial-editorial__illustration-image"
+                        :src="illustration.src"
+                        :alt="illustration.alt"
+                        :width="illustration.width"
+                        :height="illustration.height"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <figcaption class="industrial-editorial__illustration-caption">
+                        {{ illustration.caption }}
+                      </figcaption>
+                    </figure>
+                  </div>
+                  <SpecsTableSection
+                    v-if="section.table"
+                    :title="section.table.title"
+                    :columns="section.table.headers"
+                    :rows="section.table.rows"
+                    :group-headers="section.table.groupHeaders"
+                    :groups="section.table.groups"
+                    eyebrow="Таблица размеров"
+                    compact
+                  />
+                  <ul v-if="section.items">
+                    <li v-for="item in section.items" :key="item">{{ item }}</li>
+                  </ul>
+                </div>
               </div>
             </article>
           </div>
@@ -619,6 +719,10 @@ const faq = computed(
   gap: 20px;
 }
 
+.industrial-page--graphite .industrial-editorial__grid--stacked {
+  gap: 12px;
+}
+
 .industrial-page--graphite .industrial-editorial__grid article {
   grid-template-columns: 64px minmax(0, 1fr);
   min-height: 330px;
@@ -627,6 +731,14 @@ const faq = computed(
   border: 1px solid rgb(5 47 85 / 9%);
   border-radius: 8px;
   box-shadow: 0 14px 38px rgb(5 47 85 / 6%);
+}
+
+.industrial-page--graphite .industrial-editorial__grid--stacked article {
+  min-height: 0;
+}
+
+.industrial-page--graphite .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
+  padding: 12px 20px;
 }
 
 .industrial-page--graphite .industrial-editorial__grid article::before {
@@ -1396,6 +1508,10 @@ const faq = computed(
   gap: 18px;
 }
 
+.industrial-editorial__grid--stacked {
+  grid-template-columns: 1fr;
+}
+
 .industrial-editorial__grid article {
   position: relative;
   display: grid;
@@ -1407,6 +1523,13 @@ const faq = computed(
   border: 1px solid rgb(10 39 62 / 9%);
   border-radius: 4px 22px 22px 4px;
   box-shadow: 0 18px 50px rgb(16 45 69 / 7%);
+}
+
+.industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  min-height: 0;
+  padding: 16px 24px;
 }
 
 .industrial-editorial__grid article::before {
@@ -1466,6 +1589,12 @@ const faq = computed(
   letter-spacing: -0.06em;
 }
 
+.industrial-editorial__grid--stacked .industrial-editorial__number {
+  font-size: 23px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
 .industrial-editorial__label {
   font-size: 9px;
   font-weight: 800;
@@ -1480,6 +1609,63 @@ const faq = computed(
   min-width: 0;
 }
 
+.industrial-editorial__toggle {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: 0;
+
+  &:focus-visible {
+    outline: 2px solid var(--page-accent);
+    outline-offset: 6px;
+  }
+}
+
+.industrial-editorial__toggle-icon {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  color: var(--page-accent);
+  transition: transform 0.2s ease;
+}
+
+.industrial-editorial__toggle-icon--open {
+  transform: rotate(180deg);
+}
+
+.industrial-editorial__illustrations {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.industrial-editorial__illustration {
+  margin: 0;
+}
+
+.industrial-editorial__illustration-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid $line;
+  border-radius: 8px;
+}
+
+.industrial-editorial__illustration-caption {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: $muted;
+}
+
 .industrial-editorial h3,
 .industrial-catalog h3 {
   margin: 0 0 16px;
@@ -1487,6 +1673,10 @@ const faq = computed(
   line-height: 1.16;
   color: $ink;
   letter-spacing: -0.035em;
+}
+
+.industrial-editorial__grid--stacked .industrial-editorial__card--collapsed h3 {
+  margin-bottom: 0;
 }
 
 .industrial-editorial p,
@@ -2319,6 +2509,16 @@ const faq = computed(
     border-radius: 4px 16px 16px 4px;
   }
 
+  .industrial-page .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px 18px;
+  }
+
+  .industrial-page--graphite .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
+    padding: 10px 16px;
+  }
+
   .industrial-page .industrial-editorial__card-head {
     position: relative;
     z-index: 1;
@@ -2332,6 +2532,10 @@ const faq = computed(
     margin: 0;
     font-size: 24px;
     opacity: 1;
+  }
+
+  .industrial-page .industrial-editorial__grid--stacked .industrial-editorial__number {
+    font-size: 20px;
   }
 
   .industrial-page .industrial-editorial__label {
@@ -2348,6 +2552,10 @@ const faq = computed(
     margin-bottom: 12px;
     font-size: 24px;
     line-height: 1.2;
+  }
+
+  .industrial-page .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed h3 {
+    margin-bottom: 0;
   }
 
   .industrial-page .industrial-editorial p {
@@ -2402,6 +2610,132 @@ const faq = computed(
 
   .industrial-page--forest .industrial-catalog .industrial-section-heading h2 {
     white-space: normal;
+  }
+}
+
+.industrial-visual-guide {
+  background: #fff;
+  border-top: 1px solid $line;
+
+  &__eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 800;
+    color: $blue;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  &__title {
+    max-width: 980px;
+    margin: 0;
+    font-size: clamp(28px, 3.4vw, 44px);
+    line-height: 1.15;
+    color: $navy;
+  }
+
+  &__description {
+    max-width: 900px;
+    margin: 18px 0 30px;
+    line-height: 1.7;
+    color: $muted;
+  }
+
+  &__grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  &__grid--cards {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  &__card {
+    overflow: hidden;
+    background: $soft;
+    border: 1px solid $line;
+    border-radius: 14px;
+  }
+
+  &__grid--feature &__card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+    align-items: center;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    background: #fff;
+  }
+
+  &__grid--feature &__image {
+    aspect-ratio: 2;
+  }
+
+  &__copy {
+    padding: 18px;
+  }
+
+  &__grid--feature &__copy {
+    padding: 30px;
+  }
+
+  &__card-title {
+    margin: 0 0 9px;
+    font-size: 18px;
+    line-height: 1.25;
+    color: $navy;
+  }
+
+  &__card-description {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: $muted;
+  }
+}
+
+@media (max-width: $tablet) {
+  .industrial-visual-guide {
+    &__grid--cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    &__grid--feature &__card {
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 0.7fr);
+    }
+  }
+}
+
+@media (max-width: $phone) {
+  .industrial-visual-guide {
+    &__grid--cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    &__grid--feature &__card {
+      grid-template-columns: 1fr;
+    }
+
+    &__grid--feature &__copy {
+      padding: 20px;
+    }
+
+    &__copy {
+      padding: 14px;
+    }
+
+    &__card-title {
+      font-size: 16px;
+    }
+
+    &__card-description {
+      font-size: 13px;
+    }
   }
 }
 </style>

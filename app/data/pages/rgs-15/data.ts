@@ -5,7 +5,12 @@ export const options: ProductPageOptions = {
   title: 'Горизонтальный стальной резервуар РГС-15 м³',
   description:
     'Производство одностенных и двустенных резервуаров РГС-15 объёмом 15 м³ в наземном и подземном исполнении.',
-  image: '/images/26007519.webp',
+  image: '/images/izgotovlenie-gorizontalnogo-stalnogo-rezervuara-rgs-abatek.webp',
+  imageAlt: 'Изготовление горизонтального стального резервуара РГС в цехе АБАТЭК',
+  imageHeight: 'tall',
+  heroImage: '/images/rezervuar-gorizontalnyy-stalnoy-rgs-50-proizvodstvo-abatek.webp',
+  heroImageAlt: 'Горизонтальный стальной резервуар РГС-50 в производственном цехе АБАТЭК',
+  heroBackgroundVariant: 'rgs-photo',
   intro: [
     'РГС-15 — горизонтальный стальной резервуар объёмом 15 м³. Ёмкость изготавливается в наземном, подземном, одностенном или двустенном исполнении.',
     'Габариты, материал, защитное покрытие, опорная часть, патрубки и дополнительное оборудование определяются техническим заданием и условиями эксплуатации.',

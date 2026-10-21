@@ -80,7 +80,7 @@ export const pageData = {
       title: 'Модульные конвейеры',
       text: ['Гибкие линии с модульной лентой для пищевых, упаковочных и производственных процессов.'],
       items: ['Быстрая замена модулей', 'Санитарное исполнение', 'Повороты и нестандартные трассы'],
-      image: '/images/conveyors-33726588.webp',
+      image: '/images/modular-conveyor-upscaled.webp',
       href: '/modulnye-konvejery',
     },
     {

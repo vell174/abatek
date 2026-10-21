@@ -5,6 +5,11 @@ export interface ProductPageOptions {
   title: string;
   description: string;
   image: string;
+  imageAlt?: string;
+  imageHeight?: IndustrialPage['imageHeight'];
+  heroImage?: string;
+  heroImageAlt?: string;
+  heroBackgroundVariant?: IndustrialPage['heroBackgroundVariant'];
   intro: string[];
   facts: Array<[string, string]>;
   sections: IndustrialPage['sections'];
@@ -21,6 +26,10 @@ export function createProductPage(options: ProductPageOptions): IndustrialPage {
     seoTitle: `${options.title} от производителя`,
     description: options.description,
     image: options.image,
+    imageAlt: options.imageAlt,
+    imageHeight: options.imageHeight,
+    heroImage: options.heroImage,
+    heroBackgroundVariant: options.heroBackgroundVariant,
     introTitle: options.title,
     intro: options.intro,
     facts: options.facts,
@@ -36,7 +45,11 @@ export function createProductSeo(options: ProductPageOptions): PageSeo {
     keywords: options.keywords,
     canonicalPath: `/${options.slug}/`,
     robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
-    image: { src: options.image, alt: options.title, type: 'image/jpeg' },
+    image: {
+      src: options.heroImage ?? options.image,
+      alt: options.heroImageAlt ?? options.title,
+      type: (options.heroImage ?? options.image).endsWith('.webp') ? 'image/webp' : 'image/jpeg',
+    },
     openGraph: {
       title: `${options.title} | АБАТЭК`,
       description: options.description,

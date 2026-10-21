@@ -1,68 +1,22 @@
 <script setup lang="ts">
 import ScraperProductCard from '~/components/shared/card/ScraperProductCard.vue';
+import type { GalleryImage } from '~/data/pages/_shared/types';
 import { catalog } from '~/data/pages/rolgang/data-catalog';
+import { pageData, rollerContent } from '~/data/pages/rolgang/data';
+
+defineProps<{ gallery?: readonly GalleryImage[]; galleryTitle: string }>();
 
 const isProjectRequestOpen = useState('project-request-open', () => false);
-const facts = [
-  ['10 видов', 'типовых конструкций'],
-  ['до 2+ т', 'масса штучного груза'],
-  ['0 ₽', 'затраты на привод у гравитационных моделей'],
-  ['под ТЗ', 'размеры и конфигурация'],
-] satisfies Array<[string, string]>;
-const gravityBenefits = [
-  'Надёжная конструкция без сложных элементов',
-  'Экономия площади производственных и складских помещений',
-  'Возможность перемещения горячих грузов и работы в агрессивной среде',
-  'Снижение затрат на транспортировку и складирование',
-  'Ускорение рабочего процесса',
-  'Быстрая окупаемость оборудования',
-];
-const poweredBenefits = [
-  'Перемещение лёгких и крупногабаритных грузов разной формы',
-  'Экономия площади и сокращение применения транспортных средств',
-  'Работа в разных климатических условиях, включая отрицательные температуры',
-  'Снижение затрат на транспортирование и складирование',
-  'Отсутствие необходимости в дорогостоящем обслуживании',
-];
-const steps = [
-  'Обсуждаем задачу, получаем техническое задание и уточняем параметры перемещаемого груза.',
-  'Готовим технико-коммерческое предложение со стоимостью, сроками и комплектацией рольганга.',
-  'Заключаем договор и согласовываем условия изготовления, оплаты и поставки оборудования.',
-  'Разрабатываем и согласовываем чертежи общего вида роликового конвейера.',
-  'Изготавливаем рольганг по утверждённому техническому заданию и проводим контроль качества.',
-  'Организуем доставку готового роликового конвейера до склада заказчика.',
-];
-const faq = [
-  {
-    question: 'Чем приводной рольганг отличается от неприводного?',
-    answer:
-      'В приводном рольганге ролики вращаются от привода. В неприводном груз перемещается вручную или под действием собственного веса по наклонной трассе.',
-  },
-  {
-    question: 'Какие грузы можно перевозить на роликовом конвейере?',
-    answer:
-      'Коробки, ящики, лотки, паллеты, кеги и другие штучные грузы с устойчивой опорной поверхностью. Тяжёлые серии рассчитаны на паллеты массой до 1500 кг и ящики массой более двух тонн.',
-  },
-  {
-    question: 'Можно ли изготовить поворотную или разветвлённую линию?',
-    answer:
-      'Да. Рольганги объединяются в прямые, поворотные, накопительные, телескопические и многоуровневые системы под планировку объекта.',
-  },
-  {
-    question: 'От чего зависит стоимость рольганга?',
-    answer:
-      'От веса, размеров и формы груза, габаритов конвейера, конфигурации трассы, поворотов и уклонов, типа привода, материалов и требуемой скорости.',
-  },
-];
 </script>
 
 <template>
   <div class="roller-page">
     <ProductIntroSection_02
-      title="Роликовые конвейеры и рольганги"
-      image="/images/26025724.webp"
-      image-alt="Роликовый конвейер рольганг производства АБАТЭК"
-      label="Собственное производство"
+      :title="rollerContent.introTitle"
+      :image="pageData.image"
+      :image-alt="pageData.imageAlt"
+      :label="rollerContent.labels.hero"
+      :button-label="rollerContent.labels.calculate"
       label-icon="lucide:factory"
       @action="isProjectRequestOpen = true"
     >
@@ -71,76 +25,17 @@ const faq = [
           :items="[{ label: 'Главная', to: '/' }, { label: 'Каталог', to: '/#catalog' }, { label: 'Рольганги' }]"
         />
       </template>
-      <p>
-        Незаменимые элементы складского и производственного оборудования для эффективного перемещения и накопления
-        крупных штучных грузов и групповой упаковки: коробок, ящиков, паллет и других товаров.
-      </p>
+      <p v-for="paragraph in rollerContent.intro" :key="paragraph">{{ paragraph }}</p>
+      <template #caption>{{ rollerContent.heroCaption }}</template>
     </ProductIntroSection_02>
-    <ProductFactsSection_03 :facts="facts" />
+    <ProductFactsSection_03 :facts="rollerContent.facts" />
+    <LazyProjectGallerySlider v-if="gallery?.length" :images="gallery" :title="galleryTitle" />
 
-    <section class="content-section site-container roller-page__overview">
-      <div>
-        <p class="roller-page__eyebrow">Автоматизация перемещения</p>
-        <h2>Неприводные и приводные рольганги</h2>
-      </div>
-      <div>
-        <p>
-          На основе роликового конвейера можно автоматизировать отдельный участок производства, повысить скорость
-          обработки материалов и снизить затраты на ручной труд.
-        </p>
-        <p>
-          Разветвлённая гибкая система оптимизирует сортировку и транспортировку на складе или в логистическом центре,
-          обеспечивает организованное движение товаров и ускоряет обработку заказов.
-        </p>
-      </div>
-    </section>
-
-    <section class="roller-page__types">
-      <div class="content-section site-container roller-page__type-grid">
-        <article>
-          <p class="roller-page__eyebrow">Без привода</p>
-          <h2>Неприводные рольганги</h2>
-          <p>
-            Гравитационные конвейеры, на которых груз движется под собственным весом вследствие небольшого наклона
-            полотна.
-          </p>
-          <p>
-            Оборудование применяется для подачи заготовок к станкам, перемещения продукции после металлообработки,
-            сортировки материалов и оптимизации ручного труда.
-          </p>
-          <h3>Преимущества</h3>
-          <ol>
-            <li v-for="item in gravityBenefits" :key="item">{{ item }}</li>
-          </ol>
-        </article>
-        <article>
-          <p class="roller-page__eyebrow">С приводом</p>
-          <h2>Приводные рольганги</h2>
-          <p>
-            Ролики вращаются от привода, а груз перемещается благодаря сцеплению его опорной поверхности с роликами.
-          </p>
-          <p>
-            Применяются для коробок, ящиков, лотков, паллет и кег. Тяжёлая серия транспортирует паллеты массой до 1500
-            кг и деревянные ящики массой более двух тонн, а также работает на участках накопления.
-          </p>
-          <h3>Преимущества</h3>
-          <ol>
-            <li v-for="item in poweredBenefits" :key="item">{{ item }}</li>
-          </ol>
-        </article>
-      </div>
-    </section>
-
-    <section class="content-section site-container roller-page__catalog">
-      <header>
-        <div>
-          <p class="roller-page__eyebrow">Изготовление на заказ</p>
-          <h2>Виды роликовых конвейеров</h2>
-        </div>
-        <p>
-          АБАТЭК изготавливает все разновидности рольгангов на собственном производстве, в том числе по чертежам
-          заказчика.
-        </p>
+    <section class="content-section site-container roller-page__section roller-page__catalog">
+      <header class="roller-page__section-header">
+        <p class="roller-page__eyebrow">{{ rollerContent.labels.catalog }}</p>
+        <h2 class="roller-page__heading">{{ rollerContent.headings.catalog }}</h2>
+        <p class="roller-page__text roller-page__section-lead">{{ rollerContent.catalogLead }}</p>
       </header>
       <div class="roller-page__product-grid">
         <ScraperProductCard
@@ -151,153 +46,261 @@ const faq = [
           @action="isProjectRequestOpen = true"
         />
       </div>
+      <p class="roller-page__catalog-caption">{{ rollerContent.catalogCaption }}</p>
     </section>
 
-    <section class="roller-page__price">
-      <div class="content-section site-container roller-page__price-grid">
-        <div>
-          <p class="roller-page__eyebrow">Проектирование</p>
-          <h2>Стоимость роликового конвейера</h2>
-        </div>
-        <div>
-          <p>
-            Точная стоимость зависит от веса, габаритов, формы и упаковки груза, размеров и конфигурации транспортёра,
-            сложности трассы, поворотов, уклонов и требуемой скорости движения.
-          </p>
-          <p>
-            Рольганг может автоматизировать отдельный станок или стать основой многоуровневой разветвлённой системы,
-            работающей в сложных температурных режимах и агрессивных средах.
-          </p>
-          <p>
-            Специалисты подбирают материалы, оптимизируют конструкцию и сопровождают проект, обеспечивая надёжность,
-            производительность и экономичность решения.
-          </p>
-          <button type="button" @click="isProjectRequestOpen = true">Рассчитать стоимость</button>
+    <section class="content-section site-container roller-page__section roller-page__overview">
+      <div>
+        <p class="roller-page__eyebrow">{{ rollerContent.labels.overview }}</p>
+        <h2 class="roller-page__heading">{{ rollerContent.headings.overview }}</h2>
+      </div>
+      <div class="roller-page__prose">
+        <p v-for="paragraph in rollerContent.overview" :key="paragraph" class="roller-page__text">{{ paragraph }}</p>
+      </div>
+    </section>
+
+    <section class="roller-page__band">
+      <div class="content-section site-container roller-page__section">
+        <header class="roller-page__section-header">
+          <p class="roller-page__eyebrow">{{ rollerContent.labels.driveTypes }}</p>
+          <h2 class="roller-page__heading">{{ rollerContent.headings.driveTypes }}</h2>
+        </header>
+        <div class="roller-page__drive-grid">
+          <article v-for="drive in rollerContent.driveTypes" :key="drive.title" class="roller-page__drive-card">
+            <p class="roller-page__eyebrow">{{ drive.eyebrow }}</p>
+            <h3 class="roller-page__card-title">{{ drive.title }}</h3>
+            <p v-for="paragraph in drive.paragraphs" :key="paragraph" class="roller-page__text">{{ paragraph }}</p>
+            <ul class="roller-page__point-list">
+              <li v-for="point in drive.points" :key="point" class="roller-page__point">{{ point }}</li>
+            </ul>
+          </article>
         </div>
       </div>
     </section>
 
+    <section class="content-section site-container roller-page__section">
+      <header class="roller-page__section-header">
+        <p class="roller-page__eyebrow">{{ rollerContent.labels.cargo }}</p>
+        <h2 class="roller-page__heading">{{ rollerContent.headings.cargo }}</h2>
+      </header>
+      <div class="roller-page__cargo-grid">
+        <article v-for="cargo in rollerContent.cargoGroups" :key="cargo.title" class="roller-page__info-card">
+          <h3 class="roller-page__card-title">{{ cargo.title }}</h3>
+          <p class="roller-page__text">{{ cargo.text }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="roller-page__band">
+      <div class="content-section site-container roller-page__section">
+        <header class="roller-page__section-header">
+          <p class="roller-page__eyebrow">{{ rollerContent.labels.applications }}</p>
+          <h2 class="roller-page__heading">{{ rollerContent.headings.applications }}</h2>
+        </header>
+        <div class="roller-page__application-grid">
+          <article
+            v-for="application in rollerContent.applications"
+            :key="application.title"
+            class="roller-page__info-card"
+          >
+            <h3 class="roller-page__card-title">{{ application.title }}</h3>
+            <p class="roller-page__text">{{ application.text }}</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="roller-page__band">
+      <div class="content-section site-container roller-page__section roller-page__selection">
+        <div>
+          <p class="roller-page__eyebrow">{{ rollerContent.labels.selection }}</p>
+          <h2 class="roller-page__heading">{{ rollerContent.headings.selection }}</h2>
+        </div>
+        <ol class="roller-page__selection-list">
+          <li v-for="item in rollerContent.selection" :key="item" class="roller-page__selection-item">{{ item }}</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="content-section site-container roller-page__section roller-page__price">
+      <div>
+        <p class="roller-page__eyebrow">{{ rollerContent.labels.price }}</p>
+        <h2 class="roller-page__heading">{{ rollerContent.headings.price }}</h2>
+      </div>
+      <div class="roller-page__prose">
+        <p v-for="paragraph in rollerContent.price" :key="paragraph" class="roller-page__text">{{ paragraph }}</p>
+        <UiButton @click="isProjectRequestOpen = true">{{ rollerContent.labels.calculate }}</UiButton>
+      </div>
+    </section>
+
     <ManufacturingStagesSection_last_02
-      title="От задачи до готового рольганга"
-      :items="steps"
-      note="Сопровождаем проект на каждом этапе — от расчёта конструкции до изготовления и доставки готового рольганга."
+      :title="rollerContent.headings.workflow"
+      :items="rollerContent.workflow"
+      :note="rollerContent.workflowNote"
     />
-    <FaqSection_last_01 :items="faq" title="Частые вопросы о рольгангах" title-id="roller-faq-title" />
+    <FaqSection_last_01 :items="rollerContent.faq" :title="rollerContent.headings.faq" title-id="roller-faq-title" />
   </div>
 </template>
 
 <style scoped lang="scss">
+@use '~/assets/styles/mixins' as *;
+
 .roller-page {
   color: $ink;
 
-  h2 {
-    margin: 0;
-    font-size: clamp(30px, 4vw, 54px);
-    line-height: 1.07;
-    letter-spacing: -0.045em;
+  &__section {
+    padding-block: clamp(56px, 7vw, 96px);
   }
 
-  p,
-  li {
+  &__band {
+    background: $soft;
+  }
+
+  &__overview,
+  &__selection,
+  &__price {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(36px, 7vw, 100px);
+  }
+
+  &__eyebrow {
+    margin: 0 0 12px;
+    font-size: 11px;
+    font-weight: 900;
+    color: $blue;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  &__heading {
+    margin: 0;
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.12;
+    letter-spacing: -0.04em;
+  }
+
+  &__section-header {
+    max-width: 850px;
+    margin-bottom: 36px;
+  }
+
+  &__section-lead {
+    margin-top: 18px;
+  }
+
+  &__catalog-caption {
+    margin: 20px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: $muted;
+  }
+
+  &__prose {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+  }
+
+  &__text {
+    margin: 0;
     line-height: 1.7;
     color: $muted;
   }
-}
 
-.roller-page__eyebrow {
-  margin: 0 0 12px;
-  font-size: 11px;
-  font-weight: 900;
-  color: $blue !important;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-}
+  &__drive-grid,
+  &__application-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
 
-.roller-page__overview,
-.roller-page__price-grid {
-  display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: clamp(40px, 8vw, 100px);
-}
+  &__cargo-grid,
+  &__product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
 
-.roller-page__types,
-.roller-page__price {
-  background: $soft;
-}
-
-.roller-page__type-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-
-  article {
-    padding: clamp(28px, 4vw, 46px);
+  &__drive-card,
+  &__info-card {
+    padding: clamp(24px, 3vw, 38px);
     background: #fff;
-    border-top: 5px solid $yellow;
-    border-radius: 20px;
+    border: 1px solid $line;
+    border-radius: 16px;
   }
 
-  article + article {
-    border-top-color: $blue;
+  &__drive-card {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    border-top: 4px solid $yellow;
   }
 
-  h2 {
-    font-size: clamp(30px, 3.3vw, 44px);
+  &__info-card {
+    border-top: 4px solid $blue;
   }
 
-  h3 {
-    margin-top: 30px;
+  &__card-title {
+    margin: 0 0 14px;
+    font-size: clamp(21px, 2vw, 28px);
+    line-height: 1.25;
+    color: $navy;
   }
 
-  ol {
-    padding-left: 22px;
+  &__drive-card &__card-title {
+    margin-bottom: 0;
   }
-}
 
-.roller-page__catalog header {
-  display: grid;
-  grid-template-columns: 1fr 0.65fr;
-  gap: 50px;
-  align-items: end;
-  margin-bottom: 42px;
+  &__point-list {
+    display: grid;
+    gap: 8px;
+    padding-left: 20px;
+    margin: 4px 0 0;
+  }
 
-  > p {
+  &__point {
+    line-height: 1.5;
+    color: $ink;
+  }
+
+  &__selection-list {
+    display: grid;
+    gap: 16px;
+    padding-left: 24px;
     margin: 0;
   }
-}
 
-.roller-page__product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.roller-page__price button {
-  padding: 16px 24px;
-  font-weight: 800;
-  color: $navy;
-  cursor: pointer;
-  background: $yellow;
-  border: 0;
-  border-radius: 7px;
-}
-
-@media (width <= $tablet) {
-  .roller-page__overview,
-  .roller-page__price-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .roller-page__product-grid {
-    grid-template-columns: repeat(2, 1fr);
+  &__selection-item {
+    padding-left: 6px;
+    line-height: 1.6;
+    color: $ink;
   }
 }
 
-@media (width <= $phone) {
-  .roller-page__type-grid,
-  .roller-page__catalog header,
-  .roller-page__product-grid {
-    grid-template-columns: 1fr;
+@include tablet {
+  .roller-page {
+    &__overview,
+    &__selection,
+    &__price {
+      grid-template-columns: 1fr;
+    }
+
+    &__cargo-grid,
+    &__product-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+@include phone {
+  .roller-page {
+    &__drive-grid,
+    &__cargo-grid,
+    &__application-grid,
+    &__product-grid {
+      grid-template-columns: 1fr;
+    }
   }
 }
 </style>

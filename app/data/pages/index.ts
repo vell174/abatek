@@ -2,6 +2,34 @@ import type { GalleryImage, IndustrialPage, IndustrialSection, PageRoutes, PageS
 import { equipmentRouteGroups } from './equipment-routes';
 import { beltVariantDefinitions } from './_shared/belt-variant-definitions';
 import { gallery as screwFeederGallery } from './vintovoy-pitatel/gallery';
+import { gallery as bunkerGallery } from './bunkery-priemnye-nakopitelnye/gallery';
+import { gallery as driveDrumGallery } from './privodnoy-baraban-konveyera/gallery';
+import { gallery as customDrumGallery } from './nestandartnyy-baraban-po-chertezham/gallery';
+import { gallery as elevatorDrumGallery } from './baraban-kovshovogo-elevatora/gallery';
+import { gallery as idlerDrumGallery } from './otklonyayushchiy-baraban-konveyera/gallery';
+import { gallery as noriaDrumGallery } from './baraban-lentochnoy-norii/gallery';
+import { gallery as laggedDrumGallery } from './futerovannyy-baraban-transportera/gallery';
+import { gallery as slattedDrumGallery } from './planchatyy-baraban-transportera/gallery';
+import { gallery as tensionDrumGallery } from './natyazhnoy-baraban-konveyera/gallery';
+import { gallery as drumsOverviewGallery } from './barabany/gallery';
+import { gallery as elevatorBucketsGallery } from './kovshi/gallery';
+import { gallery as verticalReservoirsGallery } from './rezervuary-vertikalnye-rvs/gallery';
+
+const galleryOverrides: Record<string, readonly GalleryImage[]> = {
+  'vintovoy-pitatel': screwFeederGallery,
+  'bunkery-priemnye-nakopitelnye': bunkerGallery,
+  'privodnoy-baraban-konveyera': driveDrumGallery,
+  'nestandartnyy-baraban-po-chertezham': customDrumGallery,
+  'baraban-kovshovogo-elevatora': elevatorDrumGallery,
+  'otklonyayushchiy-baraban-konveyera': idlerDrumGallery,
+  'baraban-lentochnoy-norii': noriaDrumGallery,
+  'futerovannyy-baraban-transportera': laggedDrumGallery,
+  'planchatyy-baraban-transportera': slattedDrumGallery,
+  'natyazhnoy-baraban-konveyera': tensionDrumGallery,
+  barabany: drumsOverviewGallery,
+  kovshi: elevatorBucketsGallery,
+  'rezervuary-vertikalnye-rvs': verticalReservoirsGallery,
+};
 
 type EquipmentPageData =
   | IndustrialPage
@@ -9,6 +37,8 @@ type EquipmentPageData =
       title: string;
       description: string;
       heroAccents?: readonly string[];
+      heroImage?: string;
+      heroBackgroundVariant?: IndustrialPage['heroBackgroundVariant'];
       image: string;
     };
 
@@ -43,6 +73,7 @@ const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['konveyery-skrebkovye', 'industrial'],
   ['elevatory', 'industrial'],
   ['shneki-konveera', 'industrial'],
+  ['vitki-shneka', 'industrial'],
   ['shlyuzovyezatvory', 'industrial'],
   ['shlyuzovye-pitateli-shp', 'industrial'],
   ['shp-150', 'industrial'],
@@ -55,6 +86,7 @@ const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['shp-500', 'industrial'],
   ['shp-nestandartnyh-razmerov', 'industrial'],
   ['komplektuyushie-k-konvejeram', 'industrial'],
+  ['dempfernye-stoly-dlya-lentochnyh-konveyerov', 'industrial'],
   ['ciklony', 'cyclones'],
   ['metallokonstruktsii-na-zakaz', 'custom-metal'],
   ['lentochnye-konvejery', 'industrial'],
@@ -64,6 +96,8 @@ const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['vintovoy-konveyer-v-trube', 'industrial'],
   ['vintovoy-pitatel', 'industrial'],
   ['rezervuary', 'reservoirs'],
+  ['rezervuary-vertikalnye-rvs', 'industrial'],
+  ['bunkery-priemnye-nakopitelnye', 'industrial'],
   ['silosy', 'silos'],
   ['rolgang', 'roller-conveyors'],
   ['barabany', 'industrial'],
@@ -144,7 +178,7 @@ export async function getEquipmentPage(slug: string): Promise<EquipmentPageDefin
   const dataKey = `./${routes.root}/data.ts`;
   const seoKey = `./${routes.root}/seo.ts`;
   const catalogLoader = catalogModules[`./${routes.root}/data-catalog.ts`];
-  const galleryLoader = galleryModules[`./${routes.root}/gallery.ts`];
+  const galleryLoader = template === 'reservoir-model' ? undefined : galleryModules[`./${routes.root}/gallery.ts`];
   const [dataModule, seoModule, catalogModule, galleryModule] = await Promise.all([
     requiredModuleLoader(pageDataModules, dataKey)(),
     requiredModuleLoader(seoModules, seoKey)(),
@@ -157,7 +191,7 @@ export async function getEquipmentPage(slug: string): Promise<EquipmentPageDefin
     data: dataModule.pageData,
     seo: seoModule.seo,
     catalog: catalogModule?.catalog,
-    gallery: routes.root === 'vintovoy-pitatel' ? screwFeederGallery : (galleryModule?.gallery ?? []),
+    gallery: galleryOverrides[routes.root] ?? galleryModule?.gallery ?? [],
     template,
   };
 }

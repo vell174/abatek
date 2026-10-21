@@ -11,7 +11,7 @@ import {
 } from 'reka-ui';
 import type { GalleryImage } from '~/data/pages/_shared/types';
 
-defineProps<{ images: readonly GalleryImage[]; title: string }>();
+defineProps<{ images: readonly GalleryImage[]; title: string; id?: string }>();
 
 const [emblaRef, emblaApi] = emblaCarouselVue({ align: 'start', loop: true });
 const selectedIndex = ref(0);
@@ -54,14 +54,19 @@ const setViewerOpen = (open: boolean) => {
 </script>
 
 <template>
-  <section class="project-gallery" aria-labelledby="project-gallery-title">
+  <section
+    :id="id"
+    class="project-gallery"
+    :class="{ 'project-gallery--single': images.length === 1, 'project-gallery--two': images.length === 2 }"
+    aria-labelledby="project-gallery-title"
+  >
     <div class="content-section site-container">
       <header class="project-gallery__heading">
         <div class="project-gallery__heading-content">
           <p class="project-gallery__eyebrow">Реализованные решения</p>
           <h2 id="project-gallery-title" class="project-gallery__title">{{ title }}</h2>
         </div>
-        <div class="project-gallery__controls">
+        <div v-if="images.length > 1" class="project-gallery__controls">
           <span>{{ String(selectedIndex + 1).padStart(2, '0') }} / {{ String(images.length).padStart(2, '0') }}</span>
           <button type="button" aria-label="Предыдущая фотография" @click="scrollPrev">
             <Icon name="lucide:arrow-left" aria-hidden="true" mode="svg" />
@@ -161,6 +166,14 @@ const setViewerOpen = (open: boolean) => {
     align-items: end;
     justify-content: space-between;
     margin-bottom: 38px;
+  }
+
+  &--single &__slide {
+    flex-basis: 100%;
+  }
+
+  &--two &__slide {
+    flex-basis: 50%;
   }
 
   &__heading-content {
@@ -420,6 +433,10 @@ const setViewerOpen = (open: boolean) => {
 
 @media (width <= $phone) {
   .project-gallery {
+    &--two &__slide {
+      flex-basis: 100%;
+    }
+
     &__heading {
       flex-direction: column;
       align-items: start;

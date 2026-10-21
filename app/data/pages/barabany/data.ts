@@ -84,7 +84,8 @@ export const pageData = {
   galleryTitle: 'Модельный ряд',
   catalogDescription:
     'Девять исполнений для разных задач. Выберите тип барабана, чтобы узнать о его назначении, конструкции и параметрах заказа.',
-  hideProjects: true,
+  hideProjects: false,
+  projectsTitle: 'Выполненные проекты: конвейерные барабаны',
   sectionsVariant: 'technical',
   sectionsTitle: 'Назначение, функции и конструкция',
   sections: [

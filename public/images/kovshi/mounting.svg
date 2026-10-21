@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Крепление ковшей к ленте и цепям</title>
+  <desc id="desc">Условные схемы расположения ковшей на ленте и крепления к цепям.</desc>
+  <style>.head{font:700 23px Montserrat,Arial,sans-serif;fill:#052f55}.label{font:600 17px Montserrat,Arial,sans-serif;fill:#052f55}.note{font:500 14px Montserrat,Arial,sans-serif;fill:#52677d}.bucket{fill:#eef5fb;stroke:#052f55;stroke-width:3}.belt{fill:#f5f8fb;stroke:#0757a4;stroke-width:3}.chain{fill:none;stroke:#0757a4;stroke-width:8;stroke-dasharray:18 8}.bolt{fill:#f5c518;stroke:#052f55;stroke-width:2}</style>
+  <rect width="800" height="500" rx="20" fill="#fff" />
+  <rect width="800" height="8" fill="#f5c518" />
+  <text x="40" y="55" class="head">КРЕПЛЕНИЕ КОВШЕЙ</text>
+  <text x="40" y="97" class="label">К ленте</text>
+  <text x="429" y="97" class="label">К цепям</text>
+  <rect x="48" y="126" width="303" height="258" rx="10" class="belt" />
+  <path d="M83 171 L178 171 L168 225 L94 225 Z M220 171 L315 171 L305 225 L231 225 Z M151 272 L246 272 L236 326 L162 326 Z" class="bucket" />
+  <circle cx="117" cy="178" r="6" class="bolt" />
+  <circle cx="143" cy="178" r="6" class="bolt" />
+  <circle cx="254" cy="178" r="6" class="bolt" />
+  <circle cx="280" cy="178" r="6" class="bolt" />
+  <circle cx="185" cy="279" r="6" class="bolt" />
+  <circle cx="211" cy="279" r="6" class="bolt" />
+  <text x="200" y="412" text-anchor="middle" class="note">Один или два ряда, шаг по проекту</text>
+  <path d="M484 137 L484 362 M672 137 L672 362" class="chain" />
+  <path d="M512 170 L644 170 L626 241 L530 241 Z M512 267 L644 267 L626 338 L530 338 Z" class="bucket" />
+  <path d="M484 197 L518 197 M638 197 L672 197 M484 294 L518 294 M638 294 L672 294" stroke="#f5c518" stroke-width="8" />
+  <circle cx="520" cy="197" r="7" class="bolt" />
+  <circle cx="637" cy="197" r="7" class="bolt" />
+  <circle cx="520" cy="294" r="7" class="bolt" />
+  <circle cx="637" cy="294" r="7" class="bolt" />
+  <text x="579" y="412" text-anchor="middle" class="note">Одна или две цепи по ширине ковша</text>
+  <text x="400" y="470" text-anchor="middle" class="note">Условная схема · посадочные размеры по чертежу заказчика</text>
+</svg>

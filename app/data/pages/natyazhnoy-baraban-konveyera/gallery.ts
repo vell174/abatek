@@ -1,0 +1,43 @@
+export const gallery = [
+  {
+    src: '/images/barabany/tension-projects/natyazhnoy-baraban-konveyera-v-tsehe.webp',
+    alt: 'Натяжной барабан ленточного конвейера и элементы натяжного устройства в цехе',
+    width: 960,
+    height: 1280,
+    fullWidth: 960,
+    fullHeight: 1280,
+  },
+  {
+    src: '/images/barabany/tension-projects/natyazhnoy-baraban-s-oporoy-uct316.webp',
+    alt: 'Натяжной барабан конвейера с валом и подшипниковой опорой UCT316',
+    width: 960,
+    height: 1280,
+    fullWidth: 960,
+    fullHeight: 1280,
+  },
+  {
+    src: '/images/barabany/tension-projects/futerovannyy-natyazhnoy-baraban-konveyera.webp',
+    alt: 'Футерованный натяжной барабан конвейера с ромбовидным рисунком покрытия',
+    width: 959,
+    height: 1280,
+    fullWidth: 959,
+    fullHeight: 1280,
+  },
+  {
+    src: '/images/barabany/tension-projects/kontsevye-natyazhnye-barabany-konveyera.webp',
+    alt: 'Концевые натяжные барабаны конвейера с валами и подшипниковыми опорами',
+    width: 1136,
+    height: 852,
+    fullWidth: 1136,
+    fullHeight: 852,
+  },
+  {
+    src: '/images/barabany/tension-projects/otgruzka-privodnyh-i-natyazhnyh-barabanov-konveyera.webp',
+    fullSrc: '/images/barabany/tension-projects/otgruzka-privodnyh-i-natyazhnyh-barabanov-konveyera-full.webp',
+    alt: 'Приводные и натяжные барабаны ленточного конвейера с упакованными валами перед отгрузкой',
+    width: 1440,
+    height: 1080,
+    fullWidth: 2400,
+    fullHeight: 1800,
+  },
+] as const;

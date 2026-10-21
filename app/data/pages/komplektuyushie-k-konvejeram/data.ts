@@ -57,5 +57,14 @@ export const pageData = {
       ],
       image: '/images/source-26787063.webp',
     },
+    {
+      title: 'Демпферные столы для ленточных конвейеров',
+      text: [
+        'Поддерживают ленту в зоне загрузки и принимают удар от падающего материала. Подбираются под ширину ленты, угол желоба и длину пересыпа.',
+      ],
+      image: '/images/dempfernye-stoly/impact-bed.webp',
+      imageAlt: 'Визуализация демпферного стола с амортизационными брусьями',
+      href: '/dempfernye-stoly-dlya-lentochnyh-konveyerov/',
+    },
   ],
 } satisfies IndustrialPage;

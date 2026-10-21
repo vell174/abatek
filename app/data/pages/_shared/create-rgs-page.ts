@@ -148,7 +148,7 @@ const rgsSpecifications: RgsSpecification[] = [
   },
 ];
 
-const table = {
+export const rgsDimensionsTable = {
   title: 'Варианты изготовления одностенных горизонтальных резервуаров РГС',
   headers: [
     'Обозначение',
@@ -182,7 +182,12 @@ export function createRgsOptions(slug: string, volume: number): ProductPageOptio
     description:
       `Производство одностенных и двустенных резервуаров РГС-${volume} объёмом ${volume} м³ ` +
       'в наземном и подземном исполнении.',
-    image: '/images/26007519.webp',
+    image: '/images/izgotovlenie-gorizontalnogo-stalnogo-rezervuara-rgs-abatek.webp',
+    imageAlt: 'Изготовление горизонтального стального резервуара РГС в цехе АБАТЭК',
+    imageHeight: 'tall',
+    heroImage: '/images/rezervuar-gorizontalnyy-stalnoy-rgs-50-proizvodstvo-abatek.webp',
+    heroImageAlt: 'Горизонтальный стальной резервуар РГС-50 в производственном цехе АБАТЭК',
+    heroBackgroundVariant: 'rgs-photo',
     intro: [
       `РГС-${volume} — горизонтальный стальной резервуар объёмом ${volume} м³ для хранения жидкостей, совместимых с материалом корпуса. Ёмкость изготавливается в наземном, подземном, одностенном или двустенном исполнении.`,
       'Габариты, материал, защитное покрытие, опорная часть, патрубки, подогрев и теплоизоляция определяются техническим заданием и условиями эксплуатации.',
@@ -239,7 +244,7 @@ export function createRgsOptions(slug: string, volume: number): ProductPageOptio
         ],
       },
     ],
-    table,
+    table: rgsDimensionsTable,
     keywords: [
       `ргс ${volume}`,
       `резервуар ргс-${volume}`,

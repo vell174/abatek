@@ -54,8 +54,10 @@ export const catalogGroups: CatalogGroup[] = [
       { label: 'Барабаны конвейерные', to: '/barabany' },
       { label: 'Ролики конвейерные', to: '/rolikikonveyernye' },
       { label: 'Роликоопоры', to: '/rolikoopory' },
+      { label: 'Демпферные столы для ленточных конвейеров', to: '/dempfernye-stoly-dlya-lentochnyh-konveyerov/' },
       { label: 'Ковши элеваторные', to: '/kovshi' },
       { label: 'Шнеки', to: '/shneki-konveera' },
+      { label: 'Витки шнека', to: '/vitki-shneka/' },
     ],
   },
   {
@@ -63,10 +65,9 @@ export const catalogGroups: CatalogGroup[] = [
     image: '/images/catalog/storage-equipment.webp',
     items: [
       { label: 'Резервуары горизонтальные РГС', to: '/rezervuary' },
-      { label: 'Резервуары вертикальные РВС' },
+      { label: 'Резервуары вертикальные РВС', to: '/rezervuary-vertikalnye-rvs/' },
       { label: 'Силосы стальные для сыпучих', to: '/silosy' },
-      { label: 'Бункеры приёмные' },
-      { label: 'Бункеры накопительные' },
+      { label: 'Бункеры приёмные и накопительные', to: '/bunkery-priemnye-nakopitelnye/' },
     ],
   },
   {

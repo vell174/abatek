@@ -1,15 +1,23 @@
 import type { PageSeo } from '../_shared/types';
 import { createBeltVariantSeo } from '../_shared/create-belt-variant-page';
+import { pageData } from './data';
 
 const base = createBeltVariantSeo('mini-lentochnyy-konveyer');
 const title = 'Мини ленточный конвейер до 1,5 м на заказ | АБАТЭК';
 const description =
-  'Мини ленточный конвейер длиной до 1,5 м для производства и лабораторных испытаний. Изготовление под груз, скорость и схему измерений. Расчёт в АБАТЭК.';
+  'Мини ленточные конвейеры до 1,5 м для передачи небольших грузов между операциями. Изготовление по ТЗ, фото выполненных проектов. Расчёт в АБАТЭК.';
 
 export const seo = {
   ...base,
   title,
   description,
+  image: {
+    src: pageData.heroImage,
+    alt: 'Ленточный конвейер с тёмно-зелёной лентой и синим приводом на бетонном полу',
+    type: 'image/webp',
+    width: 1981,
+    height: 794,
+  },
   keywords: [
     'мини ленточный конвейер',
     'мини транспортер до 1,5 м',

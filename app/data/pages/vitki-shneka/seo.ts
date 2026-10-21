@@ -1,0 +1,60 @@
+import type { PageSeo } from '../_shared/types';
+import { pageData } from './data';
+
+export const seo = {
+  title: pageData.seoTitle,
+  description: pageData.description,
+  keywords: [
+    'витки шнека',
+    'изготовление витков шнека',
+    'гибка витков шнека',
+    'витки спирали шнека',
+    'изготовление витков шнека на заказ',
+    'витки для шнека купить',
+    'перо шнека',
+    'перо шнека купить',
+    'перо шнека Челябинск',
+    'развертка пера шнека',
+    'расчет шнека развертка витка',
+    'расчет витков шнека калькулятор',
+    'калькулятор пера шнека',
+    'витки шнека для винтового конвейера',
+    'витки шнека для винтовых свай',
+    'витки шнека из нержавеющей стали',
+  ],
+  canonicalPath: '/vitki-shneka/',
+  robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  image: {
+    src: pageData.heroImage,
+    alt: pageData.heroImageAlt,
+    width: 1672,
+    height: 941,
+    type: 'image/webp',
+  },
+  openGraph: {
+    title: pageData.seoTitle,
+    description: pageData.description,
+    type: 'website',
+    locale: 'ru_RU',
+    siteName: 'АБАТЭК',
+  },
+  twitter: { card: 'summary_large_image', title: pageData.seoTitle, description: pageData.description },
+  breadcrumbs: [
+    { name: 'Главная', path: '/' },
+    { name: 'Комплектующие к конвейерам', path: '/komplektuyushie-k-konvejeram/' },
+    { name: 'Витки шнека', path: '/vitki-shneka/' },
+  ],
+  schema: {
+    pageType: 'CollectionPage',
+    entityType: 'ProductGroup',
+    name: 'Витки шнека (перо шнека) по чертежам заказчика',
+    category: 'Комплектующие винтовых конвейеров, винтовых свай и буровых шнеков',
+    productGroupId: 'vitki-shneka',
+    variesBy: ['Материал', 'Наружный диаметр', 'Внутренний диаметр', 'Шаг', 'Толщина', 'Направление навивки'],
+    properties: [
+      { name: 'Производство', value: 'Челябинск' },
+      { name: 'Материал', value: 'Конструкционная или нержавеющая сталь по техническому заданию' },
+      { name: 'Изготовление', value: 'По чертежу и размерам заказчика' },
+    ],
+  },
+} satisfies PageSeo;

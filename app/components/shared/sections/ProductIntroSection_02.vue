@@ -5,6 +5,8 @@ withDefaults(
     titleSize?: 'default' | 'compact';
     image: string;
     imageAlt: string;
+    imageWidthPx?: number;
+    imageHeightPx?: number;
     imageFit?: 'cover' | 'contain';
     imageFrame?: 'default' | 'bare';
     imageScale?: 'default' | '120';
@@ -20,6 +22,8 @@ withDefaults(
   }>(),
   {
     imageFit: 'cover',
+    imageWidthPx: 1920,
+    imageHeightPx: 1080,
     imageFrame: 'default',
     titleSize: 'default',
     imageScale: 'default',
@@ -68,8 +72,8 @@ defineEmits<{ action: [] }>();
         }"
         :src="image"
         :alt="imageAlt"
-        width="1920"
-        height="1080"
+        :width="imageWidthPx"
+        :height="imageHeightPx"
       />
       <span v-if="label" class="product-intro-02__label">
         <Icon :name="labelIcon" mode="svg" aria-hidden="true" />

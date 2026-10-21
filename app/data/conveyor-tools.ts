@@ -82,7 +82,7 @@ export const toolPages = {
 } as const;
 
 export const toolNavigation = [
-  { label: 'Мощность привода', to: conveyorToolRoutes.power },
+  { label: 'Мощность привода ленточного конвейера', to: conveyorToolRoutes.power },
   { label: 'Ширина ленты', to: conveyorToolRoutes.width },
   { label: 'Условия эксплуатации', to: conveyorToolRoutes.operating },
   { label: 'Скорость конвейера', to: conveyorToolRoutes.speed },

@@ -27,18 +27,7 @@ const copyEmail = async () => {
         <h3 class="footer__title">Оборудование</h3>
         <NuxtLink class="footer__link" to="/#catalog">Каталог</NuxtLink>
         <NuxtLink class="footer__link" to="/primery-rabot">Примеры работ</NuxtLink>
-        <NuxtLink class="footer__link" to="/kalkulyator-vesa-metalla/">Калькулятор веса металла</NuxtLink>
-        <NuxtLink class="footer__link" to="/kalkulyator-moshchnosti-privoda-lentochnogo-konveyera/">
-          Калькулятор мощности привода
-        </NuxtLink>
-        <NuxtLink class="footer__link" to="/kalkulyatory/shirina-lenty/">Расчёт ширины ленты</NuxtLink>
-        <NuxtLink class="footer__link" to="/kalkulyatory/usloviya-ekspluatatsii/">Условия эксплуатации ленты</NuxtLink>
-        <NuxtLink class="footer__link" to="/kalkulyatory/skorost-konveyera/">Скорость конвейера</NuxtLink>
-        <NuxtLink class="footer__link" to="/spravochniki/parametry-lentochnyh-konveyerov/">
-          Параметры конвейеров
-        </NuxtLink>
-        <NuxtLink class="footer__link" to="/spravochniki/abrazivnost-gruzov/">Абразивность грузов</NuxtLink>
-        <NuxtLink class="footer__link" to="/spravochniki/svoystva-sypuchih-gruzov/">Свойства сыпучих грузов</NuxtLink>
+        <NuxtLink class="footer__link" to="/poleznoe/">Калькуляторы и справочники</NuxtLink>
       </div>
       <div class="footer__column">
         <h3 class="footer__title">Компания</h3>

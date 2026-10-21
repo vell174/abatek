@@ -4,12 +4,15 @@ import { routes as screwTrough } from './vintovoy-konveyer-v-zhelobe/name-router
 import { routes as screwTube } from './vintovoy-konveyer-v-trube/name-routers';
 import { routes as screwFeeder } from './vintovoy-pitatel/name-routers';
 import { routes as reservoirs } from './rezervuary/name-routers';
+import { routes as verticalReservoirs } from './rezervuary-vertikalnye-rvs/name-routers';
+import { routes as receivingStorageHoppers } from './bunkery-priemnye-nakopitelnye/name-routers';
 import { routes as silos } from './silosy/name-routers';
 import { routes as rollerConveyors } from './rolgang/name-routers';
 import { routes as firewoodConveyors } from './transporterdlyadrov/name-routers';
 import { routes as scraperConveyors } from './konveyery-skrebkovye/name-routers';
 import { routes as elevators } from './elevatory/name-routers';
 import { routes as augers } from './shneki-konveera/name-routers';
+import { routes as screwFlights } from './vitki-shneka/name-routers';
 import { routes as rotaryValves } from './shlyuzovyezatvory/name-routers';
 import { routes as rotaryFeeders } from './shlyuzovye-pitateli-shp/name-routers';
 import { routes as shp150 } from './shp-150/name-routers';
@@ -22,6 +25,7 @@ import { routes as shp450 } from './shp-450/name-routers';
 import { routes as shp500 } from './shp-500/name-routers';
 import { routes as shpCustom } from './shp-nestandartnyh-razmerov/name-routers';
 import { routes as conveyorParts } from './komplektuyushie-k-konvejeram/name-routers';
+import { routes as impactBeds } from './dempfernye-stoly-dlya-lentochnyh-konveyerov/name-routers';
 import { routes as cyclones } from './ciklony/name-routers';
 import { routes as metalStructures } from './metallokonstruktsii-na-zakaz/name-routers';
 import { routes as beltConveyors } from './lentochnye-konvejery/name-routers';
@@ -90,12 +94,15 @@ const existingEquipmentRouteGroups = [
   screwTube,
   screwFeeder,
   reservoirs,
+  verticalReservoirs,
+  receivingStorageHoppers,
   silos,
   rollerConveyors,
   firewoodConveyors,
   scraperConveyors,
   elevators,
   augers,
+  screwFlights,
   rotaryValves,
   rotaryFeeders,
   shp150,
@@ -108,6 +115,7 @@ const existingEquipmentRouteGroups = [
   shp500,
   shpCustom,
   conveyorParts,
+  impactBeds,
   cyclones,
   metalStructures,
   beltConveyors,

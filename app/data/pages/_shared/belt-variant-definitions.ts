@@ -257,7 +257,7 @@ export const beltVariantDefinitions = [
     slug: 'modulnye-konvejery',
     title: 'Конвейеры с модульной лентой',
     group: 'material',
-    image: '/images/modular-conveyor-33727827.webp',
+    image: '/images/modular-conveyor-upscaled.webp',
     description: 'Полотно из соединённых модулей с подбором поверхности и геометрии под технологическую линию.',
     construction:
       'Модули соединяются шарнирными элементами и образуют замкнутую ленту. Для соответствующих серий применяется зацепление со звёздочками; шаг модулей и опорная система выбираются совместно с радиусом поворота или формой трассы.',

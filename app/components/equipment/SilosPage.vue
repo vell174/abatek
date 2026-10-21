@@ -1,617 +1,306 @@
 <script setup lang="ts">
 import { catalog } from '~/data/pages/silosy/data-catalog';
+import { pageData } from '~/data/pages/silosy/data';
 
 const isProjectRequestOpen = useState('project-request-open', () => false);
-
-const facts = [
-  ['12–48 м³', 'цельносварные модели'],
-  ['до 900 м³', 'сборно-разборные модели'],
-  ['4–8+ мм', 'толщина металла'],
-  ['Ст3 / 09Г2С', 'марки стали'],
-] satisfies Array<[string, string]>;
-
-const baseEquipment = [
-  'Опорная конструкция',
-  'Ёмкость силоса',
-  'Лестница',
-  'Ограждение верхней площадки',
-  'Труба для закачки цемента',
-];
-const extraEquipment = [
-  'Дисковый затвор или шиберная задвижка',
-  'Фильтр цемента',
-  'Клапан избыточного давления',
-  'Система аэрации',
-  'Вибраторы',
-  'Датчики уровня',
-];
-const productionStages = [
-  'Утверждение технического задания',
-  'Разработка чертежей в разделах КМ и КМД',
-  'Раскладка карты обечайки из стальных листов',
-  'Вальцовка обечаек необходимого диаметра',
-  'Изготовление конуса и крышки',
-  'Сборка корпуса из обечаек на кантователях',
-  'Опрессовка сжатым воздухом и обмыливание швов',
-  'Врезка фланцев и трубной обвязки',
-  'Установка силосной банки на опоры',
-  'Грунтовка и покраска',
-  'Монтаж навесного оборудования',
-];
-const workSteps = [
-  [
-    'Обращение и обсуждение потребности',
-    'Позвоните нам или отправьте техническое задание. В кратчайшие сроки согласуем технические вопросы и приступим к расчёту стоимости.',
-  ],
-  [
-    'Разработка технико-коммерческого предложения',
-    'Рассчитаем стоимость, сроки изготовления, характеристики и комплектацию, учтём доставку до вашего склада.',
-  ],
-  [
-    'Заключение договора поставки',
-    'Согласуем условия поставки, сроки и оплату. Для постоянных заказчиков предусмотрены скидки и возможность отсрочки платежа.',
-  ],
-  [
-    'Согласование чертежей',
-    'Предоставим чертежи общего вида для согласования. Срок разработки зависит от объёма и сложности работ.',
-  ],
-  [
-    'Изготовление оборудования',
-    'Изготовим силос по согласованному техническому заданию и чертежам. Срок указывается уже в технико-коммерческом предложении.',
-  ],
-  ['Доставка до вашего склада', 'Организацию доставки берём на себя. Срок зависит от региона расположения заказчика.'],
-];
-const deliveryStages = workSteps.map(([title, description]) => `${title}. ${description}`);
-const faq = [
-  {
-    question: 'Какие материалы можно хранить в силосе?',
-    answer:
-      'Силосы предназначены для цемента, песка, зерна, полипропиленовых гранул и других сыпучих материалов с учётом их характеристик.',
-  },
-  {
-    question: 'Можно ли заказать силос нестандартного объёма?',
-    answer:
-      'Да. Кроме типового ряда АБАТЭК изготавливает силосы других объёмов, в том числе сборно-разборные конструкции по техническому заданию.',
-  },
-  {
-    question: 'В чём отличие цельносварного силоса от разборного?',
-    answer:
-      'Цельносварной силос полностью собирается на заводе и доставляется готовым. Разборный производится панелями и собирается непосредственно на монтажной площадке.',
-  },
-  {
-    question: 'От чего зависит цена силоса?',
-    answer:
-      'Стоимость зависит от объёма, назначения, марки и толщины стали, комплектации, условий эксплуатации, способа монтажа и региона доставки.',
-  },
-];
 </script>
 
 <template>
   <div class="silos-page">
     <ProductIntroSection_02
-      title="Силосы для хранения сыпучих материалов"
-      image="/images/26025737.webp"
-      image-alt="Металлический силос для хранения сыпучих материалов"
-      label="Собственное производство"
-      label-icon="lucide:factory"
+      :title="pageData.introTitle"
+      :image="pageData.image"
+      :image-alt="pageData.imageAlt"
+      :button-label="pageData.ctaLabel"
       @action="isProjectRequestOpen = true"
     >
       <template #breadcrumbs>
-        <BreadcrumbsNavigation
-          :items="[{ label: 'Главная', to: '/' }, { label: 'Каталог', to: '/#catalog' }, { label: 'Силосы' }]"
-        />
+        <BreadcrumbsNavigation :items="pageData.breadcrumbs" />
       </template>
-      <p>
-        Изготавливаем цельносварные силосы объёмом от 12 до 48 м³. Конструкции собираются на производстве и перевозятся
-        в готовом виде. Подходят для цемента, песка, полипропиленовых гранул и других сыпучих материалов.
-      </p>
-      <p>По желанию заказчика возможно изготовление силосов других объёмов, а также разборных моделей.</p>
+      <p v-for="paragraph in pageData.intro" :key="paragraph">{{ paragraph }}</p>
     </ProductIntroSection_02>
 
-    <ProductFactsSection_03 :facts="facts" />
+    <ProductFactsSection_03 :facts="pageData.facts" />
 
-    <section class="content-section site-container silos-page__equipment">
-      <header>
-        <p class="silos-page__eyebrow">Оснащение</p>
-        <h2>Комплектация силоса</h2>
-      </header>
-      <div class="silos-page__equipment-grid">
-        <article>
-          <h3>Базовая комплектация</h3>
-          <ul>
-            <li v-for="item in baseEquipment" :key="item">{{ item }}</li>
-          </ul>
-        </article>
-        <article>
-          <h3>Дополнительное оборудование</h3>
-          <ul>
-            <li v-for="item in extraEquipment" :key="item">{{ item }}</li>
+    <section class="silos-page__types content-section site-container" aria-labelledby="silos-types-title">
+      <div class="silos-page__heading">
+        <p class="silos-page__eyebrow">{{ pageData.typesEyebrow }}</p>
+        <h2 id="silos-types-title" class="silos-page__title">{{ pageData.typesTitle }}</h2>
+        <p class="silos-page__lead">{{ pageData.typesDescription }}</p>
+      </div>
+      <div class="silos-page__grid">
+        <article v-for="item in catalog" :key="item.title" class="silos-page__card">
+          <span class="silos-page__volume">{{ item.shortTitle }}</span>
+          <h3 class="silos-page__card-title">{{ item.title }}</h3>
+          <p v-for="paragraph in item.text" :key="paragraph" class="silos-page__card-text">{{ paragraph }}</p>
+          <ul v-if="item.items?.length" class="silos-page__card-list">
+            <li v-for="feature in item.items" :key="feature" class="silos-page__card-feature">{{ feature }}</li>
           </ul>
         </article>
       </div>
     </section>
 
-    <ManufacturingStagesSection_last_02
-      title="Этапы изготовления силоса для зерна, цемента и песка"
-      :items="productionStages"
-      note="Контролируем весь цикл — от технического задания до монтажа навесного оборудования."
-    />
-
-    <section class="content-section site-container silos-page__materials">
-      <div>
-        <p class="silos-page__eyebrow">Материал изготовления</p>
-        <h2>Сталь под климат и условия эксплуатации</h2>
-      </div>
-      <div>
-        <p>
-          Силосы для цемента изготавливаются из стали Ст3Сп5 и 09Г2С-14. Ст3 применяется для центральных и южных
-          регионов России, 09Г2С-14 — для северных. Толщина металла составляет от 4 до 8 мм и более в зависимости от
-          проекта, объёма и хранимого сырья.
-        </p>
-        <h3>Для кого это подходит</h3>
-        <p>
-          Мы производим агрегаты разного объёма для крупных и средних фермерских хозяйств. Оборудование помогает
-          сокращать потери масложировым и комбикормовым заводам, мельницам и другим промышленным предприятиям.
-        </p>
+    <section class="silos-page__selection" aria-labelledby="silos-selection-title">
+      <div class="content-section site-container silos-page__selection-inner">
+        <div>
+          <p class="silos-page__eyebrow">{{ pageData.selectionEyebrow }}</p>
+          <h2 id="silos-selection-title" class="silos-page__title">{{ pageData.selectionTitle }}</h2>
+          <p class="silos-page__lead">{{ pageData.selectionDescription }}</p>
+        </div>
+        <ul class="silos-page__selection-list">
+          <li v-for="item in pageData.selectionItems" :key="item" class="silos-page__selection-item">{{ item }}</li>
+        </ul>
       </div>
     </section>
 
-    <section class="silos-page__installation">
-      <div class="content-section site-container">
-        <p class="silos-page__eyebrow">Монтаж</p>
-        <h2>Способы выполнения монтажных работ</h2>
-        <div class="silos-page__cards">
-          <article>
-            <strong>до 50 м³</strong>
-            <h3>Заводская сборка</h3>
-            <p>
-              Небольшие конструкции собираются на заводе и доставляются готовыми. Фундамент и опорный металлический
-              каркас подготавливаются заранее.
-            </p>
-          </article>
-          <article>
-            <strong>крупные модели</strong>
-            <h3>Секционная сборка</h3>
-            <p>Секции соединяются на объекте сварным или болтовым способом.</p>
-          </article>
-          <article>
-            <strong>особо крупные</strong>
-            <h3>Рулонирование</h3>
-            <p>Крупные секции сворачиваются для транспортировки, а на площадке разворачиваются и собираются.</p>
-          </article>
+    <section class="silos-page__equipment content-section site-container" aria-labelledby="silos-equipment-title">
+      <div>
+        <p class="silos-page__eyebrow">{{ pageData.equipmentEyebrow }}</p>
+        <h2 id="silos-equipment-title" class="silos-page__title">{{ pageData.equipmentTitle }}</h2>
+        <p class="silos-page__lead">{{ pageData.equipmentDescription }}</p>
+      </div>
+      <div class="silos-page__equipment-groups">
+        <article v-for="group in pageData.equipmentGroups" :key="group.title" class="silos-page__equipment-card">
+          <h3 class="silos-page__equipment-heading">{{ group.title }}</h3>
+          <ul class="silos-page__equipment-list">
+            <li v-for="item in group.items" :key="item" class="silos-page__equipment-item">{{ item }}</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="silos-page__materials" aria-labelledby="silos-materials-title">
+      <div class="content-section site-container silos-page__materials-inner">
+        <div>
+          <p class="silos-page__eyebrow">{{ pageData.materialsEyebrow }}</p>
+          <h2 id="silos-materials-title" class="silos-page__title">{{ pageData.materialsTitle }}</h2>
+        </div>
+        <div class="silos-page__materials-copy">
+          <p class="silos-page__lead">{{ pageData.materialsDescription }}</p>
+          <p class="silos-page__lead">{{ pageData.materialsNote }}</p>
         </div>
       </div>
     </section>
 
     <SpecsTableSection
-      title="Характеристики цельносварных силосов"
-      eyebrow="Типовой ряд"
-      :columns="['Наименование', 'Объём, м³', 'Вместимость, т', 'Диаметр × высота, мм']"
-      :rows="catalog"
+      :eyebrow="pageData.specs.eyebrow"
+      :title="pageData.specs.title"
+      :columns="pageData.specs.columns"
+      :rows="pageData.specs.rows"
     />
-
-    <section class="silos-page__production">
-      <div class="content-section site-container silos-page__production-grid">
-        <div>
-          <p class="silos-page__eyebrow">Контроль качества</p>
-          <h2>Производство силосов</h2>
-        </div>
-        <div>
-          <p>
-            Уже при приёмке металла проводится входной контроль. По технологической карте металл поступает со склада на
-            заготовительный участок, где аттестованные специалисты выполняют сборку и сварку. Изделия проходят испытания
-            на герметичность, контрольную сборку и нанесение лакокрасочного покрытия.
-          </p>
-          <p>
-            АБАТЭК — завод-производитель с необходимыми материальными и трудовыми ресурсами. Особое внимание уделяется
-            технологическому оснащению, а продукция соответствует европейским стандартам.
-          </p>
-          <p>
-            Силосы могут эксплуатироваться внутри цехов и на открытом воздухе. Производим как цельносварные, так и
-            сборные модели.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section site-container silos-page__methods">
-      <p class="silos-page__eyebrow">Конструкция</p>
-      <h2>Методы изготовления силоса</h2>
-      <div class="silos-page__method-grid">
-        <article>
-          <span>8–150 м³</span>
-          <h3>Цельносварные силосы</h3>
-          <p>
-            Диаметр 2400–4500 мм. Полностью готовы к эксплуатации, надёжны и долговечны; требуют транспортировки
-            грузовым автомобилем и установки на объекте.
-          </p>
-        </article>
-        <article>
-          <span>24–900 м³</span>
-          <h3>Сборно-разборные силосы</h3>
-          <p>
-            Диаметр 3500–7600 мм. Собираются из заводских стальных панелей, которые соединяются непосредственно на
-            монтажной площадке.
-          </p>
-        </article>
-      </div>
-      <p>Для обоих методов используется сталь Ст3 или 09Г2С.</p>
-    </section>
-
-    <section class="silos-page__price">
-      <div class="content-section site-container silos-page__price-grid">
-        <div>
-          <p class="silos-page__eyebrow">Стоимость</p>
-          <h2>Как купить силос или узнать цену</h2>
-        </div>
-        <div>
-          <p>
-            Позвоните специалистам по телефону 8 (800) 505-19-15, чтобы узнать ориентировочную стоимость нужной ёмкости.
-            Цена может существенно различаться в зависимости от модификации, назначения и условий эксплуатации.
-          </p>
-          <button type="button" @click="isProjectRequestOpen = true">Запросить расчёт</button>
-        </div>
-      </div>
-    </section>
 
     <ManufacturingStagesSection_last_02
-      title="От заявки до доставки"
-      :items="deliveryStages"
-      eyebrow="Работа с заказом"
-      note="Фиксируем технические решения, стоимость и сроки до запуска производства, затем организуем доставку готового силоса."
+      :title="pageData.workflow.title"
+      :items="pageData.workflow.items"
+      :note="pageData.workflow.note"
+      :eyebrow="pageData.workflow.eyebrow"
     />
 
-    <FaqSection_last_01 :items="faq" title="Частые вопросы о силосах" title-id="silos-faq-title" />
+    <section class="silos-page__request" aria-labelledby="silos-request-title">
+      <div class="content-section site-container silos-page__request-inner">
+        <div>
+          <h2 id="silos-request-title" class="silos-page__request-title">{{ pageData.priceTitle }}</h2>
+          <p class="silos-page__request-text">{{ pageData.priceDescription }}</p>
+        </div>
+        <UiButton @click="isProjectRequestOpen = true">{{ pageData.ctaLabel }}</UiButton>
+      </div>
+    </section>
+
+    <FaqSection_last_01 :items="pageData.faq" :title="pageData.faqTitle" title-id="silos-faq-title" />
   </div>
 </template>
 
 <style scoped lang="scss">
+@use '~/assets/styles/mixins' as *;
+
 .silos-page {
   color: $ink;
 
-  h2 {
-    margin: 0;
-    font-size: clamp(30px, 4vw, 54px);
-    line-height: 1.07;
-    letter-spacing: -0.045em;
+  &__heading {
+    max-width: 820px;
+    margin-bottom: 36px;
   }
 
-  p,
-  li {
+  &__eyebrow {
+    margin: 0 0 12px;
+    font-size: 11px;
+    font-weight: 900;
+    color: $blue;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  &__title {
+    margin: 0 0 20px;
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  &__lead {
+    margin: 0;
     line-height: 1.7;
     color: $muted;
   }
-}
 
-.silos-page__eyebrow {
-  margin: 0 0 12px;
-  font-size: 11px;
-  font-weight: 900;
-  color: $blue !important;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-}
-
-.silos-page__equipment header,
-.silos-page__catalog > h2,
-.silos-page__methods > h2,
-.silos-page__process > h2 {
-  max-width: 850px;
-  margin-bottom: 38px;
-}
-
-.silos-page__equipment-grid,
-.silos-page__method-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-
-  article {
-    padding: 34px;
-    background: $soft;
-    border-radius: 18px;
-  }
-
-  h3 {
-    margin-top: 0;
-    font-size: 26px;
-  }
-}
-
-.silos-page__installation,
-.silos-page__production,
-.silos-page__price {
-  background: $soft;
-}
-
-.silos-page__stages {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #edf5fc 0%, $soft 58%, #e8f2fb 100%);
-
-  &::before,
-  &::after {
-    position: absolute;
-    pointer-events: none;
-    content: '';
-    border: 1px solid rgb(7 87 164 / 9%);
-    border-radius: 50%;
-  }
-
-  &::before {
-    top: -190px;
-    right: -110px;
-    width: 430px;
-    height: 430px;
-    box-shadow:
-      0 0 0 42px rgb(7 87 164 / 2.5%),
-      0 0 0 84px rgb(7 87 164 / 1.5%);
-  }
-
-  &::after {
-    bottom: -150px;
-    left: -100px;
-    width: 300px;
-    height: 300px;
-  }
-}
-
-.silos-page__stages > div {
-  position: relative;
-  z-index: 1;
-}
-
-.silos-page__stages-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
-  gap: clamp(32px, 7vw, 90px);
-  align-items: end;
-
-  h2 {
-    max-width: 900px;
-  }
-}
-
-.silos-page__stages-note {
-  padding: 20px 0 20px 24px;
-  margin: 0;
-  font-weight: 650;
-  color: $ink !important;
-  border-left: 4px solid $yellow;
-}
-
-.silos-page__stages ol {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 0;
-  margin-top: 48px;
-  list-style: none;
-
-  li {
-    position: relative;
-    padding: 22px;
-    font-weight: 650;
-    color: $ink;
-    background: rgb(255 255 255 / 92%);
-    border: 1px solid rgb(7 87 164 / 10%);
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgb(3 35 68 / 5%);
-    opacity: 0;
-    transform: translateY(14px);
-    transition:
-      border-color 0.22s ease,
-      box-shadow 0.22s ease,
-      transform 0.22s ease;
-    animation: silos-stage-in 0.5s ease-out forwards;
-
-    &::after {
-      position: absolute;
-      right: 18px;
-      bottom: 0;
-      left: 18px;
-      height: 3px;
-      content: '';
-      background: linear-gradient(90deg, $yellow, $blue);
-      border-radius: 4px 4px 0 0;
-      opacity: 0;
-      transform: scaleX(0.35);
-      transition:
-        opacity 0.22s ease,
-        transform 0.22s ease;
-    }
-
-    &:hover {
-      border-color: rgb(7 87 164 / 24%);
-      box-shadow: 0 18px 38px rgb(3 35 68 / 10%);
-      transform: translateY(-5px);
-
-      &::after {
-        opacity: 1;
-        transform: scaleX(1);
-      }
-    }
-
-    @for $index from 1 through 11 {
-      &:nth-child(#{$index}) {
-        animation-delay: #{($index - 1) * 0.055}s;
-      }
-    }
-  }
-
-  span {
+  &__grid {
     display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    margin-bottom: 18px;
-    font-weight: 900;
-    color: $navy;
-    background: #e2effb;
-    border: 1px solid rgb(7 87 164 / 22%);
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 4px rgb(255 255 255 / 65%);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
   }
 
-  p {
-    margin: 0;
-    font-weight: 700;
-    line-height: 1.55;
-    color: $ink;
-  }
-}
-
-@keyframes silos-stage-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.silos-page__materials,
-.silos-page__production-grid,
-.silos-page__price-grid {
-  display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: clamp(40px, 8vw, 100px);
-}
-
-.silos-page__cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-top: 38px;
-
-  article {
-    padding: 32px;
-    background: #fff;
+  &__card {
+    padding: clamp(26px, 3vw, 38px);
+    background: $soft;
+    border: 1px solid $line;
     border-radius: 18px;
   }
 
-  strong {
-    color: $blue;
+  &__volume {
+    display: inline-block;
+    padding: 8px 12px;
+    margin-bottom: 22px;
+    font-size: 13px;
+    font-weight: 800;
+    color: $navy;
+    background: $yellow;
+    border-radius: 6px;
   }
 
-  h3 {
-    font-size: 24px;
-  }
-}
-
-.silos-page__table-wrap {
-  overflow-x: auto;
-  border: 1px solid $line;
-  border-radius: 14px;
-}
-
-.silos-page table {
-  width: 100%;
-  min-width: 720px;
-  border-collapse: collapse;
-
-  th,
-  td {
-    padding: 16px;
-    text-align: left;
-    border-bottom: 1px solid $line;
+  &__card-title {
+    margin: 0 0 14px;
+    font-size: clamp(22px, 2.3vw, 28px);
+    line-height: 1.25;
   }
 
-  th {
+  &__card-text {
+    margin: 0;
+    line-height: 1.65;
+    color: $muted;
+  }
+
+  &__card-list {
+    display: grid;
+    gap: 8px;
+    padding-left: 20px;
+    margin: 22px 0 0;
+  }
+
+  &__card-feature {
+    line-height: 1.5;
+  }
+
+  &__selection {
+    background: $soft;
+  }
+
+  &__selection-inner,
+  &__equipment,
+  &__materials-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 6vw, 86px);
+  }
+
+  &__selection-list {
+    display: grid;
+    gap: 14px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__selection-item {
+    padding: 20px 24px;
+    line-height: 1.6;
+    background: #fff;
+    border: 1px solid $line;
+    border-radius: 12px;
+  }
+
+  &__equipment-groups {
+    display: grid;
+    gap: 18px;
+  }
+
+  &__equipment-card {
+    padding: 24px;
+    background: $soft;
+    border: 1px solid $line;
+    border-radius: 12px;
+  }
+
+  &__equipment-heading {
+    margin: 0 0 16px;
+    font-size: 21px;
+    line-height: 1.3;
+  }
+
+  &__equipment-list {
+    display: grid;
+    gap: 10px;
+    padding-left: 20px;
+    margin: 0;
+  }
+
+  &__equipment-item {
+    line-height: 1.6;
+  }
+
+  &__materials {
+    background: $soft;
+  }
+
+  &__materials-copy {
+    display: grid;
+    gap: 16px;
+  }
+
+  &__request {
     color: #fff;
     background: $navy;
   }
 
-  td:first-child {
-    font-weight: 800;
-    color: $blue;
+  &__request-inner {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  tbody tr:nth-child(even) {
-    background: $soft;
-  }
-}
-
-.silos-page__method-grid article {
-  border-top: 5px solid $yellow;
-
-  span {
-    font-weight: 900;
-    color: $blue;
-  }
-}
-
-.silos-page__price button {
-  padding: 16px 24px;
-  font-weight: 800;
-  color: $navy;
-  cursor: pointer;
-  background: $yellow;
-  border: 0;
-  border-radius: 7px;
-}
-
-.silos-page__process ol {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  padding: 0;
-  list-style: none;
-
-  li {
-    display: grid;
-    grid-template-columns: 48px 1fr;
-    gap: 16px;
-    padding: 28px;
-    background: $soft;
-    border-radius: 16px;
+  &__request-title {
+    margin: 0 0 16px;
+    font-size: clamp(28px, 3.5vw, 46px);
+    line-height: 1.1;
   }
 
-  span {
-    font-weight: 900;
-    color: $blue;
-  }
-
-  h3 {
-    margin: 0 0 8px;
-  }
-
-  p {
+  &__request-text {
+    max-width: 800px;
     margin: 0;
+    line-height: 1.7;
   }
 }
 
-@media (width <= $tablet) {
-  .silos-page__materials,
-  .silos-page__production-grid,
-  .silos-page__price-grid {
-    grid-template-columns: 1fr;
-  }
+@include tablet {
+  .silos-page {
+    &__selection-inner,
+    &__equipment,
+    &__materials-inner {
+      grid-template-columns: 1fr;
+    }
 
-  .silos-page__stages ol,
-  .silos-page__cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .silos-page__stages-header {
-    grid-template-columns: 1fr;
+    &__request-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 }
 
-@media (width <= $phone) {
-  .silos-page__equipment-grid,
-  .silos-page__method-grid,
-  .silos-page__stages ol,
-  .silos-page__cards,
-  .silos-page__process ol {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .silos-page__stages ol li {
-    opacity: 1;
-    transform: none;
-    transition: none;
-    animation: none;
+@include phone {
+  .silos-page {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
   }
 }
 </style>

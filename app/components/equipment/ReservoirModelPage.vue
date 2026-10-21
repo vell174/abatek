@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IndustrialPage } from '~/data/pages/_shared/types';
+import { reservoirProjectsLink } from '~/data/pages/rezervuary/data';
 
 defineProps<{ page: IndustrialPage }>();
 
@@ -11,7 +12,10 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
     <ProductIntroSection_02
       :title="page.introTitle"
       :image="page.image"
-      :image-alt="page.title"
+      :image-alt="page.imageAlt || page.title"
+      :image-width-px="718"
+      :image-height-px="771"
+      :image-height="page.imageHeight"
       eyebrow="Модель горизонтального резервуара"
       button-label="Запросить расчёт РГС"
       label="Наземное и подземное исполнение"
@@ -75,6 +79,20 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
       eyebrow="Типоразмерный ряд РГС"
       tone="soft"
     />
+
+    <section
+      class="reservoir-model-page__projects content-section content-section--soft"
+      aria-labelledby="rgs-projects-title"
+    >
+      <div class="site-container">
+        <h2 id="rgs-projects-title" class="reservoir-model-page__projects-title">{{ reservoirProjectsLink.title }}</h2>
+        <p class="reservoir-model-page__projects-text">{{ reservoirProjectsLink.text }}</p>
+        <NuxtLink class="reservoir-model-page__projects-link" :to="reservoirProjectsLink.href">
+          {{ reservoirProjectsLink.label }}
+          <Icon name="lucide:arrow-right" aria-hidden="true" mode="svg" />
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -185,6 +203,43 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   height: 100%;
   max-height: 420px;
   object-fit: contain;
+}
+
+.reservoir-model-page__projects-title {
+  max-width: 800px;
+  margin: 0;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.1;
+  color: $navy;
+}
+
+.reservoir-model-page__projects-text {
+  max-width: 680px;
+  margin: 18px 0 26px;
+  line-height: 1.6;
+  color: $muted;
+}
+
+.reservoir-model-page__projects-link {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 50px;
+  padding: 12px 18px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  background: $blue;
+  border-radius: 7px;
+
+  &:hover {
+    background: $navy;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba($blue, 0.4);
+    outline-offset: 4px;
+  }
 }
 
 @media (width <= $tablet) {

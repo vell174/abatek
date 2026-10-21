@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Схема остроугольного ковша</title>
+  <desc id="desc">Условная форма сварного элеваторного ковша, вид сбоку и спереди. Размеры подбираются по проекту.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#0757a4" />
+    </marker>
+  </defs>
+  <style>.title{font:700 23px Montserrat,Arial,sans-serif;fill:#052f55;letter-spacing:1px}.small{font:500 15px Montserrat,Arial,sans-serif;fill:#52677d}.label{font:600 18px Montserrat,Arial,sans-serif;fill:#052f55}.shape{fill:#eef5fb;stroke:#052f55;stroke-width:5;stroke-linejoin:round}.accent{fill:none;stroke:#f5c518;stroke-width:7;stroke-linejoin:round}.dim{fill:none;stroke:#0757a4;stroke-width:2;marker-start:url(#arrow);marker-end:url(#arrow)}</style>
+  <rect width="800" height="500" rx="20" fill="#fff" />
+  <rect x="0" y="0" width="800" height="8" fill="#f5c518" />
+  <text x="40" y="55" class="title">ОСТРОУГОЛЬНЫЙ</text>
+  <text x="40" y="84" class="small">остроугольное днище</text>
+  <circle cx="739" cy="48" r="29" fill="#052f55" />
+  <text x="739" y="56" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="24" fill="#fff">О</text>
+  <path class="shape" d="M158 157 L385 157 L288 376 L158 226 Z" />
+  <path d="M158 157 L385 157" stroke="#f5c518" stroke-width="8" stroke-linecap="round" />
+  <path class="accent" d="M168 169 L195 169 L195 241 M353 169 L380 169 L354 253" />
+  <path class="shape" d="M524 157 L716 157 L696 355 L545 355 Z" />
+  <path d="M524 157 L716 157" stroke="#f5c518" stroke-width="8" stroke-linecap="round" />
+  <path class="dim" d="M158 123 L385 123" />
+  <text x="271" y="113" text-anchor="middle" class="label">L</text>
+  <path class="dim" d="M524 123 L716 123" />
+  <text x="620" y="113" text-anchor="middle" class="label">B</text>
+  <path class="dim" d="M419 157 L419 372" />
+  <text x="432" y="267" class="label">Hк</text>
+  <text x="270" y="425" text-anchor="middle" class="label">Вид сбоку</text>
+  <text x="620" y="425" text-anchor="middle" class="label">Вид спереди</text>
+  <text x="400" y="470" text-anchor="middle" class="small">Схема формы · не в масштабе</text>
+</svg>

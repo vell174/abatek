@@ -18,7 +18,10 @@ export const seo = {
   twitter: { card: 'summary_large_image', title, description },
   breadcrumbs: [
     { name: 'Главная', path: '/' },
-    { name: 'Калькулятор мощности привода', path: '/kalkulyator-moshchnosti-privoda-lentochnogo-konveyera/' },
+    {
+      name: 'Калькулятор мощности привода ленточного конвейера',
+      path: '/kalkulyator-moshchnosti-privoda-lentochnogo-konveyera/',
+    },
   ],
   schema: { pageType: 'WebPage', name: title },
 } satisfies PageSeo;
