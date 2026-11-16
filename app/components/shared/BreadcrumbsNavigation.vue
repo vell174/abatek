@@ -6,11 +6,16 @@ interface BreadcrumbItem {
   to?: string;
 }
 
-defineProps<{ items: BreadcrumbItem[] }>();
+defineProps<{ items: BreadcrumbItem[]; tone?: 'default' | 'light' }>();
 </script>
 
 <template>
-  <Primitive as="nav" class="breadcrumbs" aria-label="Хлебные крошки">
+  <Primitive
+    as="nav"
+    class="breadcrumbs"
+    :class="{ 'breadcrumbs--light': tone === 'light' }"
+    aria-label="Хлебные крошки"
+  >
     <Primitive as="ol" class="breadcrumbs__list">
       <Primitive v-for="(item, index) in items" :key="`${item.label}-${index}`" as="li" class="breadcrumbs__item">
         <NuxtLink v-if="item.to" :to="item.to">{{ item.label }}</NuxtLink>
@@ -22,6 +27,18 @@ defineProps<{ items: BreadcrumbItem[] }>();
 </template>
 
 <style scoped lang="scss">
+.breadcrumbs {
+  --breadcrumb-text: #{$muted};
+  --breadcrumb-link: #{$blue};
+  --breadcrumb-link-hover: #{$navy};
+
+  &--light {
+    --breadcrumb-text: rgb(255 255 255 / 78%);
+    --breadcrumb-link: #{$yellow};
+    --breadcrumb-link-hover: #fff;
+  }
+}
+
 .breadcrumbs__list {
   display: flex;
   flex-wrap: wrap;
@@ -41,24 +58,24 @@ defineProps<{ items: BreadcrumbItem[] }>();
   font-size: 12px;
   font-weight: 700;
   line-height: 1.4;
-  color: $muted;
+  color: var(--breadcrumb-text);
 }
 
 .breadcrumbs__item a {
-  color: #0757a4;
+  color: var(--breadcrumb-link);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .breadcrumbs__item a:hover {
-  color: #052f55;
+  color: var(--breadcrumb-link-hover);
 }
 
 .breadcrumbs__item :deep(svg) {
   flex: 0 0 auto;
   width: 14px;
   height: 14px;
-  color: #0757a4;
+  color: var(--breadcrumb-link);
   stroke-width: 2;
 }
 

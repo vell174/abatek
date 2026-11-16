@@ -60,7 +60,7 @@ const setViewerOpen = (open: boolean) => {
     :class="{ 'project-gallery--single': images.length === 1, 'project-gallery--two': images.length === 2 }"
     aria-labelledby="project-gallery-title"
   >
-    <div class="content-section site-container">
+    <div class="project-gallery__inner site-container">
       <header class="project-gallery__heading">
         <div class="project-gallery__heading-content">
           <p class="project-gallery__eyebrow">Реализованные решения</p>
@@ -90,11 +90,10 @@ const setViewerOpen = (open: boolean) => {
                 loading="lazy"
                 decoding="async"
               />
-              <span class="project-gallery__shade" aria-hidden="true" />
               <span class="project-gallery__number">{{ String(index + 1).padStart(2, '0') }}</span>
-              <span class="project-gallery__caption">{{ image.alt }}</span>
               <Icon class="project-gallery__zoom" name="lucide:move-up-right" aria-hidden="true" mode="svg" />
             </button>
+            <figcaption class="project-gallery__caption">{{ image.alt }}</figcaption>
           </figure>
         </div>
       </div>
@@ -143,6 +142,10 @@ const setViewerOpen = (open: boolean) => {
   background:
     radial-gradient(circle at 88% 5%, rgb(23 105 170 / 28%), transparent 32%), linear-gradient(145deg, #031d38, #052f55);
 
+  &__inner {
+    padding-block: 56px;
+  }
+
   &::before {
     position: absolute;
     top: -180px;
@@ -165,7 +168,7 @@ const setViewerOpen = (open: boolean) => {
     gap: 32px;
     align-items: end;
     justify-content: space-between;
-    margin-bottom: 38px;
+    margin-bottom: 24px;
   }
 
   &--single &__slide {
@@ -193,8 +196,8 @@ const setViewerOpen = (open: boolean) => {
   &__title {
     max-width: 1120px;
     margin: 0;
-    font-size: clamp(32px, 4vw, 54px);
-    line-height: 1;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.045em;
   }
 
@@ -249,21 +252,21 @@ const setViewerOpen = (open: boolean) => {
 
   &__track {
     display: flex;
-    margin-left: -20px;
+    margin-left: -14px;
     touch-action: pan-y pinch-zoom;
   }
 
   &__slide {
-    flex: 0 0 33.333%;
+    flex: 0 0 25%;
     min-width: 0;
-    padding-left: 20px;
+    padding-left: 14px;
     margin: 0;
 
     button {
       position: relative;
       display: block;
       width: 100%;
-      height: clamp(340px, 34vw, 470px);
+      height: clamp(205px, 22vw, 285px);
       padding: 0;
       overflow: hidden;
       color: #fff;
@@ -271,7 +274,7 @@ const setViewerOpen = (open: boolean) => {
       cursor: zoom-in;
       background: #071a2e;
       border: 1px solid rgb(255 255 255 / 14%);
-      border-radius: 18px;
+      border-radius: 14px 14px 0 0;
       box-shadow: 0 22px 55px rgb(0 0 0 / 22%);
     }
 
@@ -286,26 +289,18 @@ const setViewerOpen = (open: boolean) => {
     button:hover img {
       transform: scale(1.045);
     }
-
-    .project-gallery__caption {
-      position: absolute;
-      right: 24px;
-      bottom: 22px;
-      left: 24px;
-      z-index: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 15px;
-      font-weight: 750;
-      line-height: 1.4;
-      white-space: nowrap;
-    }
   }
 
-  &__shade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 45%, rgb(2 14 28 / 90%) 100%);
+  &__caption {
+    min-height: 68px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.4;
+    color: $ink;
+    overflow-wrap: anywhere;
+    background: #fff;
+    border-radius: 0 0 14px 14px;
   }
 
   &__number {
@@ -340,7 +335,7 @@ const setViewerOpen = (open: boolean) => {
     flex-wrap: wrap;
     gap: 7px;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 20px;
 
     button {
       width: 24px;
@@ -433,6 +428,10 @@ const setViewerOpen = (open: boolean) => {
 
 @media (width <= $phone) {
   .project-gallery {
+    &__inner {
+      padding-block: 40px;
+    }
+
     &--two &__slide {
       flex-basis: 100%;
     }
@@ -443,8 +442,8 @@ const setViewerOpen = (open: boolean) => {
     }
 
     &__title {
-      font-size: clamp(30px, 9vw, 40px);
-      line-height: 1.05;
+      font-size: var(--section-heading-size);
+      line-height: var(--section-heading-leading);
     }
 
     &__controls {
@@ -459,7 +458,7 @@ const setViewerOpen = (open: boolean) => {
       flex-basis: 100%;
 
       button {
-        height: 380px;
+        height: 260px;
       }
     }
   }

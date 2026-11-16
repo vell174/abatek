@@ -17,9 +17,11 @@ export const seo = {
   canonicalPath: '/dempfernye-stoly-dlya-lentochnyh-konveyerov/',
   robots: 'index, follow',
   image: {
-    src: '/images/dempfernye-stoly/impact-bed.webp',
-    alt: 'Визуализация демпферного стола для ленточного конвейера',
+    src: '/images/dempfernye-stoly/impact-bed-workshop-hero-v2.webp',
+    alt: 'Демпферный стол для зоны загрузки ленточного конвейера',
     type: 'image/webp',
+    width: 1672,
+    height: 941,
   },
   openGraph: { title, description, type: 'website', locale: 'ru_RU', siteName: 'АБАТЭК' },
   twitter: { card: 'summary_large_image', title, description },

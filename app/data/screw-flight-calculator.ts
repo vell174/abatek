@@ -40,7 +40,6 @@ export const screwFlightResults: Array<{
 
 export const screwFlightContent = {
   homeLabel: 'Главная',
-  usefulLabel: 'Полезное',
   eyebrow: 'Инженерный калькулятор',
   title: 'Калькулятор развертки витка шнека',
   description:

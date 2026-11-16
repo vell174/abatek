@@ -30,8 +30,8 @@ defineProps<{ facts: Array<[string, string]> }>();
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 150px;
-  padding: 28px;
+  min-height: var(--product-facts-card-height, 150px);
+  padding: var(--product-facts-card-padding, 28px);
   background: var(--page-deep, #052f55);
 }
 
@@ -55,8 +55,8 @@ defineProps<{ facts: Array<[string, string]> }>();
 
 @media (width <= $phone) {
   .product-facts-03 article {
-    min-height: 125px;
-    padding: 20px;
+    min-height: var(--product-facts-card-height-mobile, 125px);
+    padding: var(--product-facts-card-padding-mobile, 20px);
   }
 }
 </style>

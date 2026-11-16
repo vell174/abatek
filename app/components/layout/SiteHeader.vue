@@ -58,7 +58,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
 </script>
 
 <template>
-  <header class="site-header">
+  <header class="site-header" :class="{ 'site-header--home': route.path === '/' }">
     <div class="site-container site-header__inner">
       <AppLogo />
       <nav class="site-navigation" aria-label="Основная навигация">
@@ -299,6 +299,10 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
     gap: clamp(16px, 1.8vw, 28px);
     align-items: center;
     min-height: 116px;
+  }
+
+  &--home &__inner {
+    min-height: 84px;
   }
 
   &__phone {
@@ -1129,6 +1133,10 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
 @media (max-width: $phone) {
   .site-header__inner {
     min-height: 70px;
+  }
+
+  .site-header--home .site-header__inner {
+    min-height: 66px;
   }
 
   .project-request {

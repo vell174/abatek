@@ -3,6 +3,7 @@ import { equipmentRouteGroups } from './equipment-routes';
 import { beltVariantDefinitions } from './_shared/belt-variant-definitions';
 import { gallery as screwFeederGallery } from './vintovoy-pitatel/gallery';
 import { gallery as bunkerGallery } from './bunkery-priemnye-nakopitelnye/gallery';
+import { gallery as beltFeederGallery } from './lentochnye-pitateli/gallery';
 import { gallery as driveDrumGallery } from './privodnoy-baraban-konveyera/gallery';
 import { gallery as customDrumGallery } from './nestandartnyy-baraban-po-chertezham/gallery';
 import { gallery as elevatorDrumGallery } from './baraban-kovshovogo-elevatora/gallery';
@@ -14,10 +15,19 @@ import { gallery as tensionDrumGallery } from './natyazhnoy-baraban-konveyera/ga
 import { gallery as drumsOverviewGallery } from './barabany/gallery';
 import { gallery as elevatorBucketsGallery } from './kovshi/gallery';
 import { gallery as verticalReservoirsGallery } from './rezervuary-vertikalnye-rvs/gallery';
+import { gallery as partitionedBeltGallery } from './konveyery-s-poperechnymi-peregorodkami/gallery';
+import { gallery as corrugatedSidewallGallery } from './konveyery-s-gofrobortami/gallery';
+import { gallery as straightSideboardsGallery } from './lentochnye-konveyery-s-prodolnymi-pryamymi-bortami/gallery';
+import { gallery as warehouseBeltGallery } from './lentochnye-konveyery-dlya-sklada/gallery';
+import { gallery as firewoodGallery } from './transporterdlyadrov/gallery';
+import { gallery as scraperConveyorGallery } from './konveyery-skrebkovye/gallery';
 
 const galleryOverrides: Record<string, readonly GalleryImage[]> = {
+  'konveyery-skrebkovye': scraperConveyorGallery,
+  transporterdlyadrov: firewoodGallery,
   'vintovoy-pitatel': screwFeederGallery,
   'bunkery-priemnye-nakopitelnye': bunkerGallery,
+  'lentochnye-pitateli': beltFeederGallery,
   'privodnoy-baraban-konveyera': driveDrumGallery,
   'nestandartnyy-baraban-po-chertezham': customDrumGallery,
   'baraban-kovshovogo-elevatora': elevatorDrumGallery,
@@ -29,6 +39,10 @@ const galleryOverrides: Record<string, readonly GalleryImage[]> = {
   barabany: drumsOverviewGallery,
   kovshi: elevatorBucketsGallery,
   'rezervuary-vertikalnye-rvs': verticalReservoirsGallery,
+  'konveyery-s-poperechnymi-peregorodkami': partitionedBeltGallery,
+  'konveyery-s-gofrobortami': corrugatedSidewallGallery,
+  'lentochnye-konveyery-s-prodolnymi-pryamymi-bortami': straightSideboardsGallery,
+  'lentochnye-konveyery-dlya-sklada': warehouseBeltGallery,
 };
 
 type EquipmentPageData =
@@ -68,6 +82,7 @@ const galleryModules = import.meta.glob<{ gallery: readonly GalleryImage[] }>('.
 
 const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['konveyery-po-vidam', 'industrial'],
+  ['konveyery-dlya-sypuchih-materialov', 'industrial'],
   ['lentochnye-pitateli', 'industrial'],
   ['transporterdlyadrov', 'industrial'],
   ['konveyery-skrebkovye', 'industrial'],
@@ -122,11 +137,14 @@ const pageTemplates = new Map<string, EquipmentPageDefinition['template']>([
   ['konvejery-dlya-othodov', 'conveyor-application'],
   ['konvejery-dlya-ovoshchey', 'conveyor-application'],
   ['konvejery-dlya-peska', 'conveyor-application'],
-  ['konvejery-dlya-sklada', 'conveyor-application'],
-  ['konvejery-dlya-sortirovki', 'conveyor-application'],
+  ['lentochnye-konveyery-dlya-sklada', 'conveyor-application'],
+  ['konveyery-dlya-sklada', 'industrial'],
+  ['lentochnye-konveyery-dlya-sortirovki', 'conveyor-application'],
+  ['konveyery-dlya-sortirovki', 'industrial'],
   ['konvejery-dlya-uglya', 'conveyor-application'],
   ['konvejery-dlya-zerna', 'conveyor-application'],
-  ['konveyer-dlya-upakovki', 'conveyor-application'],
+  ['lentochnye-konveyery-dlya-shtuchnyh-gruzov', 'conveyor-application'],
+  ['konveyery-dlya-shtuchnyh-gruzov', 'industrial'],
   ['konveyer-lentochnyy-zhelobchatyy', 'industrial'],
   ['modulnye-konvejery', 'industrial'],
   ['naklonnyj-lentochnyj-konvejer', 'industrial'],

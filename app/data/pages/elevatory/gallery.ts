@@ -1,0 +1,98 @@
+import type { GalleryImage } from '../_shared/types';
+
+const projectPhotos = [
+  {
+    slug: 'bashmak-kovshovogo-elevatora',
+    alt: 'Изготовленный башмак ковшового элеватора с ревизионным люком в производственном цехе',
+    width: 720,
+    height: 960,
+    fullWidth: 1500,
+    fullHeight: 2000,
+  },
+  {
+    slug: 'privodnaya-golovnaya-sektsiya-kovshovogo-elevatora',
+    alt: 'Приводная головная секция ковшового элеватора с барабаном и мотором-редуктором',
+    width: 720,
+    height: 540,
+    fullWidth: 1800,
+    fullHeight: 1350,
+  },
+  {
+    slug: 'izgotovlenie-kryshki-golovki-elevatora',
+    alt: 'Изготовление металлической крышки головной части ковшового элеватора',
+    width: 720,
+    height: 540,
+    fullWidth: 1800,
+    fullHeight: 1350,
+  },
+  {
+    slug: 'noriya-dlya-drobemetnoy-ustanovki',
+    alt: 'Сборка ковшовой нории для дробемётной установки в цехе',
+    width: 720,
+    height: 540,
+    fullWidth: 1800,
+    fullHeight: 1350,
+  },
+  {
+    slug: 'natyazhnaya-zagruzochnaya-sektsiya-elevatora',
+    alt: 'Натяжная загрузочная секция ковшового элеватора с приёмным патрубком',
+    width: 720,
+    height: 540,
+    fullWidth: 1800,
+    fullHeight: 1350,
+  },
+  {
+    slug: 'otgruzka-elevatora-lg-400',
+    alt: 'Отгрузка секций ленточного ковшового элеватора ЛГ-400',
+    width: 720,
+    height: 960,
+    fullWidth: 1650,
+    fullHeight: 2200,
+  },
+  {
+    slug: 'patrubki-samotechnoy-vygruzki',
+    alt: 'Изготовленные патрубки самотечной выгрузки продукта для ковшового элеватора',
+    width: 720,
+    height: 540,
+    fullWidth: 1800,
+    fullHeight: 1350,
+  },
+  {
+    slug: 'promezhutochnye-sektsii-kovshovogo-elevatora',
+    alt: 'Промежуточные металлические секции корпуса ковшового элеватора в цехе',
+    width: 720,
+    height: 540,
+    fullWidth: 1800,
+    fullHeight: 1350,
+  },
+  {
+    slug: 'smotrovoy-lyuchok-bashmaka-elevatora',
+    alt: 'Смотровой лючок башмака ковшового элеватора и внутренний натяжной узел',
+    width: 720,
+    height: 960,
+    fullWidth: 1500,
+    fullHeight: 2000,
+  },
+  {
+    slug: 'elevator-dlya-sypuchego-produkta',
+    alt: 'Установленный ковшовый элеватор для вертикального подъёма сыпучего продукта',
+    width: 540,
+    height: 959,
+    fullWidth: 941,
+    fullHeight: 1672,
+  },
+  {
+    slug: 'elevator-lg-250',
+    alt: 'Ленточный ковшовый элеватор ЛГ-250 рядом с силосами на производственной площадке',
+    width: 720,
+    height: 960,
+    fullWidth: 1086,
+    fullHeight: 1448,
+  },
+] as const;
+
+export const gallery = projectPhotos.map(({ slug, ...photo }) => ({
+  src: `/images/elevatory/projects/${slug}-720.webp`,
+  fullSrc: `/images/elevatory/projects/${slug}-full.webp`,
+  ...photo,
+})) satisfies GalleryImage[];

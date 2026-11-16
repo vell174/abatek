@@ -1,6 +1,7 @@
 import type { IndustrialPage } from '../_shared/types';
 
 export const pageData = {
+  compactLayout: true,
   theme: 'teal',
   galleryTitle: 'Основные узлы конвейера',
   title: 'Комплектующие к ленточным конвейерам',

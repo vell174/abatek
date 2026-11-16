@@ -166,15 +166,12 @@ const moveViewer = (direction: 1 | -1) => {
               >
                 <button type="button" :aria-label="`Открыть фотографию: ${image.alt}`" @click="openImage(image)">
                   <img :src="image.src" :alt="image.alt" width="1000" height="750" loading="lazy" />
-                  <span class="project-card__shade" aria-hidden="true" />
-                  <span class="project-card__meta">
-                    <small>{{ String(index + 1).padStart(2, '0') }}</small>
-                    <b>{{ image.alt }}</b>
-                  </span>
+                  <span class="project-card__number">{{ String(index + 1).padStart(2, '0') }}</span>
                   <span class="project-card__open">
                     <Icon name="lucide:expand" aria-hidden="true" mode="svg" />
                   </span>
                 </button>
+                <p class="project-card__caption">{{ image.alt }}</p>
               </article>
             </div>
           </Transition>
@@ -466,8 +463,8 @@ const moveViewer = (direction: 1 | -1) => {
 
     h2 {
       margin: 0;
-      font-size: clamp(40px, 5vw, 68px);
-      line-height: 1;
+      font-size: var(--section-heading-size);
+      line-height: var(--section-heading-leading);
       color: $navy;
       letter-spacing: -0.055em;
     }
@@ -632,6 +629,19 @@ const moveViewer = (direction: 1 | -1) => {
   margin: 0;
   filter: drop-shadow(0 16px 24px rgb(5 34 59 / 10%));
 
+  &__caption {
+    min-height: 64px;
+    padding: 12px 16px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: $ink;
+    overflow-wrap: anywhere;
+    background: #fff;
+    border-radius: 0 0 14px 14px;
+  }
+
   &--feature {
     grid-column: 1 / -1;
 
@@ -651,7 +661,7 @@ const moveViewer = (direction: 1 | -1) => {
     text-align: left;
     background: $navy;
     border: 5px solid #fff;
-    border-radius: 18px;
+    border-radius: 14px 14px 0 0;
   }
 
   img {
@@ -665,42 +675,16 @@ const moveViewer = (direction: 1 | -1) => {
     transform: scale(1.04);
   }
 
-  &__shade {
+  &__number {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 42%, rgb(2 17 32 / 88%) 100%);
-    transition: background 0.3s ease;
-  }
-
-  button:hover &__shade {
-    background: linear-gradient(180deg, rgb(2 17 32 / 8%) 20%, rgb(2 17 32 / 92%) 100%);
-  }
-
-  &__meta {
-    position: absolute;
-    right: 24px;
-    bottom: 22px;
-    left: 24px;
-    display: flex;
-    gap: 16px;
-    align-items: flex-end;
-
-    small {
-      padding-bottom: 3px;
-      font-size: 10px;
-      font-weight: 900;
-      color: $yellow;
-      letter-spacing: 0.12em;
-    }
-
-    b {
-      max-width: 520px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 14px;
-      line-height: 1.4;
-      white-space: nowrap;
-    }
+    top: 18px;
+    left: 18px;
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 900;
+    color: $navy;
+    background: $yellow;
+    border-radius: 50%;
   }
 
   &__open {
@@ -762,9 +746,9 @@ const moveViewer = (direction: 1 | -1) => {
 
     p {
       margin: 0;
-      font-size: clamp(42px, 5vw, 70px);
+      font-size: var(--section-heading-size);
       font-weight: 760;
-      line-height: 0.98;
+      line-height: var(--section-heading-leading);
       letter-spacing: -0.055em;
     }
   }

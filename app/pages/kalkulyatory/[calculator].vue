@@ -19,6 +19,7 @@ import {
 } from '~/data/conveyor-tools';
 import { beltSpeeds } from '~/data/conveyor-calculator';
 import { referenceLinkLabels, referenceRoutes } from '~/data/conveyor-references';
+import { usefulResourcesBreadcrumb } from '~/data/useful-resources';
 import { calculateBeltWidth, calculateConveyorSpeed, calculateOperatingConditions } from '~/utils/conveyor-tools';
 
 definePageMeta({ key: (route) => route.fullPath });
@@ -134,7 +135,10 @@ function reset() {
   <main class="conveyor-tool">
     <section class="conveyor-tool__hero">
       <div class="site-container">
-        <BreadcrumbsNavigation :items="[{ label: ui.home, to: '/' }, { label: page.title }]" />
+        <BreadcrumbsNavigation
+          tone="light"
+          :items="[{ label: ui.home, to: '/' }, usefulResourcesBreadcrumb, { label: page.title }]"
+        />
         <p class="conveyor-tool__eyebrow">{{ page.eyebrow }}</p>
         <h1 class="conveyor-tool__title">{{ page.title }}</h1>
         <p class="conveyor-tool__intro">{{ page.description }}</p>
@@ -345,13 +349,13 @@ function reset() {
   background: $soft;
 
   &__hero {
-    padding: 72px 0 68px;
+    padding: 34px 0 40px;
     color: #fff;
     background: $navy;
   }
 
   &__eyebrow {
-    margin: 46px 0 16px;
+    margin: 22px 0 10px;
     font-size: 11px;
     font-weight: 800;
     color: $yellow;
@@ -360,18 +364,18 @@ function reset() {
   }
 
   &__title {
-    max-width: 950px;
+    max-width: 1100px;
     margin: 0;
-    font-size: clamp(36px, 5vw, 68px);
-    line-height: 1.05;
+    font-size: var(--resource-hero-title-size);
+    line-height: 1.12;
     letter-spacing: -0.045em;
   }
 
   &__intro {
     max-width: 750px;
-    margin: 24px 0 0;
-    font-size: 16px;
-    line-height: 1.6;
+    margin: 14px 0 0;
+    font-size: 15px;
+    line-height: 1.5;
     color: rgba(#fff, 0.78);
   }
 
@@ -606,7 +610,8 @@ function reset() {
 
   &__method h2 {
     margin: 0;
-    font-size: clamp(28px, 3vw, 44px);
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
   }
 
   &__method p,
@@ -648,11 +653,11 @@ function reset() {
 @include phone {
   .conveyor-tool {
     &__hero {
-      padding: 45px 0 50px;
+      padding: 26px 0 34px;
     }
 
     &__eyebrow {
-      margin-top: 36px;
+      margin-top: 18px;
     }
 
     &__intro {

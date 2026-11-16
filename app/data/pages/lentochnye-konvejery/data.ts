@@ -1,12 +1,15 @@
 import type { IndustrialPage } from '../_shared/types';
+import { beltCapacityReferenceCard } from '../_shared/belt-capacity-reference';
 import { beltClassificationGroups } from '../_shared/create-belt-variant-page';
 import { createIndustrialFaq } from '../_shared/faq';
 
 export const pageData = {
+  compactLayout: true,
   theme: 'amber',
   galleryTitle: 'Классификация ленточных конвейеров',
   classificationGroups: beltClassificationGroups,
   hideCatalog: true,
+  referenceCard: beltCapacityReferenceCard,
   projectsPlacement: 'before-workflow',
   title: 'Ленточные конвейеры от производителя',
   seoTitle: 'Купить ленточный конвейер от производителя — цена, виды | АБАТЭК',

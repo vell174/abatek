@@ -1,18 +1,35 @@
 <script setup lang="ts">
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+} from 'reka-ui';
 import ScraperProductCard from '~/components/shared/card/ScraperProductCard.vue';
-import type { GalleryImage } from '~/data/pages/_shared/types';
+import type { GalleryImage, IndustrialSection } from '~/data/pages/_shared/types';
 import { catalog } from '~/data/pages/rolgang/data-catalog';
 import { pageData, rollerContent } from '~/data/pages/rolgang/data';
 
 defineProps<{ gallery?: readonly GalleryImage[]; galleryTitle: string }>();
 
 const isProjectRequestOpen = useState('project-request-open', () => false);
+const selectedProduct = ref<IndustrialSection | null>(null);
+const detailsOpen = ref(false);
+const showDetails = (product: IndustrialSection) => {
+  selectedProduct.value = product;
+  detailsOpen.value = true;
+};
 </script>
 
 <template>
   <div class="roller-page">
     <ProductIntroSection_02
+      compact
       :title="rollerContent.introTitle"
+      title-size="compact"
       :image="pageData.image"
       :image-alt="pageData.imageAlt"
       :label="rollerContent.labels.hero"
@@ -43,7 +60,10 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
           :key="product.title"
           :product="product"
           :index="index"
+          compact
+          details-button
           @action="isProjectRequestOpen = true"
+          @details="showDetails(product)"
         />
       </div>
       <p class="roller-page__catalog-caption">{{ rollerContent.catalogCaption }}</p>
@@ -139,6 +159,49 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
       :note="rollerContent.workflowNote"
     />
     <FaqSection_last_01 :items="rollerContent.faq" :title="rollerContent.headings.faq" title-id="roller-faq-title" />
+
+    <DialogRoot v-model:open="detailsOpen">
+      <DialogPortal>
+        <DialogOverlay class="roller-details__overlay" />
+        <DialogContent v-if="selectedProduct" class="roller-details__dialog">
+          <DialogTitle class="roller-details__title">{{ selectedProduct.title }}</DialogTitle>
+          <DialogDescription class="roller-details__description">
+            {{ selectedProduct.text?.join(' ') }}
+          </DialogDescription>
+          <div class="roller-details__body">
+            <img
+              v-if="selectedProduct.image"
+              class="roller-details__image"
+              :src="selectedProduct.image"
+              :alt="selectedProduct.imageAlt || selectedProduct.title"
+              width="720"
+              height="480"
+            />
+            <div>
+              <h3 class="roller-details__subtitle">{{ rollerContent.labels.features }}</h3>
+              <ul class="roller-details__list">
+                <li v-for="feature in selectedProduct.features" :key="feature.title" class="roller-details__item">
+                  <strong class="roller-details__feature-title">{{ feature.title }}</strong>
+                  <span class="roller-details__feature-text">{{ feature.text }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <UiButton
+            class="roller-details__action"
+            @click="
+              detailsOpen = false;
+              isProjectRequestOpen = true;
+            "
+          >
+            {{ rollerContent.labels.calculate }}
+          </UiButton>
+          <DialogClose class="roller-details__close" aria-label="Закрыть описание модели">
+            <Icon name="lucide:x" aria-hidden="true" mode="svg" />
+          </DialogClose>
+        </DialogContent>
+      </DialogPortal>
+    </DialogRoot>
   </div>
 </template>
 
@@ -148,8 +211,15 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .roller-page {
   color: $ink;
 
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
+  --product-facts-card-height: 112px;
+  --product-facts-card-padding: 20px;
+  --product-facts-card-height-mobile: 100px;
+  --product-facts-card-padding-mobile: 16px;
+
   &__section {
-    padding-block: clamp(56px, 7vw, 96px);
+    padding-block: clamp(40px, 4vw, 64px);
   }
 
   &__band {
@@ -161,7 +231,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__price {
     display: grid;
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: clamp(36px, 7vw, 100px);
+    gap: clamp(24px, 4vw, 56px);
   }
 
   &__eyebrow {
@@ -175,14 +245,14 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__heading {
     margin: 0;
-    font-size: clamp(30px, 4vw, 52px);
-    line-height: 1.12;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.04em;
   }
 
   &__section-header {
     max-width: 850px;
-    margin-bottom: 36px;
+    margin-bottom: 24px;
   }
 
   &__section-lead {
@@ -198,7 +268,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__prose {
     display: grid;
-    gap: 18px;
+    gap: 14px;
     align-content: start;
   }
 
@@ -212,19 +282,19 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__application-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: 14px;
   }
 
   &__cargo-grid,
   &__product-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    gap: 14px;
   }
 
   &__drive-card,
   &__info-card {
-    padding: clamp(24px, 3vw, 38px);
+    padding: clamp(18px, 2.5vw, 28px);
     background: #fff;
     border: 1px solid $line;
     border-radius: 16px;
@@ -232,7 +302,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__drive-card {
     display: grid;
-    gap: 16px;
+    gap: 12px;
     align-content: start;
     border-top: 4px solid $yellow;
   }
@@ -242,9 +312,9 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   }
 
   &__card-title {
-    margin: 0 0 14px;
-    font-size: clamp(21px, 2vw, 28px);
-    line-height: 1.25;
+    margin: 0 0 10px;
+    font-size: var(--card-heading-size);
+    line-height: var(--card-heading-leading);
     color: $navy;
   }
 
@@ -266,7 +336,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__selection-list {
     display: grid;
-    gap: 16px;
+    gap: 12px;
     padding-left: 24px;
     margin: 0;
   }
@@ -275,6 +345,111 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
     padding-left: 6px;
     line-height: 1.6;
     color: $ink;
+  }
+}
+
+.roller-details {
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba($navy, 0.72);
+  }
+
+  &__dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 101;
+    width: min(900px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    padding: 32px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 16px;
+    transform: translate(-50%, -50%);
+  }
+
+  &__title {
+    padding-right: 40px;
+    margin: 0 0 12px;
+    font-size: 28px;
+    color: $navy;
+  }
+
+  &__description {
+    margin: 0 0 24px;
+    line-height: 1.6;
+    color: $muted;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 24px;
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+  }
+
+  &__subtitle {
+    margin: 0 0 14px;
+    font-size: 18px;
+    color: $navy;
+  }
+
+  &__list {
+    display: grid;
+    gap: 14px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: grid;
+    gap: 4px;
+    line-height: 1.5;
+    color: $muted;
+  }
+
+  &__feature-title {
+    color: $ink;
+  }
+
+  &__action {
+    margin-top: 24px;
+  }
+
+  &__close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: $navy;
+    cursor: pointer;
+    background: $soft;
+    border: 0;
+    border-radius: 50%;
+  }
+}
+
+@include phone {
+  .roller-details {
+    &__dialog {
+      padding: 20px;
+    }
+
+    &__body {
+      grid-template-columns: 1fr;
+    }
   }
 }
 

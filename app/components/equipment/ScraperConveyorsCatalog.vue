@@ -61,7 +61,7 @@ const products = computed(() => props.sections.slice(1));
   grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
   gap: clamp(35px, 7vw, 90px);
   align-items: end;
-  margin-bottom: 46px;
+  margin-bottom: 28px;
 }
 
 .scraper-catalog__header > div > p {
@@ -76,8 +76,8 @@ const products = computed(() => props.sections.slice(1));
 .scraper-catalog__header h2 {
   max-width: 820px;
   margin: 0;
-  font-size: clamp(36px, 5vw, 66px);
-  line-height: 1;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: #052f55;
   letter-spacing: -0.055em;
 }
@@ -143,7 +143,8 @@ const products = computed(() => props.sections.slice(1));
 }
 
 .scraper-catalog__overview h3 {
-  font-size: clamp(28px, 3vw, 42px);
+  font-size: var(--card-heading-size);
+  line-height: var(--card-heading-leading);
   color: #fff;
 }
 

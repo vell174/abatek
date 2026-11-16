@@ -12,7 +12,9 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 <template>
   <div class="reservoir-page">
     <ProductIntroSection_02
+      compact
       :title="reservoirContent.introTitle"
+      title-size="compact"
       :image="pageData.image"
       :image-alt="reservoirContent.introImageAlt"
       :image-width-px="718"
@@ -204,13 +206,20 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .reservoir-page {
   color: $ink;
 
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
+  --product-facts-card-height: 112px;
+  --product-facts-card-padding: 20px;
+  --product-facts-card-height-mobile: 100px;
+  --product-facts-card-padding-mobile: 16px;
+
   &__section--soft {
     background: $soft;
   }
 
   &__heading {
     max-width: 900px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   &__heading--installation {
@@ -228,27 +237,27 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__title {
     margin: 0;
-    font-size: clamp(30px, 4vw, 54px);
-    line-height: 1.07;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.045em;
   }
 
   &__lead,
   &__note {
     max-width: 850px;
-    margin: 20px 0 0;
-    line-height: 1.7;
+    margin: 14px 0 0;
+    line-height: 1.6;
     color: $muted;
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    gap: 14px;
   }
 
   &__card {
-    padding: 30px;
+    padding: 22px;
     background: #fff;
     border: 1px solid $line;
     border-radius: 18px;
@@ -256,8 +265,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__card-title {
     margin: 0 0 12px;
-    font-size: 23px;
-    line-height: 1.2;
+    font-size: var(--card-heading-size);
+    line-height: var(--card-heading-leading);
   }
 
   &__card-text {
@@ -269,7 +278,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__split {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
-    gap: clamp(32px, 6vw, 80px);
+    gap: clamp(24px, 4vw, 52px);
     align-items: start;
   }
 
@@ -279,7 +288,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__stack {
     display: grid;
-    gap: 18px;
+    gap: 14px;
   }
 
   &__figure {
@@ -381,11 +390,11 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__models {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 10px;
+    gap: 8px;
   }
 
   &__model-link {
-    padding: 14px 10px;
+    padding: 10px 8px;
     font-size: 14px;
     font-weight: 800;
     color: $blue;
@@ -420,7 +429,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   }
 
   &__related {
-    padding-block: 36px;
+    padding-block: 28px;
     background: $navy;
   }
 
@@ -433,7 +442,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__related-title {
     margin: 0 0 8px;
-    font-size: 24px;
+    font-size: var(--section-heading-size-narrow);
+    line-height: var(--section-heading-leading);
     color: #fff;
   }
 

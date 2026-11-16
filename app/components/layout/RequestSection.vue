@@ -125,8 +125,8 @@ const copyEmail = async () => {
 
   &__title {
     margin: 0;
-    font-size: clamp(32px, 3.5vw, 46px);
-    line-height: 1.03;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.05em;
   }
 

@@ -1,20 +1,31 @@
 <script setup lang="ts">
 import type { IndustrialSection } from '~/data/pages/_shared/types';
 
-const { variant = 'default', headingTag = 'h3' } = defineProps<{
+const {
+  variant = 'default',
+  headingTag = 'h3',
+  compact = false,
+  detailsButton = false,
+} = defineProps<{
   product: IndustrialSection;
   index: number;
   variant?: 'default' | 'category' | 'showcase';
   headingTag?: 'h3' | 'h4';
+  compact?: boolean;
+  detailsButton?: boolean;
 }>();
-defineEmits<{ action: [] }>();
+defineEmits<{ action: []; details: [] }>();
 </script>
 
 <template>
   <article
     :id="product.id"
     class="scraper-product"
-    :class="[variant !== 'default' ? 'scraper-product--category' : '', `scraper-product--${variant}`]"
+    :class="[
+      variant !== 'default' ? 'scraper-product--category' : '',
+      `scraper-product--${variant}`,
+      { 'scraper-product--compact': compact },
+    ]"
   >
     <NuxtLink v-if="variant !== 'default' && product.href" class="scraper-product__category-link" :to="product.href">
       <img
@@ -33,7 +44,7 @@ defineEmits<{ action: [] }>();
       <p v-for="paragraph in product.text" :key="paragraph" class="scraper-product__category-text">{{ paragraph }}</p>
     </NuxtLink>
     <template v-else>
-      <figure>
+      <figure class="scraper-product__figure">
         <img
           class="scraper-product__image"
           :class="{ 'scraper-product__image--contain': product.imageFit === 'contain' }"
@@ -53,7 +64,11 @@ defineEmits<{ action: [] }>();
             <li v-for="item in product.items" :key="item">{{ item }}</li>
           </ul>
         </div>
-        <NuxtLink v-if="product.href" class="scraper-product__link" :to="product.href">
+        <button v-if="detailsButton" type="button" class="scraper-product__details" @click="$emit('details')">
+          Подробнее о модели
+          <Icon name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
+        </button>
+        <NuxtLink v-else-if="product.href" class="scraper-product__link" :to="product.href">
           Подробнее о товаре
           <Icon name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
         </NuxtLink>
@@ -62,6 +77,17 @@ defineEmits<{ action: [] }>();
           <span aria-hidden="true">→</span>
         </button>
       </div>
+      <TechnicalReferenceCard
+        v-if="product.specificationVisible !== false && (product.specificationDocument || product.table)"
+        :title="product.table?.title ?? `Типоразмеры: ${product.title}`"
+        :description="product.title"
+        action-label="Смотреть типоразмеры"
+        :document-url="product.specificationDocument"
+        :table="product.table"
+        :source="product.specificationSource"
+        :source-url="product.specificationSourceUrl"
+        trigger-only
+      />
     </template>
   </article>
 </template>
@@ -159,6 +185,40 @@ defineEmits<{ action: [] }>();
     font-size: 14px;
     line-height: 1.6;
     color: $muted;
+  }
+
+  &--compact &__category-link {
+    gap: 10px;
+    padding: 14px;
+  }
+
+  &--compact &__category-image {
+    height: 135px;
+  }
+
+  &--compact &__category-heading {
+    padding-top: 10px;
+  }
+
+  &--compact &__category-title {
+    font-size: 16px;
+  }
+
+  &--compact &__category-text {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  &--compact {
+    min-height: 0;
+  }
+
+  &--compact &__figure {
+    height: 190px;
+  }
+
+  &--compact &__body {
+    padding: 18px;
   }
 }
 
@@ -324,6 +384,24 @@ defineEmits<{ action: [] }>();
 .scraper-product button span {
   font-size: 22px;
   transition: transform 0.2s ease;
+}
+
+.scraper-product .scraper-product__details {
+  min-height: 48px;
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 800;
+  color: $blue;
+  background: #fff;
+  border: 1px solid $blue;
+  box-shadow: none;
+}
+
+.scraper-product .scraper-product__details:hover {
+  color: #fff;
+  background: $blue;
+  border-color: $blue;
+  box-shadow: none;
 }
 
 .scraper-product button:hover span {

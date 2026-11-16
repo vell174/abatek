@@ -122,9 +122,9 @@ withDefaults(
 
 .specs-section h2 {
   max-width: 900px;
-  margin: 0 0 38px;
-  font-size: clamp(30px, 4vw, 54px);
-  line-height: 1.07;
+  margin: 0 0 24px;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: $ink;
   letter-spacing: -0.045em;
 }

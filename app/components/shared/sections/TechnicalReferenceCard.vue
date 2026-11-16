@@ -10,18 +10,26 @@ import {
 } from 'reka-ui';
 
 defineProps<{
+  compact?: boolean;
+  triggerOnly?: boolean;
   title: string;
   description: string;
   actionLabel: string;
-  documentUrl: string;
+  documentUrl?: string;
+  table?: { title: string; headers: string[]; rows?: string[][] };
+  source?: string;
+  sourceUrl?: string;
 }>();
 
 const isOpen = ref(false);
 </script>
 
 <template>
-  <section class="technical-reference">
-    <div class="site-container content-section">
+  <section
+    class="technical-reference"
+    :class="[compact && 'technical-reference--compact', triggerOnly && 'technical-reference--trigger-only']"
+  >
+    <div v-if="!triggerOnly" class="site-container content-section">
       <article class="technical-reference__card">
         <div class="technical-reference__content">
           <p class="technical-reference__eyebrow">Справочные данные</p>
@@ -34,6 +42,10 @@ const isOpen = ref(false);
         </button>
       </article>
     </div>
+    <button v-else class="technical-reference__action" type="button" @click="isOpen = true">
+      <Icon name="lucide:table-properties" aria-hidden="true" />
+      {{ actionLabel }}
+    </button>
 
     <DialogRoot :open="isOpen" @update:open="isOpen = $event">
       <DialogPortal>
@@ -43,16 +55,24 @@ const isOpen = ref(false);
             <div>
               <DialogTitle class="technical-reference__dialog-title">{{ title }}</DialogTitle>
               <DialogDescription class="technical-reference__dialog-description">
-                Таблица типовых размеров и схемы приводных барабанов.
+                {{ description }}
               </DialogDescription>
             </div>
             <DialogClose class="technical-reference__close" aria-label="Закрыть таблицу">
               <Icon name="lucide:x" aria-hidden="true" />
             </DialogClose>
           </div>
-          <object class="technical-reference__document" :data="documentUrl" type="application/pdf">
+          <object v-if="documentUrl" class="technical-reference__document" :data="documentUrl" type="application/pdf">
             <a :href="documentUrl" target="_blank" rel="noopener">Открыть таблицу в новом окне</a>
           </object>
+          <div v-else-if="table" class="technical-reference__table">
+            <SpecsTableSection :title="table.title" :columns="table.headers" :rows="table.rows" compact />
+            <p v-if="source" class="technical-reference__source">
+              Источник:
+              <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener noreferrer">{{ source }}</a>
+              <span v-else>{{ source }}</span>
+            </p>
+          </div>
         </DialogContent>
       </DialogPortal>
     </DialogRoot>
@@ -64,6 +84,61 @@ const isOpen = ref(false);
 
 .technical-reference {
   background: $soft;
+
+  &--trigger-only {
+    padding: 0 20px 20px;
+    background: transparent;
+  }
+
+  &--trigger-only &__action {
+    width: 100%;
+  }
+
+  &--compact {
+    --content-section-space: 16px;
+    --content-section-space-mobile: 12px;
+  }
+
+  &--compact &__card {
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 10px;
+    box-shadow: none;
+  }
+
+  &--compact &__content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    align-items: baseline;
+    max-width: none;
+  }
+
+  &--compact &__eyebrow {
+    margin: 0;
+    font-size: 10px;
+  }
+
+  &--compact &__title {
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  &--compact &__description {
+    flex-basis: 100%;
+    max-width: none;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  &--compact &__action {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 
   &__card {
     display: flex;
@@ -92,8 +167,8 @@ const isOpen = ref(false);
 
   &__title {
     margin: 0;
-    font-size: clamp(26px, 3.2vw, 40px);
-    line-height: 1.12;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     color: $navy;
     letter-spacing: -0.03em;
   }
@@ -209,6 +284,17 @@ const isOpen = ref(false);
     border: 1px solid $line;
     border-radius: 8px;
   }
+
+  &__table {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  &__source {
+    margin: 16px 0 0;
+    color: $muted;
+  }
 }
 
 @media (max-width: $phone) {
@@ -221,6 +307,19 @@ const isOpen = ref(false);
     &__action {
       width: 100%;
       margin-top: 24px;
+    }
+
+    &--compact &__card {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 12px 14px;
+    }
+
+    &--compact &__action {
+      align-self: flex-start;
+      width: auto;
+      margin-top: 0;
     }
 
     &__dialog {

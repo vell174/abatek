@@ -1,4 +1,4 @@
-import { metalShapes } from '~/data/metal-calculator';
+import { metalShapes, standardChannelSizes } from '~/data/metal-calculator';
 import type { MetalField, MetalShape } from '~/data/metal-calculator';
 
 export type MetalDimensions = Record<MetalField, number>;
@@ -8,6 +8,7 @@ export interface MetalWeightInput {
   dimensions: MetalDimensions;
   density: number;
   quantity: number;
+  channelSize?: (typeof standardChannelSizes)[number]['id'];
 }
 
 export interface MetalWeightResult {
@@ -17,11 +18,45 @@ export interface MetalWeightResult {
   totalLiters: number;
 }
 
+export interface MetalLengthResult {
+  totalMeters: number;
+  pieceMeters: number;
+  kgPerMeter: number;
+}
+
+export function calculateMetalLength({
+  shape,
+  dimensions,
+  density,
+  quantity,
+  targetKg,
+  channelSize,
+}: MetalWeightInput & { targetKg: number }): MetalLengthResult | null {
+  if (
+    shape === 'flange' ||
+    shape === 'elbow' ||
+    !Number.isFinite(targetKg) ||
+    targetKg <= 0 ||
+    !Number.isInteger(quantity) ||
+    quantity < 1
+  )
+    return null;
+
+  const unitDimensions = { ...dimensions, length: 1, height: shape === 'sheet' ? 1000 : dimensions.height };
+  const unitWeight = calculateMetalWeight({ shape, dimensions: unitDimensions, density, quantity: 1, channelSize });
+  if (!unitWeight || !Number.isFinite(unitWeight.pieceKg) || unitWeight.pieceKg <= 0) return null;
+
+  const totalMeters = targetKg / unitWeight.pieceKg;
+  if (!Number.isFinite(totalMeters) || totalMeters <= 0) return null;
+  return { totalMeters, pieceMeters: totalMeters / quantity, kgPerMeter: unitWeight.pieceKg };
+}
+
 export function calculateMetalWeight({
   shape,
   dimensions: d,
   density,
   quantity,
+  channelSize,
 }: MetalWeightInput): MetalWeightResult | null {
   if (!Number.isFinite(density) || density <= 0 || !Number.isInteger(quantity) || quantity < 1) return null;
   const selectedShape = metalShapes.find((item) => item.id === shape);
@@ -32,6 +67,19 @@ export function calculateMetalWeight({
   let areaMm2 = 0;
   let lengthMm: number | null = null;
   let volumeMm3 = 0;
+
+  if (shape === 'channel') {
+    const profile = standardChannelSizes.find((item) => item.id === channelSize);
+    if (!profile) return null;
+    const kgPerMeter = (profile.kgPerMeter * density) / 7850;
+    const pieceKg = kgPerMeter * d.length;
+    return {
+      totalKg: pieceKg * quantity,
+      pieceKg,
+      kgPerMeter,
+      totalLiters: (pieceKg * quantity * 1000) / density,
+    };
+  }
 
   switch (shape) {
     case 'sheet':
@@ -70,10 +118,14 @@ export function calculateMetalWeight({
       areaMm2 = d.thickness * (d.width + d.height - d.thickness);
       lengthMm = d.length * 1000;
       break;
-    case 'channel':
     case 'beam':
       if (d.flangeThickness * 2 >= d.height || d.webThickness >= d.flangeWidth) return null;
       areaMm2 = 2 * d.flangeWidth * d.flangeThickness + (d.height - 2 * d.flangeThickness) * d.webThickness;
+      lengthMm = d.length * 1000;
+      break;
+    case 'bent-channel':
+      if (d.thickness * 2 >= Math.min(d.height, d.flangeWidth)) return null;
+      areaMm2 = d.thickness * (d.height + 2 * d.flangeWidth - 2 * d.thickness);
       lengthMm = d.length * 1000;
       break;
     case 'flange':

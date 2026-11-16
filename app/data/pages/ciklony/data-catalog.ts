@@ -11,7 +11,7 @@ export const catalog = [
       'СК-ЦН-22 (34М) — абразивная и сильно слипающаяся пыль',
       'СЦН-40 и СЦН-50 — эффективная очистка мелкой, средней и абразивной пыли',
     ],
-    image: '/images/source-26783870.webp',
+    image: '/images/catalog/cyclone-26783870.webp',
   },
   {
     title: 'Циклоны для деревообработки',
@@ -23,7 +23,7 @@ export const catalog = [
       'ЦДО и ЦДО-В — древесные отходы и крупные фракции',
       'ЦКФ — стружка, опилки и средняя пыль со встроенным вентилятором',
     ],
-    image: '/images/source-26783922.webp',
+    image: '/images/catalog/cyclone-26783922.webp',
   },
   {
     title: 'Циклоны для зерновой и мукомольной промышленности',
@@ -34,7 +34,7 @@ export const catalog = [
       'ЦОЛ — зерновая пыль крупнее 120 мкм',
       'ЦР и укороченный ЦРк — циклоны-разгрузители',
     ],
-    image: '/images/source-26783941.webp',
+    image: '/images/catalog/cyclone-26783941.webp',
   },
   {
     title: 'ВЗП, СИОТ и ЛИОТ для сухой пыли',
@@ -44,7 +44,7 @@ export const catalog = [
       'СИОТ М — крупная и средняя неслипающаяся пыль',
       'ЛИОТ — крупная и средняя сухая неслипающаяся пыль',
     ],
-    image: '/images/source-26783961.webp',
+    image: '/images/catalog/cyclone-26783961.webp',
   },
   {
     title: 'Циклоны с обратным конусом',
@@ -54,6 +54,6 @@ export const catalog = [
       'ЦМ — модернизированный ЦОК с винтовой крышкой',
       'РИСИ — волокнистая и слипающаяся полировальная пыль',
     ],
-    image: '/images/source-26783973.webp',
+    image: '/images/catalog/cyclone-26783973.webp',
   },
 ] satisfies IndustrialSection[];

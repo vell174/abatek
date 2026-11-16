@@ -6,7 +6,7 @@ withDefaults(defineProps<{ title: string; items: string[]; note?: string; eyebro
 </script>
 <template>
   <section class="manufacturing-stages">
-    <div class="content-section site-container">
+    <div class="manufacturing-stages__inner site-container">
       <header>
         <div>
           <p class="manufacturing-stages__eyebrow">{{ eyebrow }}</p>
@@ -56,15 +56,16 @@ withDefaults(defineProps<{ title: string; items: string[]; note?: string; eyebro
   height: 300px;
 }
 
-.manufacturing-stages > div {
+.manufacturing-stages__inner {
   position: relative;
   z-index: 1;
+  padding-block: 56px;
 }
 
 .manufacturing-stages header {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
-  gap: clamp(32px, 7vw, 90px);
+  gap: clamp(24px, 4vw, 56px);
   align-items: end;
 }
 
@@ -80,17 +81,17 @@ withDefaults(defineProps<{ title: string; items: string[]; note?: string; eyebro
 .manufacturing-stages h2 {
   max-width: 900px;
   margin: 0;
-  font-size: clamp(30px, 4vw, 54px);
-  line-height: 1.07;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: $ink;
   letter-spacing: -0.045em;
 }
 
 .manufacturing-stages__note {
-  padding: 20px 0 20px 24px;
+  padding: 10px 0 10px 18px;
   margin: 0;
   font-weight: 650;
-  line-height: 1.7;
+  line-height: 1.5;
   color: $ink;
   border-left: 4px solid $yellow;
 }
@@ -98,14 +99,18 @@ withDefaults(defineProps<{ title: string; items: string[]; note?: string; eyebro
 .manufacturing-stages ol {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 12px;
   padding: 0;
-  margin: 48px 0 0;
+  margin: 28px 0 0;
   list-style: none;
 }
 
 .manufacturing-stages li {
-  padding: 22px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 16px;
   background: #fff;
   border: 1px solid rgb(7 87 164 / 10%);
   border-radius: 16px;
@@ -115,9 +120,9 @@ withDefaults(defineProps<{ title: string; items: string[]; note?: string; eyebro
 .manufacturing-stages li span {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  margin-bottom: 18px;
+  width: 34px;
+  height: 34px;
+  font-size: 12px;
   font-weight: 900;
   color: $navy;
   background: #e2effb;
@@ -127,8 +132,9 @@ withDefaults(defineProps<{ title: string; items: string[]; note?: string; eyebro
 
 .manufacturing-stages li p {
   margin: 0;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.55;
+  line-height: 1.45;
   color: $ink;
 }
 
@@ -143,8 +149,17 @@ withDefaults(defineProps<{ title: string; items: string[]; note?: string; eyebro
 }
 
 @media (width <= $phone) {
+  .manufacturing-stages__inner {
+    padding-block: 40px;
+  }
+
+  .manufacturing-stages header {
+    gap: 16px;
+  }
+
   .manufacturing-stages ol {
     grid-template-columns: 1fr;
+    margin-top: 20px;
   }
 }
 </style>

@@ -8,7 +8,9 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 <template>
   <div class="silos-page">
     <ProductIntroSection_02
+      compact
       :title="pageData.introTitle"
+      title-size="compact"
       :image="pageData.image"
       :image-alt="pageData.imageAlt"
       :button-label="pageData.ctaLabel"
@@ -116,9 +118,16 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .silos-page {
   color: $ink;
 
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
+  --product-facts-card-height: 112px;
+  --product-facts-card-padding: 20px;
+  --product-facts-card-height-mobile: 100px;
+  --product-facts-card-padding-mobile: 16px;
+
   &__heading {
     max-width: 820px;
-    margin-bottom: 36px;
+    margin-bottom: 24px;
   }
 
   &__eyebrow {
@@ -131,9 +140,9 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   }
 
   &__title {
-    margin: 0 0 20px;
-    font-size: clamp(30px, 4vw, 52px);
-    line-height: 1.08;
+    margin: 0 0 14px;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.04em;
   }
 
@@ -146,11 +155,11 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    gap: 14px;
   }
 
   &__card {
-    padding: clamp(26px, 3vw, 38px);
+    padding: clamp(20px, 2.5vw, 28px);
     background: $soft;
     border: 1px solid $line;
     border-radius: 18px;
@@ -159,7 +168,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__volume {
     display: inline-block;
     padding: 8px 12px;
-    margin-bottom: 22px;
+    margin-bottom: 14px;
     font-size: 13px;
     font-weight: 800;
     color: $navy;
@@ -168,9 +177,9 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   }
 
   &__card-title {
-    margin: 0 0 14px;
-    font-size: clamp(22px, 2.3vw, 28px);
-    line-height: 1.25;
+    margin: 0 0 10px;
+    font-size: var(--card-heading-size);
+    line-height: var(--card-heading-leading);
   }
 
   &__card-text {
@@ -183,7 +192,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
     display: grid;
     gap: 8px;
     padding-left: 20px;
-    margin: 22px 0 0;
+    margin: 14px 0 0;
   }
 
   &__card-feature {
@@ -199,7 +208,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__materials-inner {
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(32px, 6vw, 86px);
+    gap: clamp(24px, 4vw, 52px);
   }
 
   &__selection-list {
@@ -211,7 +220,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   }
 
   &__selection-item {
-    padding: 20px 24px;
+    padding: 15px 18px;
     line-height: 1.6;
     background: #fff;
     border: 1px solid $line;
@@ -220,11 +229,11 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__equipment-groups {
     display: grid;
-    gap: 18px;
+    gap: 14px;
   }
 
   &__equipment-card {
-    padding: 24px;
+    padding: 18px;
     background: $soft;
     border: 1px solid $line;
     border-radius: 12px;
@@ -232,8 +241,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__equipment-heading {
     margin: 0 0 16px;
-    font-size: 21px;
-    line-height: 1.3;
+    font-size: var(--card-heading-size);
+    line-height: var(--card-heading-leading);
   }
 
   &__equipment-list {
@@ -263,15 +272,15 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__request-inner {
     display: flex;
-    gap: 32px;
+    gap: 22px;
     align-items: center;
     justify-content: space-between;
   }
 
   &__request-title {
-    margin: 0 0 16px;
-    font-size: clamp(28px, 3.5vw, 46px);
-    line-height: 1.1;
+    margin: 0 0 12px;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
   }
 
   &__request-text {

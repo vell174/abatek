@@ -3,6 +3,7 @@ withDefaults(
   defineProps<{
     title: string;
     titleSize?: 'default' | 'compact';
+    compact?: boolean;
     image: string;
     imageAlt: string;
     imageWidthPx?: number;
@@ -42,7 +43,10 @@ defineEmits<{ action: [] }>();
 </script>
 
 <template>
-  <section class="product-intro-02 site-container" :class="[`product-intro-02--${variant}`]">
+  <section
+    class="product-intro-02 site-container"
+    :class="[`product-intro-02--${variant}`, { 'product-intro-02--compact': compact }]"
+  >
     <div class="product-intro-02__content">
       <div v-if="$slots.breadcrumbs" class="product-intro-02__breadcrumbs">
         <slot name="breadcrumbs" />
@@ -97,6 +101,19 @@ defineEmits<{ action: [] }>();
     gap: 0;
     padding-block: clamp(32px, 4vw, 52px);
   }
+
+  &--compact {
+    gap: clamp(24px, 4vw, 48px);
+    padding-block: clamp(32px, 4vw, 52px);
+  }
+
+  &--compact &__image {
+    height: clamp(250px, 28vw, 350px);
+  }
+
+  &--compact &__image--compact {
+    height: clamp(220px, 24vw, 290px);
+  }
 }
 
 .product-intro-02__content {
@@ -130,17 +147,17 @@ defineEmits<{ action: [] }>();
 .product-intro-02__title {
   max-width: 700px;
   margin: 0;
-  font-size: clamp(35px, 4.5vw, 60px);
-  line-height: 1.08;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: #052f55;
   letter-spacing: -0.045em;
 }
 
 .product-intro-02--text-only .product-intro-02__title {
   max-width: 100%;
-  font-size: clamp(24px, 2.6vw, 34px);
+  font-size: var(--section-heading-size);
   font-weight: 500;
-  line-height: 1.25;
+  line-height: var(--section-heading-leading);
   letter-spacing: -0.025em;
 }
 
@@ -154,9 +171,9 @@ defineEmits<{ action: [] }>();
 }
 
 .product-intro-02__title--compact {
-  font-size: clamp(25px, 2.8vw, 38px);
+  font-size: var(--section-heading-size);
   font-weight: 600;
-  line-height: 1.22;
+  line-height: var(--section-heading-leading);
   letter-spacing: -0.025em;
 }
 
@@ -324,7 +341,7 @@ defineEmits<{ action: [] }>();
   .product-intro-02__title {
     width: 100%;
     max-width: 100%;
-    font-size: 32px;
+    font-size: var(--section-heading-size);
     hyphens: auto;
     overflow-wrap: anywhere;
   }

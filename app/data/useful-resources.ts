@@ -3,6 +3,8 @@ import { conveyorToolRoutes } from '~/data/conveyor-tools';
 import { referenceRoutes } from '~/data/conveyor-references';
 import { screwFlightRoute } from '~/data/screw-flight-calculator';
 
+export const usefulResourcesBreadcrumb = { label: 'Калькуляторы и справочники', to: '/poleznoe/' } as const;
+
 export const usefulResources = {
   homeLabel: 'Главная',
   title: 'Калькуляторы и справочники для конвейеров',
@@ -13,8 +15,8 @@ export const usefulResources = {
   referencesTitle: 'Справочники',
   calculators: [
     {
-      title: 'Калькулятор веса металла',
-      description: 'Оценка массы листа, трубы, круга и других видов металлопроката по размерам и материалу.',
+      title: 'Калькулятор металла: вес и длина',
+      description: 'Расчёт массы металлопроката по размерам и длины по известному весу партии.',
       to: '/kalkulyator-vesa-metalla/',
     },
     {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { conveyorCapacityTable } from '~/data/conveyor-capacity';
 import { materialProperties } from '~/data/conveyor-reference-materials';
 import {
   abrasivenessTables,
@@ -11,6 +12,7 @@ import {
   rollerSpacingTable,
 } from '~/data/conveyor-references';
 import { toolNavigation } from '~/data/conveyor-tools';
+import { usefulResourcesBreadcrumb } from '~/data/useful-resources';
 
 definePageMeta({ key: (route) => route.fullPath });
 
@@ -34,7 +36,10 @@ const material = computed(() => materialProperties.find((item) => item.name === 
   <main class="reference-page">
     <section class="reference-page__hero">
       <div class="site-container">
-        <BreadcrumbsNavigation :items="[{ label: ui.home, to: '/' }, { label: page.title }]" />
+        <BreadcrumbsNavigation
+          tone="light"
+          :items="[{ label: ui.home, to: '/' }, usefulResourcesBreadcrumb, { label: page.title }]"
+        />
         <p class="reference-page__eyebrow">{{ ui.eyebrow }}</p>
         <h1 class="reference-page__title">{{ page.title }}</h1>
         <p class="reference-page__intro">{{ page.description }}</p>
@@ -63,6 +68,16 @@ const material = computed(() => materialProperties.find((item) => item.name === 
           </ul>
         </div>
       </section>
+      <div class="reference-page__table-block">
+        <SpecsTableSection
+          :title="conveyorCapacityTable.title"
+          :eyebrow="conveyorCapacityTable.eyebrow"
+          :columns="conveyorCapacityTable.columns"
+          :rows="conveyorCapacityTable.rows"
+          tone="soft"
+        />
+        <p class="site-container reference-page__table-note">{{ conveyorCapacityTable.note }}</p>
+      </div>
       <div id="recommended-speeds" class="reference-page__table-block">
         <SpecsTableSection
           :title="recommendedSpeeds.title"
@@ -169,13 +184,13 @@ const material = computed(() => materialProperties.find((item) => item.name === 
   background: #fff;
 
   &__hero {
-    padding: 72px 0 67px;
+    padding: 34px 0 40px;
     color: #fff;
     background: $navy;
   }
 
   &__eyebrow {
-    margin: 46px 0 16px;
+    margin: 22px 0 10px;
     font-size: 11px;
     font-weight: 800;
     color: $yellow;
@@ -184,18 +199,18 @@ const material = computed(() => materialProperties.find((item) => item.name === 
   }
 
   &__title {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0;
-    font-size: clamp(36px, 5vw, 68px);
-    line-height: 1.04;
+    font-size: var(--resource-hero-title-size);
+    line-height: 1.12;
     letter-spacing: -0.045em;
   }
 
   &__intro {
     max-width: 750px;
-    margin: 24px 0 0;
-    font-size: 16px;
-    line-height: 1.6;
+    margin: 14px 0 0;
+    font-size: 15px;
+    line-height: 1.5;
     color: rgba(#fff, 0.78);
   }
 
@@ -256,7 +271,8 @@ const material = computed(() => materialProperties.find((item) => item.name === 
 
   &__series-group h2 {
     margin: 0 0 18px;
-    font-size: clamp(22px, 2.5vw, 34px);
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
   }
 
   &__value-list {
@@ -432,11 +448,11 @@ const material = computed(() => materialProperties.find((item) => item.name === 
 @include phone {
   .reference-page {
     &__hero {
-      padding: 45px 0 50px;
+      padding: 26px 0 34px;
     }
 
     &__eyebrow {
-      margin-top: 36px;
+      margin-top: 18px;
     }
 
     &__intro {

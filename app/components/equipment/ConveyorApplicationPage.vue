@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { IndustrialPage } from '~/data/pages/_shared/types';
+import type { GalleryImage, IndustrialPage } from '~/data/pages/_shared/types';
 
-defineProps<{ page: IndustrialPage }>();
+defineProps<{ page: IndustrialPage; gallery?: readonly GalleryImage[] }>();
 
 const isProjectRequestOpen = useState('project-request-open', () => false);
 </script>
@@ -9,9 +9,12 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 <template>
   <div class="application-page">
     <ProductIntroSection_02
+      compact
       :title="page.introTitle"
+      :title-size="page.introTitleSize"
       :image="page.image"
       :image-alt="page.title"
+      :variant="page.relatedLinksTitle === 'Другие варианты ленточных конвейеров' ? 'text-only' : 'default'"
       eyebrow="Решение для технологической линии"
       button-label="Рассчитать конвейер"
       label="Производство по техническому заданию"
@@ -30,9 +33,15 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
       <p v-for="paragraph in page.intro" :key="paragraph">{{ paragraph }}</p>
     </ProductIntroSection_02>
 
-    <ProductFactsSection_03 :facts="page.facts" />
+    <LazyProjectGallerySlider
+      v-if="gallery?.length && !page.hideProjects"
+      :images="gallery"
+      :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
+    />
 
-    <section class="application-page__solutions">
+    <ProductFactsSection_03 v-if="page.facts.length" :facts="page.facts" />
+
+    <section v-if="page.sections.length" class="application-page__solutions">
       <div class="content-section site-container">
         <header class="application-page__heading">
           <div>
@@ -74,6 +83,19 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
       </div>
     </section>
 
+    <RelatedProductLinks
+      v-if="page.relatedLinks?.length && page.relatedLinksTitle"
+      :title="page.relatedLinksTitle"
+      :links="page.relatedLinks"
+    />
+
+    <FaqSection_last_01
+      v-if="page.faq?.length"
+      :items="page.faq"
+      :title="`Частые вопросы: ${page.title.toLowerCase()}`"
+      tone="soft"
+    />
+
     <SpecsTableSection
       v-if="page.table"
       :title="page.table.title"
@@ -88,6 +110,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 <style scoped lang="scss">
 .application-page {
   --page-deep: #052f55;
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
 }
 
 .application-page__solutions {
@@ -97,9 +121,9 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .application-page__heading {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
-  gap: clamp(34px, 7vw, 90px);
+  gap: clamp(24px, 4vw, 56px);
   align-items: end;
-  margin-bottom: 46px;
+  margin-bottom: 28px;
 }
 
 .application-page__heading p {
@@ -114,8 +138,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .application-page__heading h2 {
   max-width: 850px;
   margin: 0;
-  font-size: clamp(34px, 4.8vw, 62px);
-  line-height: 1.02;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: #052f55;
   letter-spacing: -0.05em;
 }
@@ -129,7 +153,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
 .application-page__list {
   display: grid;
-  gap: 22px;
+  gap: 14px;
 }
 
 .application-page__section {
@@ -143,7 +167,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .application-page__section--media {
   display: grid;
   grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
-  min-height: 390px;
+  min-height: 310px;
 }
 
 .application-page__section--reverse figure {
@@ -151,7 +175,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 }
 
 .application-page__section figure {
-  min-height: 390px;
+  min-height: 310px;
   margin: 0;
   background: #fff;
 }
@@ -164,12 +188,12 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 }
 
 .application-page__copy {
-  padding: clamp(30px, 5vw, 58px);
+  padding: clamp(22px, 3vw, 36px);
 }
 
 .application-page__copy > span {
   display: block;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
   font-size: 12px;
   font-weight: 900;
   color: #0757a4;
@@ -179,28 +203,28 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .application-page__copy h3 {
   max-width: 760px;
   margin: 0;
-  font-size: clamp(26px, 3.2vw, 42px);
-  line-height: 1.08;
+  font-size: var(--card-heading-size);
+  line-height: var(--card-heading-leading);
   color: #052f55;
   letter-spacing: -0.04em;
 }
 
 .application-page__copy p,
 .application-page__copy li {
-  line-height: 1.7;
+  line-height: 1.55;
   color: #52677a;
 }
 
 .application-page__copy p {
   max-width: 850px;
-  margin: 18px 0 0;
+  margin: 12px 0 0;
 }
 
 .application-page__copy ul {
   display: grid;
-  gap: 9px;
+  gap: 6px;
   padding-left: 20px;
-  margin: 20px 0 0;
+  margin: 14px 0 0;
 }
 
 @media (width <= $tablet) {

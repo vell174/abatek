@@ -22,6 +22,7 @@ export const rollerContent = {
     selection: 'Исходные данные',
     price: 'Коммерческое предложение',
     calculate: 'Рассчитать стоимость',
+    features: 'Особенности и преимущества',
   },
   headings: {
     overview: 'Как работает роликовый конвейер',

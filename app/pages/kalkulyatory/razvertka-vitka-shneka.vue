@@ -7,6 +7,7 @@ import {
   screwFlightSeo,
 } from '~/data/screw-flight-calculator';
 import { calculateScrewFlight } from '~/utils/calculate-screw-flight';
+import { usefulResourcesBreadcrumb } from '~/data/useful-resources';
 
 usePageSeo(screwFlightSeo);
 
@@ -45,11 +46,8 @@ const diagramResult = computed(() => calculateScrewFlight(form));
     <header class="screw-flight-calculator__hero">
       <div class="site-container">
         <BreadcrumbsNavigation
-          :items="[
-            { label: content.homeLabel, to: '/' },
-            { label: content.usefulLabel, to: '/poleznoe/' },
-            { label: content.title },
-          ]"
+          tone="light"
+          :items="[{ label: content.homeLabel, to: '/' }, usefulResourcesBreadcrumb, { label: content.title }]"
         />
         <p class="screw-flight-calculator__eyebrow">{{ content.eyebrow }}</p>
         <h1 class="screw-flight-calculator__title">{{ content.title }}</h1>
@@ -134,13 +132,13 @@ const diagramResult = computed(() => calculateScrewFlight(form));
   color: $ink;
 
   &__hero {
-    padding-block: 54px 68px;
+    padding-block: 34px 40px;
     color: #fff;
     background: $navy;
   }
 
   &__eyebrow {
-    margin: 34px 0 12px;
+    margin: 22px 0 10px;
     font-size: 12px;
     font-weight: 700;
     color: $yellow;
@@ -149,16 +147,16 @@ const diagramResult = computed(() => calculateScrewFlight(form));
   }
 
   &__title {
-    margin: 0 0 18px;
-    font-size: clamp(34px, 5vw, 60px);
-    line-height: 1.1;
+    margin: 0 0 14px;
+    font-size: var(--resource-hero-title-size);
+    line-height: 1.12;
   }
 
   &__description {
     max-width: 900px;
     margin: 0;
-    font-size: 17px;
-    line-height: 1.65;
+    font-size: 15px;
+    line-height: 1.5;
   }
 
   &__workspace {
@@ -178,8 +176,8 @@ const diagramResult = computed(() => calculateScrewFlight(form));
 
   &__heading {
     margin: 0 0 24px;
-    font-size: clamp(24px, 2.5vw, 32px);
-    line-height: 1.2;
+    font-size: var(--section-heading-size-narrow);
+    line-height: var(--section-heading-leading);
   }
 
   &__fields {
@@ -328,6 +326,14 @@ const diagramResult = computed(() => calculateScrewFlight(form));
 
 @include phone {
   .screw-flight-calculator {
+    &__hero {
+      padding-block: 26px 34px;
+    }
+
+    &__eyebrow {
+      margin-top: 18px;
+    }
+
     &__panel {
       padding: 20px;
     }

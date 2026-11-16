@@ -104,6 +104,36 @@ export default defineNuxtConfig({
       routes: ['/sitemap.xml', ...equipmentRouteSlugs.map((slug) => `/${slug}/`)],
     },
     routeRules: {
+      '/elevatory': {
+        redirect: { to: '/elevatory-kovshovye/', statusCode: 301 },
+      },
+      '/elevatory/': {
+        redirect: { to: '/elevatory-kovshovye/', statusCode: 301 },
+      },
+      '/konvejery-dlya-sortirovki': {
+        redirect: { to: '/lentochnye-konveyery-dlya-sortirovki/', statusCode: 301 },
+      },
+      '/konvejery-dlya-sortirovki/': {
+        redirect: { to: '/lentochnye-konveyery-dlya-sortirovki/', statusCode: 301 },
+      },
+      '/konvejery-dlya-sklada': {
+        redirect: { to: '/lentochnye-konveyery-dlya-sklada/', statusCode: 301 },
+      },
+      '/konvejery-dlya-sklada/': {
+        redirect: { to: '/lentochnye-konveyery-dlya-sklada/', statusCode: 301 },
+      },
+      '/konveyer-dlya-upakovki': {
+        redirect: { to: '/lentochnye-konveyery-dlya-shtuchnyh-gruzov/', statusCode: 301 },
+      },
+      '/konveyer-dlya-upakovki/': {
+        redirect: { to: '/lentochnye-konveyery-dlya-shtuchnyh-gruzov/', statusCode: 301 },
+      },
+      '/konveyery-s-reguliruemym-uglom': {
+        redirect: { to: '/naklonnyj-lentochnyj-konvejer/', statusCode: 301 },
+      },
+      '/konveyery-s-reguliruemym-uglom/': {
+        redirect: { to: '/naklonnyj-lentochnyj-konvejer/', statusCode: 301 },
+      },
       '/metallokonstruktsii-na-zakaz': {
         redirect: { to: '/metalloizdeliya-po-chertezham/', statusCode: 301 },
       },

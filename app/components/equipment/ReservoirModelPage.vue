@@ -125,8 +125,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
 .reservoir-model-page__details header h2 {
   margin: 0;
-  font-size: clamp(34px, 4.8vw, 62px);
-  line-height: 1.02;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: #052f55;
   letter-spacing: -0.05em;
 }
@@ -167,8 +167,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
 .reservoir-model-page__sections h3 {
   margin: 0;
-  font-size: clamp(25px, 3vw, 38px);
-  line-height: 1.08;
+  font-size: var(--card-heading-size);
+  line-height: var(--card-heading-leading);
   color: #052f55;
   letter-spacing: -0.04em;
 }
@@ -208,8 +208,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 .reservoir-model-page__projects-title {
   max-width: 800px;
   margin: 0;
-  font-size: clamp(30px, 4vw, 48px);
-  line-height: 1.1;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: $navy;
 }
 

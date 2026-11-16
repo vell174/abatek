@@ -2,27 +2,27 @@
 import ScraperProductCard from '~/components/shared/card/ScraperProductCard.vue';
 import { catalog } from '~/data/pages/ciklony/data-catalog';
 import { pageData } from '~/data/pages/ciklony/data';
+import type { GalleryImage } from '~/data/pages/_shared/types';
+
+const { gallery = [] } = defineProps<{ gallery?: readonly GalleryImage[] }>();
 
 const isProjectRequestOpen = useState('project-request-open', () => false);
-const industries = [
-  'Металлургическая промышленность',
-  'Деревообрабатывающие предприятия',
-  'Химическая промышленность',
-  'Сельское хозяйство, элеваторы и зернохранилища',
-  'Энергетический сектор',
-  'Производство сыпучих строительных материалов',
-];
 </script>
 
 <template>
   <div class="cyclones-page">
     <ProductIntroSection_02
+      variant="text-only"
       :title="pageData.introTitle"
+      title-size="compact"
       :image="pageData.image"
-      :image-alt="pageData.title"
-      eyebrow="Пылеулавливающее оборудование"
-      button-label="Подобрать циклон"
-      label="Изготовление по техническому заданию"
+      :image-alt="pageData.imageAlt"
+      :image-width-px="720"
+      :image-height-px="480"
+      image-fit="contain"
+      :eyebrow="pageData.heroEyebrow"
+      :button-label="pageData.heroButton"
+      :label="pageData.heroLabel"
       label-icon="lucide:wind"
       @action="isProjectRequestOpen = true"
     >
@@ -38,20 +38,17 @@ const industries = [
       <p v-for="paragraph in pageData.intro" :key="paragraph">{{ paragraph }}</p>
     </ProductIntroSection_02>
 
-    <ProductFactsSection_03 :facts="pageData.facts" />
+    <ProjectGallerySlider v-if="gallery.length" :images="gallery" title="Выполненные проекты: циклоны" />
 
     <section class="cyclones-page__application">
       <div class="content-section site-container cyclones-page__application-grid">
         <div>
-          <p class="cyclones-page__eyebrow">Области применения</p>
-          <h2>Где применяется циклонная установка</h2>
-          <p>
-            Циклон применяется как первая или основная ступень очистки в подготовительных и технологических операциях.
-            Конструкция подбирается по фракции, влажности, абразивности и склонности пыли к слипанию.
-          </p>
+          <p class="cyclones-page__eyebrow">{{ pageData.applicationEyebrow }}</p>
+          <h2>{{ pageData.applicationTitle }}</h2>
+          <p>{{ pageData.applicationDescription }}</p>
         </div>
         <ul>
-          <li v-for="industry in industries" :key="industry">
+          <li v-for="industry in pageData.industries" :key="industry">
             <Icon name="lucide:check" aria-hidden="true" mode="svg" />
             <span>{{ industry }}</span>
           </li>
@@ -63,13 +60,10 @@ const industries = [
       <div class="content-section site-container">
         <header class="cyclones-page__heading">
           <div>
-            <p class="cyclones-page__eyebrow">Модельный ряд</p>
-            <h2>Циклоны под вид и свойства пыли</h2>
+            <p class="cyclones-page__eyebrow">{{ pageData.catalogEyebrow }}</p>
+            <h2>{{ pageData.catalogTitle }}</h2>
           </div>
-          <p>
-            В локальном каталоге представлены решения НИИОГАЗа, деревообрабатывающие и зерновые циклоны, аппараты для
-            сухой пыли и модели с обратным конусом.
-          </p>
+          <p>{{ pageData.catalogDescription }}</p>
         </header>
         <div class="cyclones-page__products">
           <ScraperProductCard
@@ -87,23 +81,19 @@ const industries = [
 
 <style scoped lang="scss">
 .cyclones-page {
-  --page-deep: #073b5c;
-
-  :deep(.product-intro-02 img) {
-    object-fit: contain;
-  }
+  --page-deep: #{$navy};
 
   &__eyebrow {
     margin: 0 0 12px;
     font-size: 11px;
     font-weight: 900;
-    color: #0757a4;
+    color: $blue;
     text-transform: uppercase;
     letter-spacing: 0.16em;
   }
 
   &__application {
-    background: linear-gradient(135deg, rgb(7 87 164 / 7%), transparent 50%), #eef5fb;
+    background: $soft;
   }
 
   &__application-grid {
@@ -115,9 +105,9 @@ const industries = [
     h2 {
       max-width: 760px;
       margin: 0;
-      font-size: clamp(36px, 5vw, 60px);
-      line-height: 1.03;
-      color: #052f55;
+      font-size: var(--section-heading-size);
+      line-height: var(--section-heading-leading);
+      color: $navy;
       letter-spacing: -0.05em;
     }
 
@@ -126,7 +116,7 @@ const industries = [
       margin: 24px 0 0;
       font-size: 17px;
       line-height: 1.75;
-      color: #52677a;
+      color: $muted;
     }
 
     ul {
@@ -146,18 +136,19 @@ const industries = [
       padding: 14px 18px;
       font-weight: 750;
       line-height: 1.4;
-      color: #052f55;
+      color: $navy;
       background: #fff;
-      border: 1px solid rgb(7 87 164 / 12%);
+      border: 1px solid $line;
       border-radius: 10px;
     }
 
-    svg {
+    /* Icon renders an SVG inside the component; scope the visual marker to this list. */
+    :deep(svg) {
       width: 21px;
       height: 21px;
       padding: 4px;
-      color: #052f55;
-      background: #f5c518;
+      color: $navy;
+      background: $yellow;
       border-radius: 50%;
     }
   }
@@ -171,14 +162,14 @@ const industries = [
     grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
     gap: clamp(36px, 7vw, 90px);
     align-items: end;
-    margin-bottom: 44px;
+    margin-bottom: 28px;
 
     h2 {
       max-width: 820px;
       margin: 0;
-      font-size: clamp(36px, 5vw, 60px);
-      line-height: 1.03;
-      color: #052f55;
+      font-size: var(--section-heading-size);
+      line-height: var(--section-heading-leading);
+      color: $navy;
       letter-spacing: -0.05em;
     }
 
@@ -186,8 +177,8 @@ const industries = [
       padding-left: 24px;
       margin: 0;
       line-height: 1.7;
-      color: #52677a;
-      border-left: 4px solid #f5c518;
+      color: $muted;
+      border-left: 4px solid $yellow;
     }
   }
 

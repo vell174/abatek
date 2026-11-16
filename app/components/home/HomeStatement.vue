@@ -1,12 +1,5 @@
 <script setup lang="ts">
 const isProjectRequestOpen = useState('project-request-open', () => false);
-
-const stages = [
-  { number: '01', label: 'Задача', icon: 'lucide:file-text' },
-  { number: '02', label: 'Проект', icon: 'lucide:drafting-compass' },
-  { number: '03', label: 'Производство', icon: 'lucide:factory' },
-  { number: '04', label: 'Поставка', icon: 'lucide:truck' },
-];
 </script>
 
 <template>
@@ -36,26 +29,6 @@ const stages = [
           </UiButton>
         </div>
       </div>
-      <div class="statement__stages" aria-label="Этапы производственного процесса">
-        <div v-for="stage in stages" :key="stage.number" class="statement__stage">
-          <span class="statement__stage-icon">
-            <Icon :name="stage.icon" size="23" aria-hidden="true" mode="svg" />
-          </span>
-          <span class="statement__stage-content">
-            <small>{{ stage.number }}</small>
-            <strong>{{ stage.label }}</strong>
-          </span>
-        </div>
-      </div>
-      <div class="statement__cycle">
-        <span class="statement__cycle-icon">
-          <Icon name="lucide:badge-check" size="27" aria-hidden="true" mode="svg" />
-        </span>
-        <span>
-          <small>Полный цикл</small>
-          <strong>В одной компании</strong>
-        </span>
-      </div>
     </div>
   </section>
 </template>
@@ -63,7 +36,7 @@ const stages = [
 <style scoped lang="scss">
 .statement {
   position: relative;
-  padding-block: clamp(48px, 5vw, 64px);
+  padding-block: 30px;
   overflow: hidden;
   color: #fff;
   background:
@@ -72,7 +45,7 @@ const stages = [
 
   &::after {
     position: absolute;
-    inset: 20px;
+    inset: 12px;
     pointer-events: none;
     content: '';
     border: 1px solid rgb(255 255 255 / 10%);
@@ -86,9 +59,9 @@ const stages = [
 
   &__layout {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
-    gap: clamp(28px, 4vw, 56px);
-    align-items: end;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    gap: 32px;
+    align-items: center;
     max-width: 1120px;
   }
 
@@ -96,7 +69,7 @@ const stages = [
     display: flex;
     gap: 12px;
     align-items: center;
-    margin: 0 0 16px;
+    margin: 0 0 9px;
     font-size: 12px;
     font-weight: 850;
     color: $yellow;
@@ -113,23 +86,23 @@ const stages = [
   &__title {
     max-width: 820px;
     margin: 0;
-    font-size: clamp(34px, 3.8vw, 50px);
-    line-height: 1.05;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.045em;
   }
 
   &__accent {
     display: block;
-    margin-top: 6px;
+    margin-top: 2px;
     font-style: normal;
     color: #8dc5ff;
   }
 
   &__text {
-    padding-left: 22px;
+    padding-left: 14px;
     margin: 0 0 5px;
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.45;
     color: #c4d5e5;
     border-left: 2px solid $yellow;
   }
@@ -137,7 +110,7 @@ const stages = [
   &__aside {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
     align-items: flex-start;
   }
 
@@ -148,124 +121,6 @@ const stages = [
     svg {
       width: 19px;
       height: 19px;
-    }
-  }
-
-  &__stages {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    max-width: calc(100% - 260px);
-    margin-top: 32px;
-  }
-
-  &__stage {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    min-height: 64px;
-    padding: 12px;
-    background: linear-gradient(135deg, rgb(255 255 255 / 11%), rgb(255 255 255 / 6%));
-    border: 1px solid rgb(255 255 255 / 17%);
-    border-radius: 14px;
-    box-shadow: inset 0 1px rgb(255 255 255 / 7%);
-    backdrop-filter: blur(10px);
-    transition:
-      background 0.25s ease,
-      border-color 0.25s ease,
-      transform 0.25s ease;
-
-    &:hover {
-      background: linear-gradient(135deg, rgb(255 255 255 / 16%), rgb(255 255 255 / 9%));
-      border-color: rgb(255 210 10 / 50%);
-      box-shadow: 0 14px 32px rgb(0 0 0 / 15%);
-      transform: translateY(-4px);
-    }
-  }
-
-  &__cycle {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    min-width: 240px;
-    min-height: 64px;
-    padding: 10px 14px;
-    color: $navy;
-    background: linear-gradient(135deg, #ffe04c, $yellow);
-    border: 1px solid $yellow;
-    border-radius: 16px;
-    box-shadow:
-      0 18px 45px rgb(0 0 0 / 25%),
-      0 0 42px rgb(255 210 10 / 18%);
-
-    > span:last-child {
-      display: flex;
-      flex-direction: column;
-    }
-
-    small {
-      margin-bottom: 3px;
-      font-size: 11px;
-      font-weight: 750;
-      color: rgb(0 41 79 / 68%);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    strong {
-      font-size: 17px;
-      line-height: 1.25;
-    }
-  }
-
-  &__cycle-icon {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    color: $yellow;
-    background: $navy;
-    border-radius: 50%;
-
-    svg {
-      width: 27px;
-      height: 27px;
-    }
-  }
-
-  &__stage-icon {
-    display: grid;
-    flex: 0 0 auto;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    color: $navy;
-    background: $yellow;
-    border-radius: 9px;
-
-    svg {
-      width: 23px;
-      height: 23px;
-    }
-  }
-
-  &__stage-content {
-    display: flex;
-    flex-direction: column;
-
-    small {
-      margin-bottom: 2px;
-      font-size: 11px;
-      font-weight: 800;
-      color: $yellow;
-      letter-spacing: 0.1em;
-    }
-
-    strong {
-      font-size: 14px;
     }
   }
 
@@ -297,7 +152,7 @@ const stages = [
   .statement {
     &__layout {
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 14px;
     }
 
     &__layout > *,
@@ -308,22 +163,13 @@ const stages = [
     &__text {
       max-width: 600px;
     }
-
-    &__stages {
-      grid-template-columns: repeat(2, 1fr);
-      max-width: none;
-    }
-
-    &__cycle {
-      display: none;
-    }
   }
 }
 
 @media (max-width: $phone) {
   .statement {
     min-height: 0;
-    padding-block: 40px;
+    padding-block: 28px;
     background-position: 66% center;
 
     &::after {
@@ -332,22 +178,17 @@ const stages = [
 
     &__title {
       max-width: 100%;
-      font-size: clamp(28px, 8vw, 36px);
+      font-size: 28px;
       letter-spacing: -0.035em;
       overflow-wrap: anywhere;
     }
 
     &__text {
-      padding-left: 16px;
+      padding-left: 14px;
     }
 
     &__action {
       max-width: 100%;
-    }
-
-    &__stages {
-      grid-template-columns: 1fr;
-      margin-top: 24px;
     }
   }
 }

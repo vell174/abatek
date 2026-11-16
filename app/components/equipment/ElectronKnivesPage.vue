@@ -44,6 +44,8 @@ const users = [
 <template>
   <div class="knife-page">
     <ProductIntroSection_02
+      compact
+      title-size="compact"
       eyebrow="Профессиональный раскрой материалов"
       title="Электроножи для точной и быстрой резки"
       image="/images/elektronozh-dlya-rezki-konveyernoy-lenty-dr20.webp"
@@ -260,6 +262,13 @@ const users = [
 .knife-page {
   color: $ink;
 
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
+  --product-facts-card-height: 112px;
+  --product-facts-card-padding: 20px;
+  --product-facts-card-height-mobile: 100px;
+  --product-facts-card-padding-mobile: 16px;
+
   p {
     line-height: 1.72;
     color: $muted;
@@ -276,9 +285,9 @@ const users = [
 
   &__section-title {
     max-width: 900px;
-    margin: 0 0 24px;
-    font-size: clamp(32px, 4vw, 52px);
-    line-height: 1.08;
+    margin: 0 0 18px;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.04em;
   }
 
@@ -314,7 +323,7 @@ const users = [
 
   &__catalog,
   &__materials {
-    padding-block: clamp(52px, 6vw, 76px) clamp(70px, 8vw, 110px);
+    padding-block: clamp(40px, 4vw, 56px);
     background: $soft;
   }
 
@@ -328,29 +337,30 @@ const users = [
 
   &__product-list {
     display: grid;
-    gap: 20px;
-    margin-top: 32px;
+    gap: 14px;
+    margin-top: 24px;
   }
 
   &__product {
     display: grid;
     grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
-    gap: clamp(20px, 2.5vw, 34px);
-    padding: clamp(18px, 2.5vw, 28px);
+    gap: clamp(18px, 2vw, 28px);
+    padding: clamp(16px, 2vw, 22px);
     background: #fff;
     border: 1px solid $line;
     border-radius: 20px;
   }
 
   &__product-media {
-    min-height: 280px;
-    padding: 14px;
+    min-height: 220px;
+    padding: 10px;
   }
 
   &__product-content h3,
   &__blade h3 {
     margin: 0 0 12px;
-    font-size: clamp(24px, 2.6vw, 32px);
+    font-size: var(--card-heading-size);
+    line-height: var(--card-heading-leading);
     letter-spacing: -0.035em;
   }
 
@@ -389,10 +399,10 @@ const users = [
   &__blade {
     display: grid;
     grid-template-columns: minmax(240px, 0.6fr) minmax(0, 1.4fr);
-    gap: clamp(30px, 5vw, 60px);
+    gap: clamp(24px, 3vw, 40px);
     align-items: center;
-    padding: clamp(24px, 4vw, 46px);
-    margin-top: 26px;
+    padding: clamp(20px, 3vw, 34px);
+    margin-top: 18px;
     background: $navy;
     border-radius: 20px;
 
@@ -409,12 +419,12 @@ const users = [
   &__details {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(35px, 7vw, 90px);
-    padding-top: 58px;
+    gap: clamp(24px, 4vw, 56px);
+    padding-top: 40px;
   }
 
   &__article {
-    padding-top: 24px;
+    padding-top: 18px;
     border-top: 3px solid $yellow;
   }
 
@@ -469,9 +479,9 @@ const users = [
   &__video-section {
     display: grid;
     grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.65fr);
-    gap: clamp(35px, 6vw, 80px);
+    gap: clamp(24px, 4vw, 52px);
     align-items: center;
-    padding-block: clamp(52px, 6vw, 72px) clamp(70px, 8vw, 100px);
+    padding-block: clamp(40px, 4vw, 56px);
   }
 
   &__video-band {
@@ -518,12 +528,12 @@ const users = [
   &__card-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-    margin-top: 38px;
+    gap: 14px;
+    margin-top: 24px;
   }
 
   &__card {
-    padding: 30px;
+    padding: 20px;
     background: #fff;
     border: 1px solid $line;
     border-radius: 14px;
@@ -540,7 +550,7 @@ const users = [
 
   &__applications {
     position: relative;
-    padding-top: 58px;
+    padding-top: 40px;
     overflow: hidden;
     background: #fff;
     isolation: isolate;
@@ -578,7 +588,7 @@ const users = [
   &__applications-container {
     display: grid;
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    gap: clamp(40px, 7vw, 100px);
+    gap: clamp(24px, 4vw, 56px);
 
     > div {
       position: relative;
@@ -608,11 +618,11 @@ const users = [
 
   &__application-list li {
     display: grid;
-    grid-template-columns: 62px 1fr;
-    gap: 20px;
+    grid-template-columns: 48px 1fr;
+    gap: 14px;
     align-items: center;
-    min-height: 92px;
-    padding: 18px 22px;
+    min-height: 68px;
+    padding: 12px 16px;
     background: rgb(255 255 255 / 88%);
     border: 1px solid rgb(18 105 199 / 10%);
     border-radius: 14px;
@@ -632,8 +642,8 @@ const users = [
     span {
       display: grid;
       place-items: center;
-      width: 58px;
-      height: 58px;
+      width: 46px;
+      height: 46px;
       font-size: 14px;
       font-weight: 900;
       color: $navy;
@@ -652,7 +662,7 @@ const users = [
 
   &__related {
     position: relative;
-    padding-block: 44px 58px;
+    padding-block: 32px 44px;
     overflow: hidden;
     color: $ink;
     background: linear-gradient(110deg, rgb(18 105 199 / 7%), transparent 48%), #fff;
@@ -683,7 +693,7 @@ const users = [
     z-index: 1;
     display: grid;
     grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
-    gap: 50px;
+    gap: 28px;
     align-items: center;
   }
 
@@ -696,11 +706,11 @@ const users = [
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 14px;
       align-items: center;
       justify-content: space-between;
-      min-height: 150px;
-      padding: 24px;
+      min-height: 110px;
+      padding: 16px;
       overflow: hidden;
       font-size: 15px;
       font-weight: 780;

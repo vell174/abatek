@@ -31,8 +31,8 @@ useHead({
     <HomeHero />
     <HomeTrust />
     <LazyHomeCategories hydrate-on-visible />
+    <LazyHomeProjects hydrate-on-visible />
     <LazyHomeStatement hydrate-on-visible />
     <LazyHomeProcess hydrate-on-visible />
-    <LazyHomeProjects hydrate-on-visible />
   </div>
 </template>

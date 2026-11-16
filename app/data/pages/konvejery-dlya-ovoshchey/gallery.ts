@@ -1,66 +1,40 @@
+import type { GalleryImage } from '../_shared/types';
+
 export const gallery = [
   {
-    src: '/images/gallery/26553102.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/belt-projects/inclined/peredvizhnoy-naklonnyy-konveyer-dlya-kartofelya.webp',
+    alt: 'Передвижной наклонный ленточный конвейер с перегородками для картофеля',
   },
   {
-    src: '/images/gallery/26553101.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/belt-projects/inclined/naklonnyy-konveyer-s-pvh-lentoy-dlya-shtuchnyh-gruzov.webp',
+    alt: 'Наклонный ленточный конвейер с ПВХ-лентой для штучных грузов',
   },
   {
-    src: '/images/gallery/26553103.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/mini-conveyor-projects/mini-conveyor-green-belt-full.webp',
+    alt: 'Мини ленточный конвейер с зелёной лентой, боковыми направляющими и опорами на колёсах',
   },
   {
-    src: '/images/gallery/26553104.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/mini-conveyor-projects/mini-modular-conveyor-guide-rails-full.webp',
+    alt: 'Компактный конвейер с белой модульной лентой и регулируемыми направляющими',
   },
   {
-    src: '/images/gallery/26553105.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/belt-projects/flat/konveyer-s-ploskoy-lentoy-i-prodolnymi-bortami-dlya-ovoshchey-clean-full.webp',
+    alt: 'Конвейер с плоской лентой и продольными бортами для овощей',
   },
   {
-    src: '/images/gallery/26553106.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/belt-projects/flat/pishchevoy-pryamoy-konveyer-s-pvh-lentoy-full.webp',
+    alt: 'Пищевой прямой конвейер с ПВХ лентой',
   },
   {
-    src: '/images/gallery/26553108.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/belt-projects/flat/peredvizhnoy-konveyer-s-pryamoy-pvh-lentoy-full.webp',
+    alt: 'Передвижной конвейер с прямой ПВХ лентой',
   },
   {
-    src: '/images/gallery/26553107.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/belt-projects/partitioned/otgruzka-konveyera-dlya-podachi-meshkov.jpg',
+    alt: 'Отгрузка конвейера для подачи мешков',
   },
   {
-    src: '/images/gallery/26553109.webp',
-    alt: 'Ленточный конвейер',
+    src: '/images/belt-projects/partitioned/skladskie-konveyery-s-peregorodkami-na-pvh-lente.jpg',
+    alt: 'Складские конвейеры с перегородками на ПВХ ленте',
   },
-  {
-    src: '/images/gallery/26553110.webp',
-    alt: 'Ленточный конвейер',
-  },
-  {
-    src: '/images/gallery/26553112.webp',
-    alt: 'Ленточный конвейер',
-  },
-  {
-    src: '/images/gallery/26553113.webp',
-    alt: 'Ленточный конвейер',
-  },
-  {
-    src: '/images/gallery/26553114.webp',
-    alt: 'Ленточный конвейер',
-  },
-  {
-    src: '/images/gallery/26553115.webp',
-    alt: 'Ленточный конвейер',
-  },
-  {
-    src: '/images/gallery/26553116.webp',
-    alt: 'Ленточный конвейер',
-  },
-  {
-    src: '/images/gallery/26553117.webp',
-    alt: 'Ленточный конвейер',
-  },
-] as const;
+] satisfies GalleryImage[];

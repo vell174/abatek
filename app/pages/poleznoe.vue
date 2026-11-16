@@ -8,7 +8,10 @@ usePageSeo(usefulResourcesSeo);
   <main class="useful-page">
     <header class="useful-page__hero">
       <div class="site-container">
-        <BreadcrumbsNavigation :items="[{ label: content.homeLabel, to: '/' }, { label: content.eyebrow }]" />
+        <BreadcrumbsNavigation
+          tone="light"
+          :items="[{ label: content.homeLabel, to: '/' }, { label: content.eyebrow }]"
+        />
         <p class="useful-page__eyebrow">{{ content.eyebrow }}</p>
         <h1 class="useful-page__title">{{ content.title }}</h1>
         <p class="useful-page__description">{{ content.description }}</p>
@@ -46,13 +49,13 @@ usePageSeo(usefulResourcesSeo);
 
 .useful-page {
   &__hero {
-    padding-block: 54px 68px;
+    padding-block: 34px 40px;
     color: #fff;
     background: $navy;
   }
 
   &__eyebrow {
-    margin: 34px 0 12px;
+    margin: 22px 0 10px;
     font-size: 12px;
     font-weight: 700;
     color: $yellow;
@@ -62,22 +65,22 @@ usePageSeo(usefulResourcesSeo);
 
   &__title {
     max-width: 900px;
-    margin: 0 0 20px;
-    font-size: clamp(34px, 5vw, 64px);
-    line-height: 1.1;
+    margin: 0 0 14px;
+    font-size: var(--resource-hero-title-size);
+    line-height: 1.12;
   }
 
   &__description {
     max-width: 780px;
     margin: 0;
-    font-size: 18px;
-    line-height: 1.65;
+    font-size: 16px;
+    line-height: 1.5;
   }
 
   &__heading {
     margin: 0 0 28px;
-    font-size: clamp(28px, 3vw, 42px);
-    line-height: 1.2;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     color: $ink;
   }
 
@@ -149,6 +152,14 @@ usePageSeo(usefulResourcesSeo);
 
 @include phone {
   .useful-page {
+    &__hero {
+      padding-block: 26px 34px;
+    }
+
+    &__eyebrow {
+      margin-top: 18px;
+    }
+
     &__grid {
       grid-template-columns: 1fr;
     }

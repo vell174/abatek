@@ -51,7 +51,7 @@ const steps = [
 <style scoped lang="scss">
 .home-process {
   position: relative;
-  padding-block: 56px;
+  padding-block: 36px;
 
   &::before {
     position: absolute;
@@ -75,7 +75,7 @@ const steps = [
     gap: 28px;
     align-items: end;
     justify-content: space-between;
-    margin-bottom: 28px;
+    margin-bottom: 18px;
   }
 
   &__eyebrow {
@@ -89,7 +89,8 @@ const steps = [
 
   &__title {
     margin: 0;
-    font-size: clamp(32px, 3.6vw, 46px);
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.045em;
   }
 
@@ -109,8 +110,13 @@ const steps = [
 
   &__step {
     position: relative;
-    min-height: 210px;
-    padding: 22px;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 22px 38px minmax(0, 1fr);
+    column-gap: 10px;
+    align-content: center;
+    min-height: 116px;
+    padding: 14px 16px;
     background: linear-gradient(145deg, #fff, #f8fbff);
     border: 1px solid $line;
     border-radius: 20px;
@@ -119,17 +125,6 @@ const steps = [
       border-color 0.25s ease,
       box-shadow 0.25s ease,
       transform 0.25s ease;
-
-    &::after {
-      position: absolute;
-      right: 22px;
-      bottom: 18px;
-      width: 44px;
-      height: 3px;
-      content: '';
-      background: linear-gradient(90deg, $yellow, transparent);
-      border-radius: 99px;
-    }
 
     &:hover {
       border-color: rgb(18 105 199 / 32%);
@@ -145,22 +140,24 @@ const steps = [
   }
 
   &__index {
-    position: absolute;
-    top: 22px;
-    right: 22px;
-    font-size: 14px;
+    grid-row: 1 / 3;
+    grid-column: 1;
+    align-self: center;
+    font-size: 12px;
     color: $blue;
   }
 
   &__icon {
     display: grid;
+    grid-row: 1 / 3;
+    grid-column: 2;
     place-items: center;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 20px;
+    align-self: center;
+    width: 38px;
+    height: 38px;
     color: $blue;
     background: #edf5ff;
-    border-radius: 14px;
+    border-radius: 10px;
     box-shadow: inset 0 0 0 1px rgb(18 105 199 / 8%);
     transition:
       color 0.25s ease,
@@ -168,30 +165,34 @@ const steps = [
       transform 0.25s ease;
 
     &-symbol {
-      width: 27px;
-      height: 27px;
+      width: 22px;
+      height: 22px;
     }
   }
 
   &__step-name {
+    grid-row: 1;
+    grid-column: 3;
     margin: 0;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 800;
-    line-height: 1.4;
+    line-height: 1.25;
   }
 
   &__step-text {
+    grid-row: 2;
+    grid-column: 3;
     max-width: 320px;
-    margin: 8px 0 0;
+    margin: 5px 0 0;
     font-size: 14px;
-    line-height: 1.65;
+    line-height: 1.45;
     color: $muted;
   }
 }
 
 @media (max-width: $tablet) {
   .home-process {
-    padding-block: 40px;
+    padding-block: 36px;
 
     &__heading {
       align-items: start;
@@ -205,6 +206,8 @@ const steps = [
 
 @media (max-width: $phone) {
   .home-process {
+    padding-block: 32px;
+
     &__heading {
       flex-direction: column;
       gap: 14px;
@@ -212,6 +215,10 @@ const steps = [
 
     &__grid {
       grid-template-columns: 1fr;
+    }
+
+    &__step {
+      min-height: 104px;
     }
   }
 }

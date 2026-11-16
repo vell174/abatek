@@ -291,8 +291,8 @@ const advantages = [
 
   h2 {
     margin: 0;
-    font-size: clamp(38px, 5vw, 62px);
-    line-height: 1.05;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.05em;
   }
 
@@ -332,7 +332,7 @@ const advantages = [
     gap: 50px;
     align-items: end;
     justify-content: space-between;
-    margin-bottom: 52px;
+    margin-bottom: 28px;
 
     p {
       color: $yellow;
@@ -341,8 +341,8 @@ const advantages = [
     h2 {
       max-width: 720px;
       margin: 0;
-      font-size: clamp(38px, 4.5vw, 58px);
-      line-height: 1.05;
+      font-size: var(--section-heading-size);
+      line-height: var(--section-heading-leading);
       letter-spacing: -0.05em;
     }
   }
@@ -431,7 +431,7 @@ const advantages = [
     grid-template-columns: 0.45fr 1fr;
     gap: 40px;
     align-items: end;
-    margin-bottom: 46px;
+    margin-bottom: 28px;
 
     p {
       margin: 0;
@@ -444,8 +444,8 @@ const advantages = [
 
     h2 {
       margin: 0;
-      font-size: clamp(38px, 5vw, 60px);
-      line-height: 1.05;
+      font-size: var(--section-heading-size);
+      line-height: var(--section-heading-leading);
       letter-spacing: -0.05em;
     }
   }
@@ -521,8 +521,8 @@ const advantages = [
   h2 {
     max-width: 780px;
     margin: 0;
-    font-size: clamp(30px, 4vw, 48px);
-    line-height: 1.08;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.045em;
   }
 

@@ -13,6 +13,7 @@ import type { ConveyorCalculatorInput } from '~/data/conveyor-calculator';
 import { conveyorToolRoutes } from '~/data/conveyor-tools';
 import { referenceLinkLabels, referenceRoutes } from '~/data/conveyor-references';
 import { seo } from '~/data/pages/kalkulyator-moshchnosti-privoda-lentochnogo-konveyera/seo';
+import { usefulResourcesBreadcrumb } from '~/data/useful-resources';
 import { calculateConveyorPower } from '~/utils/calculate-conveyor-power';
 import type { ConveyorCalculatorResult } from '~/utils/calculate-conveyor-power';
 
@@ -116,7 +117,12 @@ function reset() {
     <section class="conveyor-calculator__hero">
       <div class="site-container conveyor-calculator__hero-inner">
         <BreadcrumbsNavigation
-          :items="[{ label: content.homeBreadcrumb, to: '/' }, { label: content.pageBreadcrumb }]"
+          tone="light"
+          :items="[
+            { label: content.homeBreadcrumb, to: '/' },
+            usefulResourcesBreadcrumb,
+            { label: content.pageBreadcrumb },
+          ]"
         />
         <p class="conveyor-calculator__eyebrow">{{ content.eyebrow }}</p>
         <h1 class="conveyor-calculator__title">{{ content.title }}</h1>
@@ -387,7 +393,7 @@ function reset() {
   background: $soft;
 
   &__hero {
-    padding: 74px 0 66px;
+    padding: 34px 0 40px;
     color: #fff;
     background: $navy;
   }
@@ -405,23 +411,23 @@ function reset() {
   }
 
   &__eyebrow {
-    margin: 50px 0 18px;
+    margin: 22px 0 10px;
     color: $yellow;
   }
 
   &__title {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0;
-    font-size: clamp(38px, 5vw, 72px);
-    line-height: 1.04;
+    font-size: var(--resource-hero-title-size);
+    line-height: 1.12;
     letter-spacing: -0.045em;
   }
 
   &__intro {
-    max-width: 720px;
-    margin: 24px 0 0;
-    font-size: 17px;
-    line-height: 1.65;
+    max-width: 840px;
+    margin: 14px 0 0;
+    font-size: 15px;
+    line-height: 1.5;
     color: rgba(#fff, 0.78);
   }
 
@@ -733,8 +739,8 @@ function reset() {
   &__method h2 {
     max-width: 490px;
     margin: 0;
-    font-size: clamp(30px, 3.5vw, 48px);
-    line-height: 1.1;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
   }
 
   &__method-copy {
@@ -768,11 +774,11 @@ function reset() {
 @include phone {
   .conveyor-calculator {
     &__hero {
-      padding: 44px 0 50px;
+      padding: 26px 0 34px;
     }
 
     &__eyebrow {
-      margin-top: 38px;
+      margin-top: 18px;
     }
 
     &__intro {

@@ -37,7 +37,9 @@ const openCaseRequest = async (context: string) => {
 <template>
   <div class="custom-metal">
     <ProductIntroSection_02
+      compact
       :title="page.introTitle"
+      title-size="compact"
       :image="page.image"
       :image-alt="page.imageAlt"
       :button-label="content.requestLabel"
@@ -52,7 +54,6 @@ const openCaseRequest = async (context: string) => {
         {{ link.label }}
       </a>
     </nav>
-    <ProductFactsSection_03 :facts="page.facts" />
     <div id="projects" class="custom-metal__section">
       <ProjectGallerySlider :images="gallery" :title="content.projectsTitle" />
     </div>
@@ -228,10 +229,13 @@ const openCaseRequest = async (context: string) => {
 
 <style scoped lang="scss">
 .custom-metal {
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
+
   &__cases-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
+    gap: 16px;
   }
 
   &__case-trigger {
@@ -256,7 +260,7 @@ const openCaseRequest = async (context: string) => {
   &__case-cover {
     display: block;
     width: 100%;
-    height: 240px;
+    height: 190px;
     object-fit: contain;
     background: $soft;
   }
@@ -265,12 +269,12 @@ const openCaseRequest = async (context: string) => {
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 16px;
-    padding: 24px;
+    gap: 10px;
+    padding: 18px;
   }
 
   &__case-name {
-    font-size: 21px;
+    font-size: 19px;
     font-weight: 700;
     line-height: 1.35;
   }
@@ -420,14 +424,14 @@ const openCaseRequest = async (context: string) => {
   &__production {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 0.8fr);
-    gap: 28px;
+    gap: 18px;
     align-items: start;
   }
 
   &__production-title {
-    margin: 0 0 22px;
-    font-size: 28px;
-    line-height: 1.25;
+    margin: 0 0 16px;
+    font-size: var(--section-heading-size-narrow);
+    line-height: var(--section-heading-leading);
     color: $navy;
   }
 
@@ -435,11 +439,11 @@ const openCaseRequest = async (context: string) => {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    padding-bottom: 36px;
+    padding-bottom: 24px;
   }
 
   &__link {
-    padding: 12px 18px;
+    padding: 10px 15px;
     color: $navy;
     text-decoration: none;
     background: $soft;
@@ -458,15 +462,15 @@ const openCaseRequest = async (context: string) => {
   }
 
   &__title {
-    margin: 0 0 22px;
-    font-size: clamp(28px, 3.4vw, 44px);
-    line-height: 1.16;
+    margin: 0 0 18px;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     color: $navy;
   }
 
   &__lead {
     max-width: 780px;
-    margin: 0 0 32px;
+    margin: 0 0 22px;
     line-height: 1.75;
     color: $muted;
   }
@@ -474,11 +478,11 @@ const openCaseRequest = async (context: string) => {
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px;
+    gap: 18px;
   }
 
   &__card {
-    padding: clamp(24px, 3vw, 40px);
+    padding: clamp(20px, 2.5vw, 28px);
     background: $soft;
     border: 1px solid $line;
     border-radius: 16px;
@@ -486,21 +490,21 @@ const openCaseRequest = async (context: string) => {
 
   &__number {
     display: block;
-    margin-bottom: 22px;
-    font-size: 28px;
+    margin-bottom: 12px;
+    font-size: 23px;
     font-weight: 800;
     color: $blue;
   }
 
   &__subtitle {
-    margin: 0 0 16px;
-    font-size: 24px;
-    line-height: 1.3;
+    margin: 0 0 12px;
+    font-size: var(--card-heading-size);
+    line-height: var(--card-heading-leading);
   }
 
   &__text {
-    margin: 0 0 24px;
-    line-height: 1.75;
+    margin: 0 0 18px;
+    line-height: 1.6;
   }
 
   &__request {

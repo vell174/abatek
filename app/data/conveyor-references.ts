@@ -18,6 +18,7 @@ function referenceSeo(title: string, description: string, path: string, keywords
     twitter: { title, description, card: 'summary_large_image' },
     breadcrumbs: [
       { name: 'Главная', path: '/' },
+      { name: 'Калькуляторы и справочники', path: '/poleznoe/' },
       { name: title, path },
     ],
     schema: { pageType: 'WebPage', name: title },

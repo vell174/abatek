@@ -94,8 +94,8 @@ withDefaults(
 
 .faq-section__inner {
   display: grid;
-  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
-  gap: clamp(40px, 7vw, 90px);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(28px, 4vw, 64px);
   padding-top: 58px;
 }
 
@@ -110,10 +110,10 @@ withDefaults(
 
 .faq-section__title {
   margin: 0;
-  font-size: clamp(28px, 3.4vw, 46px);
-  line-height: 1.04;
+  font-size: var(--section-heading-size-narrow);
+  line-height: var(--section-heading-leading);
   color: $ink;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.025em;
 }
 
 .faq-section__list {

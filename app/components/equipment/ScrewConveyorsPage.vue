@@ -18,6 +18,7 @@ const openRequest = () => {
 <template>
   <div class="screw-page">
     <ProductIntroSection_02
+      compact
       :title="pageData.introTitle"
       :image="pageData.image"
       :image-alt="pageData.imageAlt ?? pageData.title"
@@ -50,6 +51,7 @@ const openRequest = () => {
           :product="product"
           :index="index"
           variant="category"
+          compact
         />
       </div>
     </section>
@@ -137,10 +139,13 @@ const openRequest = () => {
 .screw-page {
   color: $ink;
 
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
+
   &__title {
-    margin: 0 0 32px;
-    font-size: clamp(30px, 4vw, 48px);
-    line-height: 1.15;
+    margin: 0 0 22px;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.035em;
   }
 
@@ -156,12 +161,12 @@ const openRequest = () => {
   &__catalog {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
+    gap: 14px;
   }
 
   &__text {
-    margin: 0 0 16px;
-    line-height: 1.75;
+    margin: 0 0 12px;
+    line-height: 1.6;
     color: $muted;
 
     &:last-child {
@@ -172,12 +177,12 @@ const openRequest = () => {
   &__diagrams {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 16px;
+    gap: 12px;
   }
 
   &__diagram {
     grid-column: span 3;
-    padding: 16px;
+    padding: 12px;
     margin: 0;
     background: #fff;
     border: 1px solid $line;
@@ -191,7 +196,7 @@ const openRequest = () => {
   &__diagram-image {
     display: block;
     width: 100%;
-    height: 170px;
+    height: 135px;
     object-fit: contain;
   }
 
@@ -204,7 +209,7 @@ const openRequest = () => {
   }
 
   &__construction {
-    padding: clamp(20px, 3vw, 40px);
+    padding: clamp(18px, 2.5vw, 28px);
     border: 1px solid $line;
     border-radius: 16px;
   }
@@ -213,13 +218,13 @@ const openRequest = () => {
     display: block;
     width: 100%;
     height: auto;
-    margin: 24px 0;
+    margin: 16px 0;
   }
 
   &__parts {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px 32px;
+    gap: 14px 24px;
     padding: 0;
     margin: 0;
     list-style: none;

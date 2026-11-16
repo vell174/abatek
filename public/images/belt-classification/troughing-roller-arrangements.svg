@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-labelledby="title description">
+  <title id="title">Двухроликовая и трёхроликовая схемы формирования желоба</title>
+  <desc id="description">Слева две наклонные роликоопоры образуют V-образный желоб; справа два боковых ролика и один горизонтальный центральный ролик образуют желоб с плоским дном.</desc>
+  <rect width="1200" height="430" rx="24" fill="#fff"/>
+  <rect x="18" y="18" width="570" height="394" rx="18" fill="#f4f7fb" stroke="#d8e2ec" stroke-width="2"/>
+  <rect x="612" y="18" width="570" height="394" rx="18" fill="#f4f7fb" stroke="#d8e2ec" stroke-width="2"/>
+
+  <text x="303" y="74" fill="#00294f" font-family="Montserrat, Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">Два ролика</text>
+  <text x="897" y="74" fill="#00294f" font-family="Montserrat, Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">Три ролика</text>
+
+  <path d="M100 166 L303 292 L506 166" fill="none" stroke="#0757a4" stroke-linecap="round" stroke-linejoin="round" stroke-width="18"/>
+  <line x1="109" y1="195" x2="291" y2="308" stroke="#526a82" stroke-linecap="round" stroke-width="24"/>
+  <line x1="315" y1="308" x2="497" y2="195" stroke="#526a82" stroke-linecap="round" stroke-width="24"/>
+  <line x1="109" y1="195" x2="291" y2="308" stroke="#d8e2ec" stroke-linecap="round" stroke-width="4"/>
+  <line x1="315" y1="308" x2="497" y2="195" stroke="#d8e2ec" stroke-linecap="round" stroke-width="4"/>
+  <path d="M99 347 H507" stroke="#00294f" stroke-linecap="round" stroke-width="9"/>
+  <path d="M119 339 V347 M487 339 V347" stroke="#00294f" stroke-linecap="round" stroke-width="9"/>
+
+  <path d="M680 166 L809 270 H985 L1114 166" fill="none" stroke="#0757a4" stroke-linecap="round" stroke-linejoin="round" stroke-width="18"/>
+  <line x1="689" y1="195" x2="804" y2="288" stroke="#526a82" stroke-linecap="round" stroke-width="24"/>
+  <line x1="822" y1="293" x2="972" y2="293" stroke="#526a82" stroke-linecap="round" stroke-width="24"/>
+  <line x1="990" y1="288" x2="1105" y2="195" stroke="#526a82" stroke-linecap="round" stroke-width="24"/>
+  <line x1="689" y1="195" x2="804" y2="288" stroke="#d8e2ec" stroke-linecap="round" stroke-width="4"/>
+  <line x1="822" y1="293" x2="972" y2="293" stroke="#d8e2ec" stroke-linecap="round" stroke-width="4"/>
+  <line x1="990" y1="288" x2="1105" y2="195" stroke="#d8e2ec" stroke-linecap="round" stroke-width="4"/>
+  <path d="M679 347 H1115" stroke="#00294f" stroke-linecap="round" stroke-width="9"/>
+  <path d="M699 339 V347 M1095 339 V347" stroke="#00294f" stroke-linecap="round" stroke-width="9"/>
+
+  <text x="303" y="389" fill="#526a82" font-family="Montserrat, Arial, sans-serif" font-size="16" text-anchor="middle">V-образная опора</text>
+  <text x="897" y="389" fill="#526a82" font-family="Montserrat, Arial, sans-serif" font-size="16" text-anchor="middle">Боковые и центральный ролики</text>
+</svg>

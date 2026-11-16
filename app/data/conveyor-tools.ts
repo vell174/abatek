@@ -25,6 +25,7 @@ function toolSeo(title: string, description: string, canonicalPath: string, keyw
     twitter: { ...sharedSeo.twitter, title, description },
     breadcrumbs: [
       { name: 'Главная', path: '/' },
+      { name: 'Калькуляторы и справочники', path: '/poleznoe/' },
       { name: title, path: canonicalPath },
     ],
     schema: { pageType: 'WebPage', name: title },

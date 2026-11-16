@@ -59,6 +59,6 @@ export const catalog = [
     image: '/images/conveyor-types/bucket-elevator.webp',
     imageAlt: 'Модель вертикального ковшового элеватора с верхним приводом на белом фоне',
     imageFit: 'contain',
-    href: '/elevatory/',
+    href: '/elevatory-kovshovye/',
   },
 ] satisfies IndustrialSection[];

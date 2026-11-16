@@ -18,6 +18,7 @@ export const seo = {
   twitter: { card: 'summary_large_image', title, description },
   breadcrumbs: [
     { name: 'Главная', path: '/' },
+    { name: 'Калькуляторы и справочники', path: '/poleznoe/' },
     {
       name: 'Калькулятор мощности привода ленточного конвейера',
       path: '/kalkulyator-moshchnosti-privoda-lentochnogo-konveyera/',

@@ -1,17 +1,32 @@
 <script setup lang="ts">
-defineProps<{
+const {
+  title,
+  links,
+  compact = false,
+} = defineProps<{
   title: string;
   links: Array<{ label: string; to: string; description: string }>;
+  compact?: boolean;
 }>();
 </script>
 
 <template>
-  <section class="related-product-links content-section site-container" :aria-label="title">
+  <section
+    class="related-product-links content-section site-container"
+    :class="[compact && 'related-product-links--compact']"
+    :aria-label="title"
+  >
     <h2 class="related-product-links__title">{{ title }}</h2>
     <nav class="related-product-links__list" :aria-label="title">
-      <NuxtLink v-for="link in links" :key="link.to" class="related-product-links__link" :to="link.to">
+      <NuxtLink
+        v-for="link in links"
+        :key="link.to"
+        class="related-product-links__link"
+        :to="link.to"
+        :aria-label="compact ? `${link.label}. ${link.description}` : undefined"
+      >
         <span class="related-product-links__label">{{ link.label }}</span>
-        <span class="related-product-links__description">{{ link.description }}</span>
+        <span v-if="!compact" class="related-product-links__description">{{ link.description }}</span>
         <span class="related-product-links__arrow" aria-hidden="true">↗</span>
       </NuxtLink>
     </nav>
@@ -81,6 +96,40 @@ defineProps<{
     font-size: 22px;
     line-height: 1;
     color: $blue;
+  }
+
+  &--compact {
+    --content-section-space: 16px;
+    --content-section-space-mobile: 12px;
+  }
+
+  &--compact &__title {
+    margin-bottom: 10px;
+    font-size: 21px;
+  }
+
+  &--compact &__list {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+  }
+
+  &--compact &__link {
+    min-height: 0;
+    padding: 12px 34px 12px 14px;
+    border-radius: 10px;
+  }
+
+  &--compact &__label {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  &--compact &__arrow {
+    top: 50%;
+    right: 12px;
+    font-size: 16px;
+    transform: translateY(-50%);
   }
 }
 

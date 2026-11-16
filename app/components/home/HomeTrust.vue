@@ -23,7 +23,7 @@ const items = [
 .trust {
   position: relative;
   z-index: 2;
-  padding-block: 20px 0;
+  padding-block: 12px 0;
   background: #fff;
 
   &__grid {
@@ -39,17 +39,17 @@ const items = [
     display: flex;
     gap: 12px;
     align-items: center;
-    min-height: 88px;
-    padding: 18px 20px;
+    min-height: 70px;
+    padding: 12px 18px;
     border-right: 1px solid rgb(255 255 255 / 14%);
   }
 
   &__icon {
     display: grid;
-    flex: 0 0 44px;
+    flex: 0 0 38px;
     place-items: center;
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     color: $yellow;
     background: rgb(255 255 255 / 8%);
     border: 1px solid rgb(255 255 255 / 12%);
@@ -75,17 +75,31 @@ const items = [
 
 @media (max-width: $phone) {
   .trust {
-    padding-top: 18px;
+    padding-top: 12px;
 
     &__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     &__item {
+      gap: 8px;
       min-height: 76px;
-      padding: 14px 18px;
-      border-right: 0;
+      padding: 11px;
       border-bottom: 1px solid rgb(255 255 255 / 12%);
+
+      &:nth-child(even) {
+        border-right: 0;
+      }
+    }
+
+    &__icon {
+      flex-basis: 32px;
+      width: 32px;
+      height: 32px;
+    }
+
+    &__text {
+      font-size: 13px;
     }
   }
 }

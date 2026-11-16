@@ -30,6 +30,7 @@ import { routes as cyclones } from './ciklony/name-routers';
 import { routes as metalStructures } from './metallokonstruktsii-na-zakaz/name-routers';
 import { routes as beltConveyors } from './lentochnye-konvejery/name-routers';
 import { routes as conveyorTypes } from './konveyery-po-vidam/name-routers';
+import { routes as bulkMaterialConveyors } from './konveyery-dlya-sypuchih-materialov/name-routers';
 import { routes as beltFeeders } from './lentochnye-pitateli/name-routers';
 import { routes as drums } from './barabany/name-routers';
 import { routes as driveDrum } from './privodnoy-baraban-konveyera/name-routers';
@@ -53,11 +54,14 @@ import { routes as bagConveyors } from './konvejery-dlya-meshkov/name-routers';
 import { routes as wasteConveyors } from './konvejery-dlya-othodov/name-routers';
 import { routes as vegetableConveyors } from './konvejery-dlya-ovoshchey/name-routers';
 import { routes as sandConveyors } from './konvejery-dlya-peska/name-routers';
-import { routes as warehouseConveyors } from './konvejery-dlya-sklada/name-routers';
-import { routes as sortingConveyors } from './konvejery-dlya-sortirovki/name-routers';
+import { routes as warehouseConveyors } from './lentochnye-konveyery-dlya-sklada/name-routers';
+import { routes as warehouseSystems } from './konveyery-dlya-sklada/name-routers';
+import { routes as sortingConveyors } from './lentochnye-konveyery-dlya-sortirovki/name-routers';
+import { routes as sortingSystems } from './konveyery-dlya-sortirovki/name-routers';
 import { routes as coalConveyors } from './konvejery-dlya-uglya/name-routers';
 import { routes as grainConveyors } from './konvejery-dlya-zerna/name-routers';
-import { routes as packagingConveyors } from './konveyer-dlya-upakovki/name-routers';
+import { routes as packagingConveyors } from './lentochnye-konveyery-dlya-shtuchnyh-gruzov/name-routers';
+import { routes as pieceGoodsConveyors } from './konveyery-dlya-shtuchnyh-gruzov/name-routers';
 import { routes as troughConveyors } from './konveyer-lentochnyy-zhelobchatyy/name-routers';
 import { routes as modularConveyors } from './modulnye-konvejery/name-routers';
 import { routes as inclinedConveyors } from './naklonnyj-lentochnyj-konvejer/name-routers';
@@ -120,6 +124,7 @@ const existingEquipmentRouteGroups = [
   metalStructures,
   beltConveyors,
   conveyorTypes,
+  bulkMaterialConveyors,
   beltFeeders,
   drums,
   driveDrum,
@@ -144,10 +149,13 @@ const existingEquipmentRouteGroups = [
   vegetableConveyors,
   sandConveyors,
   warehouseConveyors,
+  warehouseSystems,
   sortingConveyors,
+  sortingSystems,
   coalConveyors,
   grainConveyors,
   packagingConveyors,
+  pieceGoodsConveyors,
   troughConveyors,
   modularConveyors,
   inclinedConveyors,

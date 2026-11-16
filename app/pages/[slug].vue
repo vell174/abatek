@@ -28,9 +28,14 @@ const h1 = computed(() => title.value);
 const description = computed(() => definition.value?.data?.description ?? definition.value?.seo.description ?? '');
 const heroAccents = computed(() => definition.value?.data?.heroAccents ?? []);
 const heroTitleVariant = computed(() => industrialPage.value?.heroTitleVariant);
-const heroImageAlt = computed(() => industrialPage.value?.heroImageAlt);
+const heroImageAlt = computed(() =>
+  definition.value?.template === 'cyclones'
+    ? definition.value.data.heroImageAlt
+    : (industrialPage.value?.heroImageAlt ?? applicationPage.value?.heroImageAlt),
+);
 const heroActionLabel = computed(() => industrialPage.value?.heroActionLabel);
 const heroImage = computed(() => {
+  if (definition.value?.template === 'cyclones') return definition.value.data.heroImage;
   if (definition.value?.template === 'reservoirs') return definition.value.data.heroImage;
   if (['electron-knives', 'screw-conveyors'].includes(definition.value?.template ?? ''))
     return definition.value?.data?.image;
@@ -38,7 +43,7 @@ const heroImage = computed(() => {
   if (definition.value?.template === 'silos') return definition.value.data.heroImage;
   if (definition.value?.template === 'roller-conveyors') return definition.value.data.heroImage;
   if (definition.value?.template === 'reservoir-model') return reservoirModelPage.value?.heroImage;
-  return industrialPage.value?.heroImage;
+  return industrialPage.value?.heroImage ?? applicationPage.value?.image;
 });
 const kind = computed(() => {
   if (definition.value?.template === 'reservoir-model' || definition.value?.template === 'reservoirs')
@@ -73,9 +78,10 @@ usePageSeo(definition.value.seo);
       :text="description"
       :accent-texts="heroAccents"
       :title-variant="heroTitleVariant"
-      :compact="industrialPage?.heroCompact"
+      :compact="industrialPage?.heroCompact || industrialPage?.compactLayout"
       :background-image="heroImage"
       :background-image-alt="heroImageAlt"
+      :background-image-position="industrialPage?.heroImagePosition"
       :background-image-width="definition?.seo.image?.width"
       :background-image-height="definition?.seo.image?.height"
       :action-label="heroActionLabel"
@@ -94,9 +100,9 @@ usePageSeo(definition.value.seo);
       :gallery="definition?.gallery"
       :gallery-title="`Выполненные проекты: ${title}`"
     />
-    <LazyCyclonesPage v-else-if="isCyclonesPage" />
+    <LazyCyclonesPage v-else-if="isCyclonesPage" :gallery="definition?.gallery" />
     <LazyCustomMetalProductsPage v-else-if="definition?.template === 'custom-metal'" />
-    <LazyConveyorApplicationPage v-else-if="applicationPage" :page="applicationPage" />
+    <LazyConveyorApplicationPage v-else-if="applicationPage" :page="applicationPage" :gallery="definition?.gallery" />
     <LazyReservoirModelPage v-else-if="reservoirModelPage" :page="reservoirModelPage" />
     <LazyIndustrialEquipmentPage
       v-else-if="industrialPage"
@@ -107,10 +113,12 @@ usePageSeo(definition.value.seo);
     <LazyProjectGallerySlider
       v-if="
         !industrialPage &&
+        !applicationPage &&
         definition?.template !== 'custom-metal' &&
         definition?.template !== 'roller-conveyors' &&
         definition?.template !== 'reservoirs' &&
         definition?.template !== 'reservoir-model' &&
+        definition?.template !== 'cyclones' &&
         definition?.gallery?.length
       "
       :key="slug"

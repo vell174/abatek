@@ -121,6 +121,7 @@ export const options: ProductPageOptions = {
 
 export const pageData: IndustrialPage = {
   ...createProductPage(options),
+  introTitleSize: 'compact',
   heroImage: options.image,
   heroBackgroundVariant: 'product',
   introVariant: 'text-only',

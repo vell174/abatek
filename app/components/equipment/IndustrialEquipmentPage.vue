@@ -19,6 +19,21 @@ const textSections = computed(() =>
   props.page.sections.filter((section) => !section.image && (!section.id || !modelIds.value.has(section.id))),
 );
 const expandedEditorialSections = ref<number[]>([]);
+const isEditorialAccordion = computed(() => props.page.editorialAccordion || props.page.compactLayout);
+const projectsThenDetails = computed(
+  () => props.page.projectsThenDetails && !!props.gallery?.length && !props.page.hideProjects,
+);
+const contentBlockOrder = computed(() => {
+  if (projectsThenDetails.value)
+    return ['projects', 'editorial', 'catalog', 'reference', 'classification', 'specs', 'models'] as const;
+  if (props.page.contentOrder === 'projects-first')
+    return ['projects', 'editorial', 'catalog', 'reference', 'classification', 'specs', 'models'] as const;
+  if (props.page.contentOrder === 'editorial-first')
+    return ['editorial', 'catalog', 'reference', 'classification', 'specs', 'models', 'projects'] as const;
+  if (props.page.contentOrder === 'catalog-first')
+    return ['catalog', 'editorial', 'projects', 'reference', 'classification', 'specs', 'models'] as const;
+  return ['reference', 'classification', 'specs', 'models', 'projects', 'editorial', 'catalog'] as const;
+});
 const toggleEditorialSection = (index: number) => {
   expandedEditorialSections.value = expandedEditorialSections.value.includes(index)
     ? expandedEditorialSections.value.filter((expandedIndex) => expandedIndex !== index)
@@ -55,8 +70,12 @@ const faq = computed(
 </script>
 
 <template>
-  <div class="industrial-page" :class="`industrial-page--${page.theme}`">
+  <div
+    class="industrial-page"
+    :class="[`industrial-page--${page.theme}`, { 'industrial-page--compact': page.compactLayout }]"
+  >
     <ProductIntroSection_02
+      :compact="page.compactLayout"
       :title="page.introTitle"
       :title-size="page.introTitleSize"
       :variant="page.introVariant"
@@ -105,9 +124,17 @@ const faq = computed(
       <ProductFactsSection_03 v-if="page.facts.length" :facts="page.facts" />
 
       <RelatedProductLinks
-        v-if="page.relatedLinks?.length && page.relatedLinksTitle"
+        v-if="!projectsThenDetails && page.relatedLinks?.length && page.relatedLinksTitle"
         :title="page.relatedLinksTitle"
         :links="page.relatedLinks"
+        :compact="page.compactLinkSections"
+      />
+
+      <RelatedProductLinks
+        v-if="!projectsThenDetails && page.usefulLinks?.length && page.usefulLinksTitle"
+        :title="page.usefulLinksTitle"
+        :links="page.usefulLinks"
+        :compact="page.compactLinkSections"
       />
 
       <section v-for="guide in page.visualGuides" :id="guide.id" :key="guide.id" class="industrial-visual-guide">
@@ -135,312 +162,368 @@ const faq = computed(
         </div>
       </section>
 
-      <TechnicalReferenceCard v-if="page.referenceCard" v-bind="page.referenceCard" />
+      <template v-for="block in contentBlockOrder" :key="block">
+        <TechnicalReferenceCard v-if="block === 'reference' && page.referenceCard" v-bind="page.referenceCard" />
 
-      <section v-if="page.classificationGroups?.length" class="industrial-types">
-        <div class="site-container industrial-types__inner">
-          <h2 class="industrial-types__title">{{ page.classificationTitle ?? page.galleryTitle }}</h2>
-          <section v-for="group in page.classificationGroups" :key="group.title" class="industrial-types__group">
-            <h3 class="industrial-types__group-title">{{ group.title }}</h3>
-            <p class="industrial-types__description">{{ group.description }}</p>
-            <div class="industrial-types__grid">
-              <ScraperProductCard
-                v-for="(product, index) in group.items"
-                :key="product.href"
-                :product="product"
-                :index="index"
-                variant="category"
-                heading-tag="h4"
-              />
+        <template v-if="block === 'classification'">
+          <section v-if="page.classificationGroups?.length" class="industrial-types">
+            <div class="site-container industrial-types__inner">
+              <h2 class="industrial-types__title">{{ page.classificationTitle ?? page.galleryTitle }}</h2>
+              <section v-for="group in page.classificationGroups" :key="group.title" class="industrial-types__group">
+                <h3 class="industrial-types__group-title">{{ group.title }}</h3>
+                <p class="industrial-types__description">{{ group.description }}</p>
+                <div class="industrial-types__grid">
+                  <template v-for="(product, index) in group.items" :key="product.title">
+                    <article v-if="!product.image" class="industrial-types__pending-card">
+                      <span class="industrial-types__pending-number">{{ String(index + 1).padStart(2, '0') }}</span>
+                      <h4 class="industrial-types__pending-title">{{ product.title }}</h4>
+                    </article>
+                    <ScraperProductCard
+                      v-else
+                      :product="product"
+                      :index="index"
+                      variant="category"
+                      :compact="page.compactLayout"
+                      heading-tag="h4"
+                    />
+                  </template>
+                </div>
+              </section>
             </div>
           </section>
-        </div>
-      </section>
 
-      <section v-else-if="page.catalogVariant === 'categories'" class="industrial-types">
-        <div class="site-container industrial-types__inner">
-          <h2 class="industrial-types__title">{{ page.galleryTitle }}</h2>
-          <p v-if="page.catalogDescription" class="industrial-types__description">{{ page.catalogDescription }}</p>
-          <div class="industrial-types__grid">
-            <ScraperProductCard
-              v-for="(product, index) in mediaSections"
-              :key="product.title"
-              :product="product"
-              :index="index"
-              :variant="page.catalogCardVariant ?? 'category'"
-            />
-          </div>
-        </div>
-      </section>
-
-      <SpecsTableSection
-        v-if="page.table"
-        :title="page.table.title"
-        :columns="page.table.headers"
-        :rows="page.table.rows"
-        eyebrow="Расчётные данные"
-        tone="soft"
-      />
-
-      <SpecsTableSection
-        v-for="table in page.tables"
-        :key="table.title"
-        :title="table.title"
-        :columns="table.headers"
-        :rows="table.rows"
-        :eyebrow="table.eyebrow ?? 'Расчётные данные'"
-        tone="soft"
-      />
-
-      <section v-if="modelSections.length" class="industrial-models">
-        <div class="content-section site-container">
-          <div class="industrial-section-heading">
-            <div class="industrial-section-heading__intro">
-              <p>Модельный ряд</p>
-              <span>Сравните производительность и параметры моделей, затем отправьте запрос на расчёт</span>
-            </div>
-            <h2>
-              Шлюзовые затворы
-              <em>ШУ-6, ШУ-15, ШУ-22 и ШУ-30</em>
-            </h2>
-          </div>
-          <nav class="industrial-models__nav" aria-label="Модели шлюзовых затворов ШУ">
-            <a
-              v-for="link in page.sectionLinks"
-              :key="link.id"
-              class="industrial-models__nav-link"
-              :href="`#${link.id}`"
-            >
-              {{ link.label }}
-            </a>
-          </nav>
-          <div class="industrial-models__grid">
-            <article
-              v-for="section in modelSections"
-              :id="section.id"
-              :key="section.title"
-              class="industrial-models__card"
-            >
-              <h3 class="industrial-models__title">{{ section.title }}</h3>
-              <p v-for="paragraph in section.text" :key="paragraph" class="industrial-models__text">
-                {{ paragraph }}
-              </p>
-              <ul v-if="section.items" class="industrial-models__specs">
-                <li v-for="item in section.items" :key="item" class="industrial-models__spec">{{ item }}</li>
-              </ul>
-              <UiButton class="industrial-models__action" @click="openModelRequest(section)">
-                Запросить расчёт {{ modelLabel(section) }}
-              </UiButton>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <LazyProjectGallerySlider
-        v-if="!page.hideProjects && gallery?.length && page.projectsPlacement !== 'before-workflow'"
-        :images="gallery"
-        :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
-      />
-
-      <EquipmentDetailsSection
-        v-if="page.sectionsVariant === 'technical'"
-        :title="page.sectionsTitle ?? page.title"
-        :sections="page.sections"
-      />
-
-      <FaqSection_last_01
-        v-else-if="textSections.length && page.sectionsCollapsible"
-        :items="
-          textSections.map((section) => ({
-            question: section.title,
-            answer: section.text ?? [],
-            image: section.cardImage,
-          }))
-        "
-        :title="page.sectionsTitle ?? page.title"
-        eyebrow="Инженерный разбор"
-        title-id="industrial-selection-title"
-        layout="cards"
-        tone="white"
-        preserve-content
-      />
-
-      <section v-else-if="textSections.length" class="industrial-editorial">
-        <div class="content-section site-container">
-          <div class="industrial-section-heading">
-            <div class="industrial-section-heading__intro">
-              <p>Инженерный разбор</p>
-              <span>Ключевые сведения для выбора оборудования под вашу производственную задачу</span>
-            </div>
-            <h2>
-              Конструкция, применение
-              <em>и подбор</em>
-            </h2>
-          </div>
-          <div
-            class="industrial-editorial__grid"
-            :class="{ 'industrial-editorial__grid--stacked': page.editorialAccordion }"
-          >
-            <article
-              v-for="(section, index) in textSections"
-              :id="section.id"
-              :key="section.title"
-              class="industrial-editorial__card"
-              :class="{
-                'industrial-editorial__card--wide':
-                  !page.editorialAccordion &&
-                  index === 0 &&
-                  textSections.length > 2 &&
-                  textSections.length % 2 === 1 &&
-                  section.text?.length,
-                'industrial-editorial__card--collapsed':
-                  page.editorialAccordion && !expandedEditorialSections.includes(index),
-              }"
-            >
-              <div class="industrial-editorial__card-head">
-                <span class="industrial-editorial__number">{{ String(index + 1).padStart(2, '0') }}</span>
-                <span v-if="!page.editorialAccordion" class="industrial-editorial__label">Практика и технология</span>
-              </div>
-              <div class="industrial-editorial__body">
-                <h3 v-if="page.editorialAccordion">
-                  <button
-                    class="industrial-editorial__toggle"
-                    type="button"
-                    :aria-expanded="expandedEditorialSections.includes(index)"
-                    :aria-controls="`editorial-content-${index}`"
-                    @click="toggleEditorialSection(index)"
-                  >
-                    <span>{{ section.title }}</span>
-                    <Icon
-                      class="industrial-editorial__toggle-icon"
-                      :class="{ 'industrial-editorial__toggle-icon--open': expandedEditorialSections.includes(index) }"
-                      name="lucide:chevron-down"
-                      aria-hidden="true"
-                    />
-                  </button>
-                </h3>
-                <h3 v-else>{{ section.title }}</h3>
-                <div
-                  v-show="!page.editorialAccordion || expandedEditorialSections.includes(index)"
-                  :id="page.editorialAccordion ? `editorial-content-${index}` : undefined"
-                >
-                  <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
-                  <div v-if="section.illustrations?.length" class="industrial-editorial__illustrations">
-                    <figure
-                      v-for="illustration in section.illustrations"
-                      :key="illustration.src"
-                      class="industrial-editorial__illustration"
-                    >
-                      <img
-                        class="industrial-editorial__illustration-image"
-                        :src="illustration.src"
-                        :alt="illustration.alt"
-                        :width="illustration.width"
-                        :height="illustration.height"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <figcaption class="industrial-editorial__illustration-caption">
-                        {{ illustration.caption }}
-                      </figcaption>
-                    </figure>
-                  </div>
-                  <SpecsTableSection
-                    v-if="section.table"
-                    :title="section.table.title"
-                    :columns="section.table.headers"
-                    :rows="section.table.rows"
-                    :group-headers="section.table.groupHeaders"
-                    :groups="section.table.groups"
-                    eyebrow="Таблица размеров"
-                    compact
-                  />
-                  <ul v-if="section.items">
-                    <li v-for="item in section.items" :key="item">{{ item }}</li>
-                  </ul>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <ScraperConveyorsCatalog
-        v-if="!page.hideCatalog && page.catalogVariant !== 'categories' && page.theme === 'copper'"
-        :title="page.galleryTitle"
-        :sections="mediaSections"
-        @action="openRequest"
-      />
-
-      <section
-        v-else-if="!page.hideCatalog && page.catalogVariant !== 'categories' && mediaSections.length"
-        class="industrial-catalog"
-      >
-        <div class="content-section site-container">
-          <div class="industrial-section-heading industrial-section-heading--light">
-            <p v-if="page.theme !== 'amber' && page.title !== 'Барабаны ленточного конвейера'">Модельный ряд</p>
-            <p v-else-if="page.title === 'Барабаны ленточного конвейера'" class="industrial-section-heading__kicker">
-              Точная комплектация для стабильного движения ленты
-            </p>
-            <h2>{{ page.galleryTitle }}</h2>
-          </div>
-          <div class="industrial-catalog__grid">
-            <article v-if="page.theme === 'amber' && mediaSections[0]" class="industrial-catalog__card">
-              <figure>
-                <img
-                  :src="mediaSections[0].image"
-                  :alt="mediaSections[0].imageAlt || mediaSections[0].title"
-                  loading="lazy"
-                  width="1200"
-                  height="900"
+          <section v-else-if="page.catalogVariant === 'categories'" class="industrial-types">
+            <div class="site-container industrial-types__inner">
+              <h2 class="industrial-types__title">{{ page.galleryTitle }}</h2>
+              <p v-if="page.catalogDescription" class="industrial-types__description">{{ page.catalogDescription }}</p>
+              <div class="industrial-types__grid">
+                <ScraperProductCard
+                  v-for="(product, index) in mediaSections"
+                  :key="product.title"
+                  :product="product"
+                  :index="index"
+                  :variant="page.catalogCardVariant ?? 'category'"
+                  :compact="page.compactLayout"
                 />
-              </figure>
-              <div>
-                <h3>{{ mediaSections[0].title }}</h3>
-                <p v-for="paragraph in mediaSections[0].text" :key="paragraph">{{ paragraph }}</p>
-                <ul v-if="mediaSections[0].items">
-                  <li v-for="item in mediaSections[0].items" :key="item">{{ item }}</li>
-                </ul>
               </div>
-            </article>
+            </div>
+          </section>
+        </template>
 
-            <ScraperProductCard
-              v-for="(product, index) in scraperCatalogSections"
-              :key="product.title"
-              :product="product"
-              :index="index"
-              @action="openRequest"
-            />
+        <template v-if="block === 'specs'">
+          <SpecsTableSection
+            v-if="page.table"
+            :title="page.table.title"
+            :columns="page.table.headers"
+            :rows="page.table.rows"
+            eyebrow="Расчётные данные"
+            tone="soft"
+          />
 
-            <template v-if="!['amber', 'wine', 'teal'].includes(page.theme)">
-              <article v-for="section in mediaSections" :key="section.title" class="industrial-catalog__card">
-                <figure>
-                  <img
-                    :src="section.image"
-                    :alt="section.imageAlt || section.title"
-                    loading="lazy"
-                    width="1200"
-                    height="900"
-                  />
-                </figure>
-                <div>
-                  <h3>{{ section.title }}</h3>
-                  <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
-                  <ul v-if="section.items">
-                    <li v-for="item in section.items" :key="item">{{ item }}</li>
-                  </ul>
-                </div>
+          <SpecsTableSection
+            v-for="table in page.tables"
+            :key="table.title"
+            :title="table.title"
+            :columns="table.headers"
+            :rows="table.rows"
+            :eyebrow="table.eyebrow ?? 'Расчётные данные'"
+            tone="soft"
+          />
+        </template>
+
+        <section v-if="block === 'models' && modelSections.length" class="industrial-models">
+          <div class="content-section site-container">
+            <div class="industrial-section-heading">
+              <div class="industrial-section-heading__intro">
+                <p>Модельный ряд</p>
+                <span>Сравните производительность и параметры моделей, затем отправьте запрос на расчёт</span>
+              </div>
+              <h2>
+                Шлюзовые затворы
+                <em>ШУ-6, ШУ-15, ШУ-22 и ШУ-30</em>
+              </h2>
+            </div>
+            <nav class="industrial-models__nav" aria-label="Модели шлюзовых затворов ШУ">
+              <a
+                v-for="link in page.sectionLinks"
+                :key="link.id"
+                class="industrial-models__nav-link"
+                :href="`#${link.id}`"
+              >
+                {{ link.label }}
+              </a>
+            </nav>
+            <div class="industrial-models__grid">
+              <article
+                v-for="section in modelSections"
+                :id="section.id"
+                :key="section.title"
+                class="industrial-models__card"
+              >
+                <h3 class="industrial-models__title">{{ section.title }}</h3>
+                <p v-for="paragraph in section.text" :key="paragraph" class="industrial-models__text">
+                  {{ paragraph }}
+                </p>
+                <ul v-if="section.items" class="industrial-models__specs">
+                  <li v-for="item in section.items" :key="item" class="industrial-models__spec">{{ item }}</li>
+                </ul>
+                <UiButton class="industrial-models__action" @click="openModelRequest(section)">
+                  Запросить расчёт {{ modelLabel(section) }}
+                </UiButton>
               </article>
-            </template>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <LazyProjectGallerySlider
+          v-if="
+            block === 'projects' &&
+            !page.hideProjects &&
+            gallery?.length &&
+            page.projectsPlacement !== 'before-workflow'
+          "
+          :images="gallery"
+          :title="page.projectsTitle ?? `Выполненные проекты: ${page.title}`"
+        />
+
+        <template v-if="block === 'editorial'">
+          <EquipmentDetailsSection
+            v-if="page.sectionsVariant === 'technical'"
+            :title="page.sectionsTitle ?? page.title"
+            :sections="page.sections"
+          />
+
+          <FaqSection_last_01
+            v-else-if="textSections.length && page.sectionsCollapsible"
+            :items="
+              textSections.map((section) => ({
+                question: section.title,
+                answer: section.text ?? [],
+                image: section.cardImage,
+              }))
+            "
+            :title="page.sectionsTitle ?? page.title"
+            eyebrow="Инженерный разбор"
+            title-id="industrial-selection-title"
+            layout="cards"
+            tone="white"
+            preserve-content
+          />
+
+          <section v-else-if="textSections.length" class="industrial-editorial">
+            <div class="content-section site-container">
+              <div class="industrial-section-heading">
+                <div class="industrial-section-heading__intro">
+                  <p>Инженерный разбор</p>
+                  <span>Ключевые сведения для выбора оборудования под вашу производственную задачу</span>
+                </div>
+                <h2>
+                  Конструкция, применение
+                  <em>и подбор</em>
+                </h2>
+              </div>
+              <div
+                class="industrial-editorial__grid"
+                :class="{ 'industrial-editorial__grid--stacked': isEditorialAccordion }"
+              >
+                <article
+                  v-for="(section, index) in textSections"
+                  :id="section.id"
+                  :key="section.title"
+                  class="industrial-editorial__card"
+                  :class="{
+                    'industrial-editorial__card--wide':
+                      !isEditorialAccordion &&
+                      index === 0 &&
+                      textSections.length > 2 &&
+                      textSections.length % 2 === 1 &&
+                      section.text?.length,
+                    'industrial-editorial__card--collapsed':
+                      isEditorialAccordion && !expandedEditorialSections.includes(index),
+                  }"
+                >
+                  <div class="industrial-editorial__card-head">
+                    <span class="industrial-editorial__number">{{ String(index + 1).padStart(2, '0') }}</span>
+                  </div>
+                  <div class="industrial-editorial__body">
+                    <h3 v-if="isEditorialAccordion">
+                      <button
+                        class="industrial-editorial__toggle"
+                        type="button"
+                        :aria-expanded="expandedEditorialSections.includes(index)"
+                        :aria-controls="`editorial-content-${index}`"
+                        @click="toggleEditorialSection(index)"
+                      >
+                        <span>{{ section.title }}</span>
+                        <Icon
+                          class="industrial-editorial__toggle-icon"
+                          :class="{
+                            'industrial-editorial__toggle-icon--open': expandedEditorialSections.includes(index),
+                          }"
+                          name="lucide:chevron-down"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </h3>
+                    <h3 v-else>{{ section.title }}</h3>
+                    <div
+                      v-show="!isEditorialAccordion || expandedEditorialSections.includes(index)"
+                      :id="isEditorialAccordion ? `editorial-content-${index}` : undefined"
+                    >
+                      <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
+                      <div v-if="section.illustrations?.length" class="industrial-editorial__illustrations">
+                        <figure
+                          v-for="illustration in section.illustrations"
+                          :key="illustration.src"
+                          class="industrial-editorial__illustration"
+                          :class="{ 'industrial-editorial__illustration--compact': illustration.compact }"
+                        >
+                          <img
+                            class="industrial-editorial__illustration-image"
+                            :src="illustration.src"
+                            :alt="illustration.alt"
+                            :width="illustration.width"
+                            :height="illustration.height"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <figcaption class="industrial-editorial__illustration-caption">
+                            {{ illustration.caption }}
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <SpecsTableSection
+                        v-if="section.table"
+                        :title="section.table.title"
+                        :columns="section.table.headers"
+                        :rows="section.table.rows"
+                        :group-headers="section.table.groupHeaders"
+                        :groups="section.table.groups"
+                        eyebrow="Таблица размеров"
+                        compact
+                      />
+                      <ul v-if="section.items">
+                        <li v-for="item in section.items" :key="item">{{ item }}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        </template>
+        <template v-if="block === 'catalog'">
+          <ScraperConveyorsCatalog
+            v-if="!page.hideCatalog && page.catalogVariant !== 'categories' && page.theme === 'copper'"
+            :title="page.galleryTitle"
+            :sections="mediaSections"
+            @action="openRequest"
+          />
+
+          <section
+            v-else-if="!page.hideCatalog && page.catalogVariant !== 'categories' && mediaSections.length"
+            class="industrial-catalog"
+          >
+            <div class="content-section site-container">
+              <div class="industrial-section-heading industrial-section-heading--light">
+                <p v-if="page.theme !== 'amber' && page.title !== 'Барабаны ленточного конвейера'">Модельный ряд</p>
+                <p
+                  v-else-if="page.title === 'Барабаны ленточного конвейера'"
+                  class="industrial-section-heading__kicker"
+                >
+                  Точная комплектация для стабильного движения ленты
+                </p>
+                <h2>{{ page.galleryTitle }}</h2>
+              </div>
+              <div class="industrial-catalog__grid">
+                <article v-if="page.theme === 'amber' && mediaSections[0]" class="industrial-catalog__card">
+                  <figure>
+                    <img
+                      :src="mediaSections[0].image"
+                      :alt="mediaSections[0].imageAlt || mediaSections[0].title"
+                      loading="lazy"
+                      width="1200"
+                      height="900"
+                    />
+                  </figure>
+                  <div>
+                    <h3>{{ mediaSections[0].title }}</h3>
+                    <p v-for="paragraph in mediaSections[0].text" :key="paragraph">{{ paragraph }}</p>
+                    <ul v-if="mediaSections[0].items">
+                      <li v-for="item in mediaSections[0].items" :key="item">{{ item }}</li>
+                    </ul>
+                  </div>
+                </article>
+
+                <ScraperProductCard
+                  v-for="(product, index) in scraperCatalogSections"
+                  :key="product.title"
+                  :product="product"
+                  :index="index"
+                  @action="openRequest"
+                />
+
+                <template v-if="!['amber', 'wine', 'teal'].includes(page.theme)">
+                  <article v-for="section in mediaSections" :key="section.title" class="industrial-catalog__card">
+                    <figure>
+                      <img
+                        :src="section.image"
+                        :alt="section.imageAlt || section.title"
+                        loading="lazy"
+                        width="1200"
+                        height="900"
+                      />
+                    </figure>
+                    <div>
+                      <h3>{{ section.title }}</h3>
+                      <p v-for="paragraph in section.text" :key="paragraph">{{ paragraph }}</p>
+                      <ul v-if="section.items">
+                        <li v-for="item in section.items" :key="item">{{ item }}</li>
+                      </ul>
+                    </div>
+                  </article>
+                </template>
+              </div>
+            </div>
+          </section>
+        </template>
+      </template>
+
+      <RelatedProductLinks
+        v-if="projectsThenDetails && page.relatedLinks?.length && page.relatedLinksTitle"
+        :title="page.relatedLinksTitle"
+        :links="page.relatedLinks"
+        :compact="page.compactLinkSections"
+      />
+
+      <RelatedProductLinks
+        v-if="projectsThenDetails && page.usefulLinks?.length && page.usefulLinksTitle"
+        :title="page.usefulLinksTitle"
+        :links="page.usefulLinks"
+        :compact="page.compactLinkSections"
+      />
 
       <section v-if="page.video" class="industrial-video">
         <div class="content-section site-container">
           <p class="industrial-content__eyebrow">Видео оборудования</p>
           <h2>{{ page.video.title }}</h2>
-          <div class="industrial-video__frame">
+          <div v-if="page.video.clips" class="industrial-video__grid">
+            <figure v-for="clip in page.video.clips" :key="clip.src" class="industrial-video__clip">
+              <video
+                class="industrial-video__player"
+                :aria-label="clip.title"
+                :poster="clip.poster"
+                controls
+                preload="none"
+                playsinline
+              >
+                <source :src="clip.src" type="video/mp4" />
+                Ваш браузер не поддерживает воспроизведение видео.
+              </video>
+              <figcaption class="industrial-video__caption">{{ clip.title }}</figcaption>
+            </figure>
+          </div>
+          <div v-else class="industrial-video__frame">
             <iframe
               :src="page.video.embedUrl"
               :title="page.video.title"
@@ -474,37 +557,37 @@ const faq = computed(
 
 <style scoped lang="scss">
 .industrial-types {
-  padding-block: 48px;
+  padding-block: var(--industrial-types-padding, 48px);
   background: $soft;
 
   &__title {
-    margin: 0 0 28px;
-    font-size: clamp(30px, 3.5vw, 44px);
+    margin: 0 0 var(--industrial-types-title-space, 28px);
+    font-size: var(--industrial-types-title-size, var(--section-heading-size));
     font-weight: 600;
-    line-height: 1.2;
+    line-height: var(--section-heading-leading);
     color: $ink;
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    gap: var(--industrial-types-gap, 20px);
   }
 
   &__group {
-    margin-top: 36px;
+    margin-top: var(--industrial-types-group-space, 36px);
   }
 
   &__group-title {
     margin: 0 0 12px;
-    font-size: clamp(20px, 2.4vw, 28px);
+    font-size: var(--card-heading-size);
     font-weight: 500;
     line-height: 1.3;
     color: $ink;
   }
 
   &__description {
-    margin: 0 0 20px;
+    margin: 0 0 var(--industrial-types-description-space, 20px);
     font-size: 15px;
     line-height: 1.6;
     color: $muted;
@@ -519,7 +602,7 @@ const faq = computed(
 
 @media (max-width: $phone) {
   .industrial-types {
-    padding-block: 32px;
+    padding-block: var(--industrial-types-padding-mobile, 32px);
 
     &__grid {
       grid-template-columns: 1fr;
@@ -565,15 +648,24 @@ const faq = computed(
 }
 
 .industrial-page--blue .industrial-editorial__grid {
-  gap: 24px;
+  gap: var(--industrial-blue-editorial-gap, 24px);
 }
 
 .industrial-page--blue .industrial-editorial__grid article {
-  grid-template-columns: 72px minmax(0, 1fr);
-  min-height: 380px;
+  grid-template-columns: var(--industrial-blue-card-columns, 72px minmax(0, 1fr));
+  min-height: var(--industrial-blue-card-min-height, 380px);
   border: 1px solid rgb(23 105 170 / 13%);
   border-radius: 16px;
   box-shadow: 0 18px 44px rgb(8 47 82 / 8%);
+}
+
+.industrial-page--blue .industrial-editorial__grid--stacked article {
+  min-height: 0;
+  padding: 22px 28px;
+}
+
+.industrial-page--blue .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
+  padding: 14px 22px;
 }
 
 .industrial-page--blue .industrial-editorial__grid article::before {
@@ -594,7 +686,7 @@ const faq = computed(
 
 .industrial-page--blue .industrial-catalog__grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+  gap: var(--industrial-blue-catalog-gap, 24px);
 }
 
 .industrial-page--blue .industrial-catalog__card {
@@ -608,7 +700,7 @@ const faq = computed(
 }
 
 .industrial-page--blue .industrial-catalog figure {
-  height: 210px;
+  height: var(--industrial-blue-figure-height, 210px);
   aspect-ratio: auto;
   background: #fff;
   border-bottom: 1px solid rgb(23 105 170 / 10%);
@@ -618,12 +710,12 @@ const faq = computed(
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 24px;
+  padding: var(--industrial-blue-card-padding, 24px);
 }
 
 .industrial-page--blue .industrial-catalog h3 {
   margin-bottom: 12px;
-  font-size: clamp(21px, 2vw, 27px);
+  font-size: var(--card-heading-size);
 }
 
 .industrial-page--blue .industrial-catalog p {
@@ -642,7 +734,7 @@ const faq = computed(
 }
 
 .industrial-page--blue .industrial-section-heading--light {
-  margin-bottom: 34px;
+  margin-bottom: 28px;
 }
 
 .industrial-page--blue .industrial-section-heading--light h2 {
@@ -679,7 +771,7 @@ const faq = computed(
 
 .industrial-page--graphite :deep(.product-intro h2) {
   max-width: 650px;
-  font-size: clamp(34px, 4.4vw, 58px);
+  font-size: var(--section-heading-size);
   color: #052f55;
 }
 
@@ -761,7 +853,7 @@ const faq = computed(
 }
 
 .industrial-page--graphite .industrial-editorial h3 {
-  font-size: clamp(25px, 2.5vw, 34px);
+  font-size: var(--card-heading-size);
 }
 
 .industrial-page--graphite .industrial-catalog {
@@ -823,7 +915,7 @@ const faq = computed(
 }
 
 .industrial-page--graphite .industrial-catalog h3 {
-  font-size: clamp(28px, 3.2vw, 42px);
+  font-size: var(--card-heading-size);
   color: #052f55;
 }
 
@@ -874,7 +966,7 @@ const faq = computed(
 
 .industrial-page--teal :deep(.product-intro h2) {
   max-width: 680px;
-  font-size: clamp(34px, 4.2vw, 56px);
+  font-size: var(--section-heading-size);
   color: #052f55;
 }
 
@@ -902,20 +994,20 @@ const faq = computed(
 
 .industrial-page--teal .industrial-catalog__grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
+  gap: var(--industrial-themed-catalog-gap, 22px);
 }
 
 .industrial-page--teal .industrial-catalog__card {
   display: flex;
   flex-direction: column;
-  min-height: 560px;
+  min-height: var(--industrial-themed-card-min-height, 560px);
   border: 1px solid rgb(7 87 164 / 11%);
   border-radius: 16px;
   box-shadow: 0 14px 38px rgb(5 47 85 / 7%);
 }
 
 .industrial-page--teal .industrial-catalog figure {
-  height: 250px;
+  height: var(--industrial-themed-figure-height, 250px);
   aspect-ratio: auto;
   background: #fff;
   border-bottom: 1px solid rgb(7 87 164 / 9%);
@@ -925,11 +1017,11 @@ const faq = computed(
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 28px;
+  padding: var(--industrial-themed-card-padding, 28px);
 }
 
 .industrial-page--teal .industrial-catalog h3 {
-  font-size: clamp(23px, 2.3vw, 31px);
+  font-size: var(--industrial-themed-card-title-size, clamp(23px, 2.3vw, 31px));
   color: #052f55;
 }
 
@@ -987,7 +1079,7 @@ const faq = computed(
 
 .industrial-page--indigo :deep(.product-intro h2) {
   max-width: 690px;
-  font-size: clamp(35px, 4.5vw, 60px);
+  font-size: var(--section-heading-size);
   color: #052f55;
 }
 
@@ -1070,12 +1162,12 @@ const faq = computed(
 }
 
 .industrial-page--indigo .industrial-catalog h3 {
-  font-size: clamp(23px, 2.2vw, 31px);
+  font-size: var(--card-heading-size);
   color: #052f55;
 }
 
 .industrial-page--indigo .industrial-catalog__card:first-child h3 {
-  font-size: clamp(28px, 3.2vw, 43px);
+  font-size: var(--card-heading-size);
 }
 
 .industrial-page--indigo .industrial-catalog ul {
@@ -1162,7 +1254,7 @@ const faq = computed(
 }
 
 .industrial-page--steel .industrial-editorial h3 {
-  font-size: clamp(25px, 2.6vw, 36px);
+  font-size: var(--card-heading-size);
   color: #052f55;
 }
 
@@ -1203,13 +1295,13 @@ const faq = computed(
 }
 
 .industrial-page--amber .industrial-editorial__grid {
-  gap: 20px;
+  gap: var(--industrial-amber-editorial-gap, 20px);
 }
 
 .industrial-page--amber .industrial-editorial__grid article {
-  grid-template-columns: 66px minmax(0, 1fr);
-  min-height: 360px;
-  padding: clamp(28px, 3.5vw, 42px);
+  grid-template-columns: var(--industrial-amber-card-columns, 66px minmax(0, 1fr));
+  min-height: var(--industrial-amber-card-min-height, 360px);
+  padding: var(--industrial-amber-card-padding, clamp(28px, 3.5vw, 42px));
   background: #eef5fb;
   border: 1px solid rgb(7 87 164 / 10%);
   border-radius: 14px;
@@ -1232,7 +1324,7 @@ const faq = computed(
 }
 
 .industrial-page--amber .industrial-editorial h3 {
-  font-size: clamp(24px, 2.4vw, 33px);
+  font-size: var(--industrial-amber-editorial-title-size, clamp(24px, 2.4vw, 33px));
   color: #052f55;
 }
 
@@ -1261,7 +1353,7 @@ const faq = computed(
 
 .industrial-page--amber .industrial-catalog .industrial-section-heading h2 {
   max-width: 820px;
-  font-size: clamp(30px, 3.6vw, 46px);
+  font-size: var(--section-heading-size);
 }
 
 .industrial-page--amber .industrial-section-heading--light p {
@@ -1317,12 +1409,12 @@ const faq = computed(
 }
 
 .industrial-page--amber .industrial-catalog h3 {
-  font-size: clamp(24px, 2.5vw, 34px);
+  font-size: var(--card-heading-size);
   color: #052f55;
 }
 
 .industrial-page--amber .industrial-catalog__card:first-child h3 {
-  font-size: clamp(30px, 3.5vw, 46px);
+  font-size: var(--card-heading-size);
   color: #fff;
 }
 
@@ -1346,9 +1438,9 @@ const faq = computed(
 .industrial-section-heading {
   display: grid;
   grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
-  gap: clamp(32px, 6vw, 88px);
+  gap: var(--industrial-heading-gap, clamp(32px, 6vw, 88px));
   align-items: end;
-  margin-bottom: clamp(38px, 6vw, 68px);
+  margin-bottom: var(--industrial-heading-space, 28px);
 }
 
 .industrial-section-heading__intro p {
@@ -1371,8 +1463,8 @@ const faq = computed(
 .industrial-section-heading h2 {
   max-width: 820px;
   margin: 0;
-  font-size: clamp(34px, 4.6vw, 62px);
-  line-height: 1.02;
+  font-size: var(--industrial-heading-size, var(--section-heading-size));
+  line-height: var(--section-heading-leading);
   color: $ink;
   letter-spacing: -0.05em;
 }
@@ -1390,7 +1482,7 @@ const faq = computed(
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 28px;
+    margin-bottom: var(--industrial-models-nav-space, 28px);
   }
 
   &__nav-link {
@@ -1415,13 +1507,13 @@ const faq = computed(
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: var(--industrial-models-gap, 20px);
   }
 
   &__card {
     display: flex;
     flex-direction: column;
-    padding: clamp(24px, 3vw, 38px);
+    padding: var(--industrial-models-card-padding, clamp(24px, 3vw, 38px));
     scroll-margin-top: 120px;
     background: var(--page-tint);
     border: 1px solid color-mix(in srgb, var(--page-accent) 18%, transparent);
@@ -1430,8 +1522,8 @@ const faq = computed(
 
   &__title {
     margin: 0 0 14px;
-    font-size: clamp(24px, 2.4vw, 32px);
-    line-height: 1.16;
+    font-size: var(--card-heading-size);
+    line-height: var(--card-heading-leading);
     color: $ink;
     letter-spacing: -0.035em;
   }
@@ -1505,7 +1597,7 @@ const faq = computed(
 .industrial-editorial__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: var(--industrial-editorial-gap, 18px);
 }
 
 .industrial-editorial__grid--stacked {
@@ -1515,9 +1607,9 @@ const faq = computed(
 .industrial-editorial__grid article {
   position: relative;
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-columns: var(--industrial-editorial-columns, 92px minmax(0, 1fr));
   min-height: 100%;
-  padding: clamp(28px, 4vw, 46px);
+  padding: var(--industrial-editorial-padding, clamp(28px, 4vw, 46px));
   overflow: hidden;
   background: #fff;
   border: 1px solid rgb(10 39 62 / 9%);
@@ -1526,10 +1618,10 @@ const faq = computed(
 }
 
 .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
-  grid-template-columns: 56px minmax(0, 1fr);
+  grid-template-columns: var(--industrial-editorial-columns-collapsed, 56px minmax(0, 1fr));
   align-items: center;
   min-height: 0;
-  padding: 16px 24px;
+  padding: var(--industrial-editorial-padding-collapsed, 16px 24px);
 }
 
 .industrial-editorial__grid article::before {
@@ -1651,6 +1743,33 @@ const faq = computed(
   margin: 0;
 }
 
+.industrial-editorial__illustration--compact {
+  width: min(100%, 320px);
+  margin-inline: auto;
+}
+
+.industrial-types__pending-card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 180px;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 14px;
+}
+
+.industrial-types__pending-title {
+  margin: 0;
+  font-size: 20px;
+  color: $ink;
+}
+
+.industrial-types__pending-number {
+  font-weight: 800;
+  color: $blue;
+}
+
 .industrial-editorial__illustration-image {
   display: block;
   width: 100%;
@@ -1669,8 +1788,8 @@ const faq = computed(
 .industrial-editorial h3,
 .industrial-catalog h3 {
   margin: 0 0 16px;
-  font-size: clamp(22px, 2.3vw, 32px);
-  line-height: 1.16;
+  font-size: var(--industrial-editorial-title-size, var(--card-heading-size));
+  line-height: var(--card-heading-leading);
   color: $ink;
   letter-spacing: -0.035em;
 }
@@ -1795,7 +1914,7 @@ const faq = computed(
 }
 
 .industrial-page--copper .industrial-editorial__grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .industrial-page--copper .industrial-editorial__grid article {
@@ -1803,33 +1922,6 @@ const faq = computed(
   border: 0;
   border-radius: 10px;
   box-shadow: none;
-}
-
-.industrial-page--copper .industrial-editorial__grid article:first-child {
-  position: relative;
-  overflow: hidden;
-  color: #fff;
-  background: #052f55;
-}
-
-.industrial-page--copper .industrial-editorial__grid article:first-child::after {
-  position: absolute;
-  right: -70px;
-  bottom: -90px;
-  width: 220px;
-  height: 220px;
-  content: '';
-  border: 36px solid rgb(245 197 24 / 12%);
-  border-radius: 50%;
-}
-
-.industrial-page--copper .industrial-editorial__grid article:first-child h3 {
-  color: #fff;
-}
-
-.industrial-page--copper .industrial-editorial__grid article:first-child p,
-.industrial-page--copper .industrial-editorial__grid article:first-child li {
-  color: rgb(255 255 255 / 72%);
 }
 
 .industrial-page--copper .industrial-catalog {
@@ -1933,20 +2025,20 @@ const faq = computed(
 
 .industrial-page--wine .industrial-catalog__grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+  gap: var(--industrial-themed-catalog-gap, 24px);
 }
 
 .industrial-page--wine .industrial-catalog__card {
   display: flex;
   flex-direction: column;
-  min-height: 520px;
+  min-height: var(--industrial-themed-card-min-height, 520px);
   border: 1px solid rgb(7 87 164 / 12%);
   border-radius: 16px;
   box-shadow: 0 14px 40px rgb(5 47 85 / 7%);
 }
 
 .industrial-page--wine .industrial-catalog figure {
-  height: 250px;
+  height: var(--industrial-themed-figure-height, 250px);
   aspect-ratio: auto;
   background: #fff;
   border-bottom: 1px solid rgb(7 87 164 / 9%);
@@ -1957,7 +2049,7 @@ const faq = computed(
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  padding: 28px;
+  padding: var(--industrial-themed-card-padding, 28px);
 }
 
 .industrial-page--wine .industrial-catalog__action {
@@ -1978,7 +2070,7 @@ const faq = computed(
   display: grid;
   grid-template-columns: minmax(380px, 1.08fr) minmax(0, 0.92fr);
   grid-column: 1 / -1;
-  min-height: 410px;
+  min-height: var(--industrial-themed-featured-height, 410px);
   color: #fff;
   background: #052f55;
   border: 0;
@@ -1986,17 +2078,17 @@ const faq = computed(
 
 .industrial-page--wine .industrial-catalog__card:first-child figure {
   height: 100%;
-  min-height: 410px;
+  min-height: var(--industrial-themed-featured-height, 410px);
   border: 0;
 }
 
 .industrial-page--wine .industrial-catalog__card:first-child > div {
   justify-content: center;
-  padding: clamp(34px, 5vw, 58px);
+  padding: var(--industrial-themed-featured-padding, clamp(34px, 5vw, 58px));
 }
 
 .industrial-page--wine .industrial-catalog__card:first-child h3 {
-  font-size: clamp(30px, 3.4vw, 46px);
+  font-size: var(--industrial-themed-featured-title-size, var(--card-heading-size));
   color: #fff;
 }
 
@@ -2060,7 +2152,7 @@ const faq = computed(
 
 .industrial-page--forest .industrial-editorial h3 {
   max-width: 800px;
-  font-size: clamp(28px, 3.4vw, 46px);
+  font-size: var(--card-heading-size);
 }
 
 .industrial-page--forest .industrial-editorial p {
@@ -2096,8 +2188,8 @@ const faq = computed(
 
 .industrial-page--forest .industrial-catalog .industrial-section-heading h2 {
   max-width: none;
-  font-size: clamp(32px, 3.8vw, 50px);
-  white-space: nowrap;
+  font-size: var(--section-heading-size);
+  white-space: normal;
 }
 
 .industrial-page--forest .industrial-catalog__grid {
@@ -2147,7 +2239,7 @@ const faq = computed(
 }
 
 .industrial-page--forest .industrial-catalog h3 {
-  font-size: clamp(30px, 3.6vw, 48px);
+  font-size: var(--card-heading-size);
   color: #fff;
 }
 
@@ -2224,8 +2316,8 @@ const faq = computed(
 .industrial-video h2 {
   max-width: 900px;
   margin: 0 0 28px;
-  font-size: clamp(30px, 4vw, 52px);
-  line-height: 1.08;
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-leading);
   color: $ink;
   letter-spacing: -0.04em;
 }
@@ -2316,7 +2408,37 @@ const faq = computed(
   border: 0;
 }
 
+.industrial-video__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.industrial-video__clip {
+  margin: 0;
+  overflow: hidden;
+  background: $ink;
+  border-radius: 16px;
+}
+
+.industrial-video__player {
+  display: block;
+  width: 100%;
+  aspect-ratio: 640 / 352;
+  object-fit: cover;
+}
+
+.industrial-video__caption {
+  padding: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
 @media (width <= $tablet) {
+  .industrial-video__grid {
+    grid-template-columns: 1fr;
+  }
+
   .industrial-content__layout--media {
     grid-template-columns: 1fr;
   }
@@ -2486,8 +2608,8 @@ const faq = computed(
   }
 
   .industrial-section-heading {
-    gap: 22px;
-    margin-bottom: 32px;
+    gap: var(--industrial-heading-gap-mobile, 22px);
+    margin-bottom: var(--industrial-heading-space-mobile, 24px);
   }
 
   .industrial-section-heading__intro span {
@@ -2495,24 +2617,24 @@ const faq = computed(
   }
 
   .industrial-section-heading h2 {
-    font-size: 30px;
-    line-height: 1.08;
+    font-size: var(--industrial-heading-size-mobile, var(--section-heading-size));
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.035em;
   }
 
   .industrial-page .industrial-editorial__grid article {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: var(--industrial-editorial-columns-mobile, 1fr);
     gap: 18px;
     min-height: 0;
-    padding: 24px 20px;
+    padding: var(--industrial-editorial-padding-mobile, 24px 20px);
     border-radius: 4px 16px 16px 4px;
   }
 
   .industrial-page .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
-    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-columns: var(--industrial-editorial-columns-collapsed-mobile, 36px minmax(0, 1fr));
     gap: 12px;
-    padding: 14px 18px;
+    padding: var(--industrial-editorial-padding-collapsed-mobile, 14px 18px);
   }
 
   .industrial-page--graphite .industrial-editorial__grid--stacked .industrial-editorial__card--collapsed {
@@ -2550,7 +2672,7 @@ const faq = computed(
 
   .industrial-page .industrial-editorial h3 {
     margin-bottom: 12px;
-    font-size: 24px;
+    font-size: var(--industrial-editorial-title-size-mobile, 24px);
     line-height: 1.2;
   }
 
@@ -2629,8 +2751,8 @@ const faq = computed(
   &__title {
     max-width: 980px;
     margin: 0;
-    font-size: clamp(28px, 3.4vw, 44px);
-    line-height: 1.15;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     color: $navy;
   }
 
@@ -2737,5 +2859,60 @@ const faq = computed(
       font-size: 13px;
     }
   }
+}
+
+.industrial-page--compact {
+  --content-section-space: 56px;
+  --content-section-space-mobile: 40px;
+  --product-facts-card-height: 112px;
+  --product-facts-card-padding: 20px;
+  --product-facts-card-height-mobile: 100px;
+  --product-facts-card-padding-mobile: 16px;
+  --industrial-themed-catalog-gap: 14px;
+  --industrial-themed-card-min-height: 0;
+  --industrial-themed-figure-height: 185px;
+  --industrial-themed-card-padding: 18px;
+  --industrial-themed-card-title-size: var(--card-heading-size);
+  --industrial-themed-featured-height: 290px;
+  --industrial-themed-featured-padding: 24px;
+  --industrial-themed-featured-title-size: var(--card-heading-size);
+  --industrial-models-nav-space: 20px;
+  --industrial-models-gap: 14px;
+  --industrial-models-card-padding: 20px;
+  --industrial-blue-editorial-gap: 12px;
+  --industrial-blue-card-columns: 44px minmax(0, 1fr);
+  --industrial-blue-card-min-height: 0;
+  --industrial-blue-catalog-gap: 14px;
+  --industrial-blue-figure-height: 175px;
+  --industrial-blue-card-padding: 18px;
+  --industrial-types-padding: 40px;
+  --industrial-types-padding-mobile: 30px;
+  --industrial-types-title-space: 20px;
+  --industrial-types-title-size: var(--section-heading-size);
+  --industrial-types-group-space: 24px;
+  --industrial-types-description-space: 14px;
+  --industrial-types-gap: 14px;
+  --industrial-heading-gap: 28px;
+  --industrial-heading-gap-mobile: 12px;
+  --industrial-heading-space: 24px;
+  --industrial-heading-space-mobile: 24px;
+  --industrial-heading-size: var(--section-heading-size);
+  --industrial-heading-size-mobile: var(--section-heading-size);
+  --industrial-editorial-gap: 12px;
+  --industrial-editorial-columns: 44px minmax(0, 1fr);
+  --industrial-editorial-columns-collapsed: 44px minmax(0, 1fr);
+  --industrial-editorial-padding: 18px 22px;
+  --industrial-editorial-padding-collapsed: 16px 22px;
+  --industrial-editorial-title-size: var(--card-heading-size);
+  --industrial-editorial-columns-mobile: 32px minmax(0, 1fr);
+  --industrial-editorial-columns-collapsed-mobile: 32px minmax(0, 1fr);
+  --industrial-editorial-padding-mobile: 14px;
+  --industrial-editorial-padding-collapsed-mobile: 14px;
+  --industrial-editorial-title-size-mobile: 20px;
+  --industrial-amber-editorial-gap: 10px;
+  --industrial-amber-card-columns: 44px minmax(0, 1fr);
+  --industrial-amber-card-min-height: 0;
+  --industrial-amber-card-padding: 12px 18px;
+  --industrial-amber-editorial-title-size: clamp(18px, 1.8vw, 23px);
 }
 </style>

@@ -6,7 +6,7 @@ import { catalogGroups } from '~/data/navigation/catalog';
 </script>
 
 <template>
-  <section id="catalog" class="content-section site-container home-categories">
+  <section id="catalog" class="site-container home-categories">
     <div class="home-categories__heading">
       <h2 class="home-categories__title">{{ homeCatalog.title }}</h2>
       <p class="home-categories__subtitle">{{ homeCatalog.description }}</p>
@@ -63,20 +63,23 @@ import { catalogGroups } from '~/data/navigation/catalog';
 
 <style scoped lang="scss">
 .home-categories {
+  padding-block: 58px 54px;
+
   &__heading {
-    margin-bottom: 38px;
+    margin-bottom: 24px;
   }
 
   &__title {
     margin: 0;
-    font-size: clamp(36px, 4vw, 54px);
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.035em;
   }
 
   &__subtitle {
     max-width: 720px;
-    margin: 14px 0 0;
-    font-size: 17px;
+    margin: 8px 0 0;
+    font-size: 16px;
     line-height: 1.5;
     color: $muted;
   }
@@ -84,7 +87,7 @@ import { catalogGroups } from '~/data/navigation/catalog';
   &__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
+    gap: 14px;
     align-items: start;
   }
 
@@ -98,10 +101,10 @@ import { catalogGroups } from '~/data/navigation/catalog';
   &__hero {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
     width: 100%;
-    min-height: 290px;
-    padding: 18px;
+    min-height: 236px;
+    padding: 14px;
     overflow: hidden;
     font: inherit;
     color: $ink;
@@ -124,7 +127,7 @@ import { catalogGroups } from '~/data/navigation/catalog';
   &__image {
     display: block;
     width: 100%;
-    height: 148px;
+    height: 126px;
     object-fit: contain;
     transition: transform 0.3s ease;
   }
@@ -134,7 +137,7 @@ import { catalogGroups } from '~/data/navigation/catalog';
     gap: 10px;
     align-items: start;
     width: 100%;
-    padding-top: 16px;
+    padding-top: 10px;
     border-top: 1px solid $line;
   }
 
@@ -143,7 +146,7 @@ import { catalogGroups } from '~/data/navigation/catalog';
     flex: 1;
     font-size: 16px;
     font-weight: 400;
-    line-height: 1.45;
+    line-height: 1.35;
     color: $ink;
   }
 
@@ -253,8 +256,31 @@ import { catalogGroups } from '~/data/navigation/catalog';
 }
 
 @media (max-width: $phone) {
-  .home-categories__grid {
-    grid-template-columns: 1fr;
+  .home-categories {
+    padding-block: 40px;
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    &__hero {
+      min-height: 176px;
+      padding: 12px;
+    }
+
+    &__image {
+      height: 96px;
+    }
+
+    &__name {
+      font-size: 15px;
+    }
+
+    &__arrow {
+      width: 17px;
+      height: 17px;
+    }
   }
 }
 </style>

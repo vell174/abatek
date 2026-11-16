@@ -23,6 +23,12 @@
 
   --font-sans: 'Montserrat Variable', 'Montserrat', arial, sans-serif;
   --font-display: 'Montserrat Variable', 'Montserrat', arial, sans-serif;
+  --section-heading-size: clamp(28px, 2.6vw, 38px);
+  --section-heading-size-narrow: clamp(24px, 2.1vw, 30px);
+  --section-heading-leading: 1.16;
+  --card-heading-size: clamp(20px, 1.8vw, 24px);
+  --card-heading-leading: 1.3;
+  --resource-hero-title-size: clamp(32px, 3.4vw, 48px);
 }
 
 *,
@@ -96,7 +102,7 @@ textarea:focus-visible {
 }
 
 .content-section {
-  padding-block: 90px;
+  padding-block: var(--content-section-space, 90px);
 }
 
 .content-section--soft {
@@ -117,11 +123,18 @@ textarea:focus-visible {
 }
 
 @media (max-width: $phone) {
+  :root {
+    --section-heading-size: clamp(26px, 6vw, 30px);
+    --section-heading-size-narrow: 26px;
+    --card-heading-size: 20px;
+    --resource-hero-title-size: clamp(28px, 7vw, 34px);
+  }
+
   .site-container {
     width: min(100% - 28px, #{$wide});
   }
 
   .content-section {
-    padding-block: 64px;
+    padding-block: var(--content-section-space-mobile, 64px);
   }
 }

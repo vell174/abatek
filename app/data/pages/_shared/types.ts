@@ -7,7 +7,7 @@ export interface IndustrialSection {
   image?: string;
   imageAlt?: string;
   cardImage?: GalleryImage;
-  illustrations?: Array<GalleryImage & { caption: string }>;
+  illustrations?: Array<GalleryImage & { caption: string; compact?: boolean }>;
   table?: {
     title: string;
     headers: string[];
@@ -15,6 +15,10 @@ export interface IndustrialSection {
     groupHeaders?: Array<{ label: string; colspan?: number; rowspan?: number }>;
     groups?: Array<{ label: string; description: string; image: GalleryImage; rows: string[][] }>;
   };
+  specificationDocument?: string;
+  specificationVisible?: boolean;
+  specificationSource?: string;
+  specificationSourceUrl?: string;
   imageFit?: 'cover' | 'contain';
   href?: string;
   features?: Array<{ title: string; text: string }>;
@@ -38,19 +42,30 @@ export interface IndustrialPage {
   heroAccents?: readonly string[];
   heroImage?: string;
   heroImageAlt?: string;
+  heroImagePosition?: string;
   heroActionLabel?: string;
   heroRequestContext?: string;
   heroBackgroundVariant?:
     | 'default'
     | 'drawing'
+    | 'scraper-drawing'
+    | 'elevator-drawing'
     | 'photo'
+    | 'feeder-photo'
+    | 'photo-clear'
     | 'product'
     | 'product-dark'
     | 'product-dark-contained'
     | 'rgs-photo'
     | 'rvs-photo'
-    | 'screw-flight-photo';
+    | 'screw-flight-photo'
+    | 'flat-conveyor-photo'
+    | 'smooth-belt-photo'
+    | 'partitioned-conveyor-photo'
+    | 'straight-conveyor-photo'
+    | 'firewood-photo';
   heroCompact?: boolean;
+  compactLayout?: boolean;
   heroTitleVariant?: 'default' | 'wide-light';
   image: string;
   imageAlt?: string;
@@ -97,6 +112,7 @@ export interface IndustrialPage {
     rows: string[][];
   }>;
   referenceCard?: {
+    compact?: boolean;
     title: string;
     description: string;
     actionLabel: string;
@@ -106,11 +122,15 @@ export interface IndustrialPage {
     label: string;
     url: string;
   };
-  video?: { title: string; embedUrl: string };
+  video?:
+    | { title: string; embedUrl: string; clips?: never }
+    | { title: string; clips: Array<{ title: string; src: string; poster: string }>; embedUrl?: never };
   theme: 'forest' | 'copper' | 'blue' | 'graphite' | 'wine' | 'teal' | 'indigo' | 'steel' | 'amber';
   galleryTitle: string;
   projectsTitle?: string;
   projectsPlacement?: 'before-content' | 'before-workflow';
+  contentOrder?: 'projects-first' | 'editorial-first' | 'catalog-first';
+  projectsThenDetails?: boolean;
   hideCatalog?: boolean;
   catalogVariant?: 'default' | 'categories';
   classificationTitle?: string;
@@ -119,6 +139,9 @@ export interface IndustrialPage {
   parentBreadcrumb?: { label: string; to: string };
   relatedLinks?: Array<{ label: string; to: string; description: string }>;
   relatedLinksTitle?: string;
+  usefulLinks?: Array<{ label: string; to: string; description: string }>;
+  usefulLinksTitle?: string;
+  compactLinkSections?: boolean;
   workflow?: {
     eyebrow: string;
     title: string;

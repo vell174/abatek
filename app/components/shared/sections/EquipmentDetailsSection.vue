@@ -53,9 +53,9 @@ defineProps<{ title: string; sections: IndustrialSection[] }>();
 
   &__title {
     max-width: 920px;
-    margin: 0 0 44px;
-    font-size: clamp(30px, 3.5vw, 46px);
-    line-height: 1.16;
+    margin: 0 0 24px;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     color: $navy;
     letter-spacing: -0.035em;
   }
@@ -88,9 +88,9 @@ defineProps<{ title: string; sections: IndustrialSection[] }>();
 
   &__subtitle {
     margin: 0;
-    font-size: clamp(23px, 2.5vw, 32px);
+    font-size: var(--card-heading-size);
     font-weight: 600;
-    line-height: 1.25;
+    line-height: var(--card-heading-leading);
     color: $ink;
   }
 

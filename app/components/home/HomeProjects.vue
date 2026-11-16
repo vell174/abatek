@@ -91,7 +91,7 @@ const setDialogOpen = (open: boolean) => {
 
 <style scoped lang="scss">
 .home-projects {
-  padding-block: 56px;
+  padding-block: 48px;
   background: $soft;
 
   &__heading {
@@ -99,7 +99,7 @@ const setDialogOpen = (open: boolean) => {
     gap: 24px;
     align-items: end;
     justify-content: space-between;
-    margin-bottom: 26px;
+    margin-bottom: 20px;
   }
 
   &__eyebrow {
@@ -114,8 +114,8 @@ const setDialogOpen = (open: boolean) => {
   &__title {
     max-width: 920px;
     margin: 0;
-    font-size: clamp(32px, 3.6vw, 46px);
-    line-height: 1.06;
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-leading);
     letter-spacing: -0.045em;
   }
 
@@ -176,15 +176,16 @@ const setDialogOpen = (open: boolean) => {
 
   &__card {
     position: relative;
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    min-height: 290px;
+    min-height: 0;
     padding: 0;
     overflow: hidden;
     color: inherit;
     text-align: left;
     cursor: zoom-in;
-    background: $navy;
+    background: #fff;
     border: 0;
     border-radius: 20px;
 
@@ -195,19 +196,17 @@ const setDialogOpen = (open: boolean) => {
 
   &__image,
   &__shade {
-    position: absolute;
-    inset: 0;
     width: 100%;
-    height: 100%;
   }
 
   &__image {
+    height: 220px;
     object-fit: cover;
     transition: transform 0.45s ease;
   }
 
   &__shade {
-    background: linear-gradient(180deg, transparent 35%, rgb(3 17 34 / 92%) 100%);
+    display: none;
   }
 
   &__number {
@@ -233,15 +232,13 @@ const setDialogOpen = (open: boolean) => {
   }
 
   &__name {
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1;
+    min-height: 68px;
+    padding: 12px 16px;
     margin: 0;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1.35;
-    color: #fff;
+    color: $ink;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -391,7 +388,7 @@ const setDialogOpen = (open: boolean) => {
     }
 
     &__card {
-      min-height: 260px;
+      min-height: 0;
     }
   }
 

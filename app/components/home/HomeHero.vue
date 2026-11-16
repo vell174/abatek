@@ -32,7 +32,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 <style scoped lang="scss">
 .home-hero {
   position: relative;
-  min-height: 500px;
+  min-height: 425px;
   overflow: hidden;
   color: #fff;
   background:
@@ -53,7 +53,7 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__content {
     position: relative;
     z-index: 1;
-    padding-block: 64px 72px;
+    padding-block: 55px 58px;
   }
 
   &__eyebrow {
@@ -68,8 +68,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
   &__title {
     max-width: 720px;
     margin: 0;
-    font-size: clamp(48px, 5.5vw, 68px);
-    line-height: 0.98;
+    font-size: clamp(44px, 4.8vw, 60px);
+    line-height: 1.01;
     letter-spacing: -0.045em;
   }
 
@@ -84,8 +84,8 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
 
   &__text {
     max-width: 620px;
-    margin: 22px 0;
-    font-size: 17px;
+    margin: 18px 0;
+    font-size: 16px;
     line-height: 1.6;
     color: #cfdae6;
   }
@@ -141,11 +141,11 @@ const isProjectRequestOpen = useState('project-request-open', () => false);
       linear-gradient(90deg, rgb(2 13 31 / 22%) 0%, transparent 58%), url('/images/home-hero-welding-2026-mobile.webp');
 
     &__content {
-      padding-block: 48px 64px;
+      padding-block: 42px 50px;
     }
 
     &__title {
-      font-size: clamp(38px, 10vw, 50px);
+      font-size: clamp(35px, 9vw, 46px);
     }
 
     &__text {

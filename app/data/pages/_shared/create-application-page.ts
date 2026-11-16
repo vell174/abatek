@@ -13,7 +13,7 @@ export interface ApplicationPageOptions {
   description: string;
   intro: string[];
   hero: string;
-  feature: string;
+  feature?: string;
   featureTitle: string;
   featureText: string[];
   types?: string;
@@ -22,11 +22,13 @@ export interface ApplicationPageOptions {
   imageType?: 'image/jpeg' | 'image/png' | 'image/webp';
   extraSections?: IndustrialPage['sections'];
   standardTechnical?: boolean;
+  facts?: IndustrialPage['facts'];
+  closingSections?: boolean;
 }
 
 export function createApplicationPage(options: ApplicationPageOptions): IndustrialPage {
   const sections: IndustrialPage['sections'] = [
-    { title: options.featureTitle, text: options.featureText, image: options.feature },
+    { title: options.featureTitle, text: options.featureText, ...(options.feature ? { image: options.feature } : {}) },
   ];
   if (options.types)
     sections.push({
@@ -38,7 +40,7 @@ export function createApplicationPage(options: ApplicationPageOptions): Industri
     });
   sections.push(...(options.extraSections ?? []));
   if (options.standardTechnical !== false) sections.push(...conveyorClassification, ...standardConveyorModels);
-  sections.push(...conveyorClosingSections);
+  if (options.closingSections !== false) sections.push(...conveyorClosingSections);
   const page: IndustrialPage = {
     theme: 'teal',
     galleryTitle: `Виды конвейеров для ${options.shortTitle.toLowerCase()}`,
@@ -47,9 +49,11 @@ export function createApplicationPage(options: ApplicationPageOptions): Industri
     description: options.description,
     image: options.hero,
     introTitle: options.title,
+    introTitleSize: 'compact',
     intro: options.intro,
     facts:
-      options.standardTechnical === false
+      options.facts ??
+      (options.standardTechnical === false
         ? [
             ['4 материала', 'песок, грунт, земля и глина'],
             ['закрытая подача', 'снижение пыления'],
@@ -61,7 +65,7 @@ export function createApplicationPage(options: ApplicationPageOptions): Industri
             ['7 трасс', 'варианты компоновки'],
             ['400–2000 мм', 'ширина ленты в таблице'],
             ['12 месяцев', 'гарантия'],
-          ],
+          ]),
     sections,
   };
   if (options.standardTechnical !== false)
