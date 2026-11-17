@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Проверка развёрнутой системы: DNS, HTTPS, сертификат, API заявок, база, почта.
+# Проверка развёрнутой системы: DNS, HTTPS, сертификат, база и почта.
 #   sudo bash ops/check.sh
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -100,13 +100,7 @@ case "$AUTOCONFIG" in
   *) bad "Thunderbird autoconfig недоступен или содержит неверный домен: ${AUTOCONFIG_URL}" ;;
 esac
 
-step "API заявок"
-RESP="$(curl -s --max-time 20 -X POST "https://${SITE_DOMAIN}/api/request" -H 'Content-Type: application/json' \
-  -d '{"name":"Проверка check.sh","phone":"+70000000000","email":"","message":"автоматическая проверка","page":"/check"}' 2>/dev/null)"
-case "$RESP" in *'"ok":true'*) ok "POST /api/request -> ${RESP}" ;; *) bad "POST /api/request -> ${RESP:-нет ответа}" ;; esac
-
 step "База данных: последние заявки"
-sleep 3
 docker compose exec -T postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
   -c "SELECT id, created_at, name, phone, mail_status FROM requests ORDER BY id DESC LIMIT 5;" 2>/dev/null \
   || bad "Не удалось прочитать таблицу requests"

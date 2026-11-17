@@ -130,6 +130,15 @@ textarea:focus-visible {
     --resource-hero-title-size: clamp(28px, 7vw, 34px);
   }
 
+  /* iOS Safari увеличивает страницу при фокусе, если текст поля меньше 16 px. */
+  @supports (-webkit-touch-callout: none) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
   .site-container {
     width: min(100% - 28px, #{$wide});
   }
