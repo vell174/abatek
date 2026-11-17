@@ -55,6 +55,14 @@ set_env SITE_DOMAIN "$NEW_DOMAIN"
 set_env LEGACY_SITE_DOMAIN "$OLD_DOMAIN"
 set_env MAIL_DOMAIN "$MAIL_DOMAIN"
 set_env MAIL_TO "$NEW_MAIL_TO"
+
+# Переменные были экспортированы из старого .env выше и имеют приоритет над файлом .env
+# для Docker Compose. Обновляем окружение процесса перед пересозданием контейнера.
+SITE_DOMAIN="$NEW_DOMAIN"
+LEGACY_SITE_DOMAIN="$OLD_DOMAIN"
+MAIL_TO="$NEW_MAIL_TO"
+export SITE_DOMAIN LEGACY_SITE_DOMAIN MAIL_DOMAIN MAIL_TO
+
 grep -E '^(SITE_DOMAIN|LEGACY_SITE_DOMAIN|MAIL_DOMAIN|ACME_EMAIL|MAIL_FROM|MAIL_TO|MAIL_ADMIN)=' .env
 
 step "Перезапуск сайта (Traefik выпустит сертификаты для обоих доменов)"
