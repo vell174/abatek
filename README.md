@@ -226,8 +226,8 @@ sudo docker exec abatek-mailserver setup alias add admin@abatek74.ru vash@exampl
 cd /opt/abatek && sudo bash ops/deploy.sh
 ```
 
-Скрипт делает `git pull`, пересобирает и перезапускает сайт. База, почта и сертификаты
-не затрагиваются.
+Скрипт делает `git pull`, пересобирает и перезапускает сайт, затем удаляет неиспользуемые
+Docker-образы и BuildKit-кэш. Именованные volumes с базой, почтой и сертификатами не затрагиваются.
 
 ---
 
