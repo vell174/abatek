@@ -9,13 +9,15 @@ const consentCookie = useCookie<CookieConsent | null>('abatek_cookie_consent', {
   maxAge: 60 * 60 * 24 * 365,
   sameSite: 'lax',
 });
+const consent = useState<CookieConsent | null>('abatek-cookie-consent', () => consentCookie.value);
 
 onMounted(() => {
-  isVisible.value = consentCookie.value === null;
+  isVisible.value = consent.value === null;
 });
 
 function saveConsent(value: CookieConsent) {
   consentCookie.value = value;
+  consent.value = value;
   isVisible.value = false;
 }
 </script>
