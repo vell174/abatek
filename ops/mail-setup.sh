@@ -8,9 +8,10 @@ if [ "$(id -u)" -ne 0 ]; then exec sudo -E bash "$0" "$@"; fi
 
 [ -f .env ] || { echo "Нет файла .env — сначала выполните: sudo bash ops/install.sh"; exit 1; }
 set -a; . ./.env; set +a
-MAIL_FROM="${MAIL_FROM:-site@${SITE_DOMAIN}}"
+MAIL_DOMAIN="${MAIL_DOMAIN:-${SITE_DOMAIN}}"
+MAIL_FROM="${MAIL_FROM:-site@${MAIL_DOMAIN}}"
 MAIL_TO="${MAIL_TO:-zakaz@${SITE_DOMAIN}}"
-MAIL_ADMIN="${MAIL_ADMIN:-admin@${SITE_DOMAIN}}"
+MAIL_ADMIN="${MAIL_ADMIN:-admin@${MAIL_DOMAIN}}"
 
 ms() { docker exec abatek-mailserver "$@"; }
 # setup email list выводит результат в stderr, поэтому объединяем потоки
@@ -34,27 +35,36 @@ add_box() {
   fi
 }
 
-add_box "$MAIL_FROM"  "отправитель писем сайта"
-add_box "$MAIL_TO"    "сюда приходят заявки"
-add_box "$MAIL_ADMIN" "системная почта"
+add_local_box() {
+  local addr="$1" label="$2"
+  if [ "${addr##*@}" = "$MAIL_DOMAIN" ]; then
+    add_box "$addr" "$label"
+  else
+    echo ">>> ${addr} — внешний адрес, локальный ящик не создаётся."
+  fi
+}
+
+add_local_box "$MAIL_FROM"  "отправитель писем сайта"
+add_local_box "$MAIL_TO"    "сюда приходят заявки"
+add_local_box "$MAIL_ADMIN" "системная почта"
 
 bash ops/mailbox-localization.sh
 
 # Служебные адреса домена ведут на системный ящик
 for a in postmaster abuse hostmaster; do
-  ms setup alias add "${a}@${SITE_DOMAIN}" "$MAIL_ADMIN" >/dev/null 2>&1 || true
+  ms setup alias add "${a}@${MAIL_DOMAIN}" "$MAIL_ADMIN" >/dev/null 2>&1 || true
 done
 
-ms setup config dkim domain "${SITE_DOMAIN}" || true
+ms setup config dkim domain "${MAIL_DOMAIN}" || true
 
-DKIM_RAW="$(ms cat "/tmp/docker-mailserver/rspamd/dkim/rsa-2048-mail-${SITE_DOMAIN}.public.txt" 2>/dev/null \
+DKIM_RAW="$(ms cat "/tmp/docker-mailserver/rspamd/dkim/rsa-2048-mail-${MAIL_DOMAIN}.public.txt" 2>/dev/null \
   || ms sh -c 'cat /tmp/docker-mailserver/rspamd/dkim/*public.txt' 2>/dev/null || true)"
 
 # склеить многострочное значение в одну строку для вставки в панель DNS
 DKIM_VALUE="$(printf '%s' "$DKIM_RAW" | tr -d '\n' | grep -o '"[^"]*"' | tr -d '"' | tr -d '\n')"
 
 echo
-echo ">>> Ящики созданы: ${MAIL_FROM}, ${MAIL_TO}, ${MAIL_ADMIN} (системный)."
+echo ">>> Настройка завершена: ${MAIL_FROM} (отправитель), ${MAIL_TO} (заявки), ${MAIL_ADMIN} (системный)."
 echo
 if [ -n "$DKIM_VALUE" ]; then
   echo ">>> Добавьте в DNS запись:  тип TXT,  имя mail._domainkey,  значение (одной строкой):"
@@ -63,6 +73,6 @@ if [ -n "$DKIM_VALUE" ]; then
   echo "---------------------------------------------------------------"
   echo ">>> Показать снова: sudo bash ops/mail-setup.sh"
 else
-  echo ">>> DKIM-ключ не найден. Повторите: sudo docker exec abatek-mailserver setup config dkim domain ${SITE_DOMAIN}"
+  echo ">>> DKIM-ключ не найден. Повторите: sudo docker exec abatek-mailserver setup config dkim domain ${MAIL_DOMAIN}"
 fi
-echo ">>> Проверьте DNS: MX -> mail.${SITE_DOMAIN}, A mail -> IP сервера, SPF 'v=spf1 mx -all'."
+echo ">>> Проверьте DNS ${MAIL_DOMAIN}: MX -> mail.${MAIL_DOMAIN}, A mail -> IP сервера, SPF 'v=spf1 mx -all'."

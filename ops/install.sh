@@ -41,15 +41,19 @@ SITE_DOMAIN="$(echo "$SITE_DOMAIN" | tr -d '[:space:]' | sed -e 's#^https\?://##
 [ -n "$SITE_DOMAIN" ] || fail "Пустой домен."
 
 ACME_EMAIL="${ACME_EMAIL:-admin@${SITE_DOMAIN}}"
-MAIL_FROM="${MAIL_FROM:-site@${SITE_DOMAIN}}"
+LEGACY_SITE_DOMAIN="${LEGACY_SITE_DOMAIN:-}"
+MAIL_DOMAIN="${MAIL_DOMAIN:-${SITE_DOMAIN}}"
+MAIL_FROM="${MAIL_FROM:-site@${MAIL_DOMAIN}}"
 MAIL_TO="${MAIL_TO:-zakaz@${SITE_DOMAIN}}"
-MAIL_ADMIN="${MAIL_ADMIN:-admin@${SITE_DOMAIN}}"
-FQDN="mail.${SITE_DOMAIN}"
+MAIL_ADMIN="${MAIL_ADMIN:-admin@${MAIL_DOMAIN}}"
+FQDN="mail.${MAIL_DOMAIN}"
 SHORT_NAME="mail"
 
 step "Параметры установки"
 info "Каталог проекта : ${PROJECT_DIR}"
 info "Домен           : ${SITE_DOMAIN}"
+if [ -n "$LEGACY_SITE_DOMAIN" ]; then info "Старый домен    : ${LEGACY_SITE_DOMAIN} (301 на основной)"; fi
+info "Почтовый домен  : ${MAIL_DOMAIN}"
 info "Hostname сервера: ${FQDN}"
 info "Let's Encrypt   : ${ACME_EMAIL}"
 info "Почта           : ${MAIL_FROM} (отправитель), ${MAIL_TO} (заявки), ${MAIL_ADMIN} (системная)"
@@ -155,6 +159,8 @@ else
   umask 077
   cat > .env <<EOF
 SITE_DOMAIN=${SITE_DOMAIN}
+LEGACY_SITE_DOMAIN=${LEGACY_SITE_DOMAIN}
+MAIL_DOMAIN=${MAIL_DOMAIN}
 ACME_EMAIL=${ACME_EMAIL}
 POSTGRES_DB=abatek
 POSTGRES_USER=abatek
@@ -172,7 +178,11 @@ fi
 step "Проверка DNS перед выпуском сертификата"
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 DNS_OK=1
-for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "$FQDN" "autoconfig.${SITE_DOMAIN}"; do
+DNS_HOSTS=("$SITE_DOMAIN" "www.${SITE_DOMAIN}" "$FQDN" "autoconfig.${MAIL_DOMAIN}")
+if [ -n "$LEGACY_SITE_DOMAIN" ]; then
+  DNS_HOSTS+=("$LEGACY_SITE_DOMAIN" "www.${LEGACY_SITE_DOMAIN}")
+fi
+for host in "${DNS_HOSTS[@]}"; do
   RESOLVED="$(dig +short A "$host" | tail -n1)"
   if [ "$RESOLVED" = "$SERVER_IP" ]; then
     info "OK   ${host} -> ${RESOLVED}"
@@ -254,7 +264,7 @@ if [ "$MAIL_READY" -ne 1 ]; then
   warn "Почтовый сервер ещё не готов (статус: ${HS:-неизвестен})."
   warn "Создайте ящики позже командой: sudo bash ops/mail-setup.sh"
   warn "Диагностика: sudo docker compose logs --tail=50 mailserver"
-elif timeout 20 docker exec abatek-mailserver setup email list 2>&1 | grep -qF "$MAIL_TO"; then
+elif timeout 20 docker exec abatek-mailserver setup email list 2>&1 | grep -qF "$MAIL_FROM"; then
   info "Ящики уже созданы, пропускаю."
   info "Показать DKIM или добавить ящики: sudo bash ops/mail-setup.sh"
 elif [ -t 0 ]; then

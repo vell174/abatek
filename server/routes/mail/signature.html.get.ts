@@ -7,10 +7,10 @@ const escapeHtml = (value: string) =>
     .replaceAll("'", '&#039;');
 
 export default defineEventHandler((event) => {
-  const { siteDomain } = useRuntimeConfig(event);
+  const { mailTo, siteDomain } = useRuntimeConfig(event);
   const domain = escapeHtml(siteDomain);
   const siteUrl = `https://${domain}`;
-  const email = `zakaz@${domain}`;
+  const email = escapeHtml(mailTo);
 
   setResponseHeaders(event, {
     'cache-control': 'public, max-age=3600',

@@ -9,10 +9,10 @@ Docker Compose
 ├── Traefik            HTTPS (Let's Encrypt, автопродление)
 ├── Nuxt 4             сайт + API заявок (/api/request)
 ├── PostgreSQL         таблица requests — все заявки
-└── Docker Mailserver  site@ (отправитель), zakaz@ (заявки), admin@ (системная)
+└── Docker Mailserver  локальная почта abatek74.ru и SMTP для заявок
 ```
 
-Заявка с формы → запись в PostgreSQL → письмо на `zakaz@`. Если письмо не ушло, заявка
+Заявка с формы → запись в PostgreSQL → письмо на адрес из `MAIL_TO`. Если письмо не ушло, заявка
 всё равно в базе, а отправка повторяется автоматически каждые 5 минут.
 
 Сервер: VPS 4 GB RAM, Ubuntu 24.04 LTS. Домены на reg.ru.
@@ -159,9 +159,8 @@ cd /opt/abatek && sudo bash ops/check.sh
 4. Убедитесь, что Thunderbird показывает IMAP `993` (SSL/TLS) и SMTP `465` (SSL/TLS),
    затем завершите добавление аккаунта.
 
-Домен `abatek74.ru` здесь тестовый. XML формируется из `SITE_DOMAIN`, поэтому после запуска
-`ops/switch-domain.sh abatek.ru` тот же адрес будет опубликован уже для `abatek.ru`. До перехода
-на боевой домен QR-код содержит именно тестовый ящик `zakaz@abatek74.ru`.
+XML формируется из `MAIL_DOMAIN`. После переключения сайта на `abatek.ru` локальная почта и
+автонастройка продолжают работать на `abatek74.ru`.
 
 #### Thunderbird на Android через QR-код
 
@@ -181,8 +180,7 @@ QR-код генерирует сам Thunderbird после успешной н
 - логотип подписи: `https://abatek74.ru/mail/logo.png`.
 
 Подпись использует абсолютные HTTPS-ссылки и inline-стили для совместимости с почтовыми
-клиентами. Адрес сайта, почта `zakaz@` и URL логотипа формируются из `SITE_DOMAIN`: на тестовом
-сервере используется `abatek74.ru`, после переключения — `abatek.ru`.
+клиентами. Сайт и URL логотипа формируются из `SITE_DOMAIN`, адрес почты — из `MAIL_TO`.
 
 | Параметр | Значение |
 | --- | --- |
@@ -204,21 +202,19 @@ sudo docker exec abatek-mailserver setup alias add admin@abatek74.ru vash@exampl
 
 Когда тест признан успешным:
 
-1. В reg.ru для `abatek.ru` создайте те же записи, что на шаге 1 (A `@`, A `www`, A `mail`, A `autoconfig`,
-   MX, SPF, DMARC — везде домен `abatek.ru`), удалив записи прежнего хостинга.
+1. В reg.ru для `abatek.ru` направьте A-записи `@` и `www` на VPS. MX, SPF, DKIM и DMARC
+   оставьте от Mail.ru. DNS `abatek74.ru`, включая `mail` и `autoconfig`, не удаляйте.
    Заранее выставьте TTL 300 секунд, чтобы переключение прошло быстро.
 2. На сервере выполните одну команду:
 
    ```bash
-   cd /opt/abatek && sudo bash ops/switch-domain.sh abatek.ru
+   cd /opt/abatek && sudo bash ops/switch-domain.sh abatek.ru zakaz@abatek.ru
    ```
 
-   Скрипт меняет домен в `.env`, обновляет hostname, перезапускает стек (Traefik выпустит
-   новый сертификат), создаёт ящики `site@abatek.ru`, `zakaz@abatek.ru`, `admin@abatek.ru`
-   и печатает новый DKIM-ключ.
-3. Добавьте новый DKIM в DNS `abatek.ru` (шаг 4) и смените PTR у VPS на `mail.abatek.ru`.
-4. Проверьте: `sudo bash ops/check.sh`
-5. Записи тестового `abatek74.ru` в reg.ru можно удалить.
+   Скрипт делает `abatek.ru` основным сайтом, оставляет SSL для `abatek74.ru` и настраивает
+   с него постоянный 301-редирект. Hostname, локальные ящики, DKIM и PTR `abatek74.ru`
+   не меняются. Заявки отправляются через локальный SMTP на `zakaz@abatek.ru` в Mail.ru.
+3. Проверьте: `sudo bash ops/check.sh`
 
 ---
 
@@ -327,6 +323,8 @@ cd /opt/abatek && sudo bash ops/check.sh
 | Переменная | Описание |
 | --- | --- |
 | `SITE_DOMAIN` | домен сайта |
+| `LEGACY_SITE_DOMAIN` | старый домен сайта: SSL и 301-редирект на основной |
+| `MAIL_DOMAIN` | домен локального Docker mailserver |
 | `ACME_EMAIL` | адрес для уведомлений Let's Encrypt |
 | `POSTGRES_PASSWORD` | пароль базы (генерируется случайно) |
 | `MAIL_FROM` | отправитель писем, `site@<домен>` |

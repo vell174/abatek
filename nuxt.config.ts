@@ -71,6 +71,7 @@ export default defineNuxtConfig({
     mailFrom: 'site@abatek.ru',
     mailTo: 'zakaz@abatek.ru',
     siteDomain: 'abatek.ru',
+    mailDomain: 'abatek74.ru',
   },
   devtools: { enabled: true },
   devServer: {

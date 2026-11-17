@@ -2,8 +2,8 @@ const escapeXml = (value: string) =>
   value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 
 export default defineEventHandler((event) => {
-  const { siteDomain } = useRuntimeConfig(event);
-  const domain = escapeXml(siteDomain);
+  const { mailDomain } = useRuntimeConfig(event);
+  const domain = escapeXml(mailDomain);
 
   setResponseHeaders(event, {
     'cache-control': 'public, max-age=3600',

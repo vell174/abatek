@@ -9,6 +9,8 @@ set -a; . ./.env; set +a
 POSTGRES_USER="${POSTGRES_USER:-abatek}"
 POSTGRES_DB="${POSTGRES_DB:-abatek}"
 MAIL_TO="${MAIL_TO:-zakaz@${SITE_DOMAIN}}"
+MAIL_DOMAIN="${MAIL_DOMAIN:-${SITE_DOMAIN}}"
+LEGACY_SITE_DOMAIN="${LEGACY_SITE_DOMAIN:-}"
 AUTH_ARGS=(-u "${BASIC_AUTH_USER}:${BASIC_AUTH_PASSWORD}")
 
 FAILED=0
@@ -27,20 +29,24 @@ fi
 SERVER_IP="$(curl -fsS --max-time 10 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 echo "  IP сервера: ${SERVER_IP}"
 A_OK=1
-for host in "$SITE_DOMAIN" "www.${SITE_DOMAIN}" "mail.${SITE_DOMAIN}" "autoconfig.${SITE_DOMAIN}"; do
+DNS_HOSTS=("$SITE_DOMAIN" "www.${SITE_DOMAIN}" "mail.${MAIL_DOMAIN}" "autoconfig.${MAIL_DOMAIN}")
+if [ -n "$LEGACY_SITE_DOMAIN" ]; then
+  DNS_HOSTS+=("$LEGACY_SITE_DOMAIN" "www.${LEGACY_SITE_DOMAIN}")
+fi
+for host in "${DNS_HOSTS[@]}"; do
   R="$(dig +short A "$host" | tail -n1)"
   if [ "$R" = "$SERVER_IP" ]; then ok "A ${host} -> ${R}"; else bad "A ${host} -> ${R:-нет записи} (ожидался ${SERVER_IP})"; A_OK=0; fi
 done
-MXR="$(dig +short MX "$SITE_DOMAIN" | tail -n1)"
-case "$MXR" in *"mail.${SITE_DOMAIN}"*) ok "MX -> ${MXR}" ;; *) bad "MX -> ${MXR:-нет записи} (ожидался mail.${SITE_DOMAIN})" ;; esac
-SPF="$(dig +short TXT "$SITE_DOMAIN" | grep -i 'v=spf1' | head -n1)"
+MXR="$(dig +short MX "$MAIL_DOMAIN" | tail -n1)"
+case "$MXR" in *"mail.${MAIL_DOMAIN}"*) ok "MX ${MAIL_DOMAIN} -> ${MXR}" ;; *) bad "MX ${MAIL_DOMAIN} -> ${MXR:-нет записи} (ожидался mail.${MAIL_DOMAIN})" ;; esac
+SPF="$(dig +short TXT "$MAIL_DOMAIN" | grep -i 'v=spf1' | head -n1)"
 [ -n "$SPF" ] && ok "SPF ${SPF}" || bad "SPF-запись не найдена (нужна TXT @ = v=spf1 mx -all)"
-DMARC="$(dig +short TXT "_dmarc.${SITE_DOMAIN}" | head -n1)"
+DMARC="$(dig +short TXT "_dmarc.${MAIL_DOMAIN}" | head -n1)"
 [ -n "$DMARC" ] && ok "DMARC ${DMARC}" || warn "DMARC-запись не найдена"
-DKIM="$(dig +short TXT "mail._domainkey.${SITE_DOMAIN}" | head -n1)"
+DKIM="$(dig +short TXT "mail._domainkey.${MAIL_DOMAIN}" | head -n1)"
 [ -n "$DKIM" ] && ok "DKIM запись есть" || warn "DKIM не найден — добавьте TXT mail._domainkey (см. README, шаг 4)"
 PTR="$(dig +short -x "$SERVER_IP" | head -n1)"
-case "$PTR" in "mail.${SITE_DOMAIN}."*) ok "PTR -> ${PTR}" ;; *) warn "PTR -> ${PTR:-не настроен} (желательно mail.${SITE_DOMAIN}) — настраивается в панели VPS" ;; esac
+case "$PTR" in "mail.${MAIL_DOMAIN}."*) ok "PTR -> ${PTR}" ;; *) warn "PTR -> ${PTR:-не настроен} (желательно mail.${MAIL_DOMAIN}) — настраивается в панели VPS" ;; esac
 
 if [ "$A_OK" -ne 1 ]; then
   step "Диагностика DNS"
@@ -79,10 +85,17 @@ case "$RCODE" in 30*) ok "http -> https редирект (${RCODE})" ;; *) warn 
 ISSUER="$(echo | openssl s_client -connect "${SITE_DOMAIN}:443" -servername "${SITE_DOMAIN}" 2>/dev/null | openssl x509 -noout -issuer 2>/dev/null)"
 case "$ISSUER" in *"Let's Encrypt"*) ok "Сертификат: ${ISSUER#issuer=}" ;; *) bad "Сертификат не от Let's Encrypt: ${ISSUER:-не получен}" ;; esac
 
-AUTOCONFIG_URL="https://autoconfig.${SITE_DOMAIN}/mail/config-v1.1.xml?emailaddress=zakaz@${SITE_DOMAIN}"
+if [ -n "$LEGACY_SITE_DOMAIN" ]; then
+  LEGACY_CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://${LEGACY_SITE_DOMAIN}" 2>/dev/null)"
+  case "$LEGACY_CODE" in 301|308) ok "https://${LEGACY_SITE_DOMAIN} -> ${LEGACY_CODE} на основной домен" ;; *) bad "https://${LEGACY_SITE_DOMAIN} -> ${LEGACY_CODE:-нет ответа}, ожидался 301/308" ;; esac
+  LEGACY_ISSUER="$(echo | openssl s_client -connect "${LEGACY_SITE_DOMAIN}:443" -servername "${LEGACY_SITE_DOMAIN}" 2>/dev/null | openssl x509 -noout -issuer 2>/dev/null)"
+  case "$LEGACY_ISSUER" in *"Let's Encrypt"*) ok "Сертификат старого домена: ${LEGACY_ISSUER#issuer=}" ;; *) bad "Сертификат старого домена не получен" ;; esac
+fi
+
+AUTOCONFIG_URL="https://autoconfig.${MAIL_DOMAIN}/mail/config-v1.1.xml?emailaddress=zakaz@${MAIL_DOMAIN}"
 AUTOCONFIG="$(curl -fsS --max-time 20 "$AUTOCONFIG_URL" 2>/dev/null || true)"
 case "$AUTOCONFIG" in
-  *"<domain>${SITE_DOMAIN}</domain>"*"<hostname>mail.${SITE_DOMAIN}</hostname>"*)
+  *"<domain>${MAIL_DOMAIN}</domain>"*"<hostname>mail.${MAIL_DOMAIN}</hostname>"*)
     ok "Thunderbird autoconfig доступен"
     ;;
   *) bad "Thunderbird autoconfig недоступен или содержит неверный домен: ${AUTOCONFIG_URL}" ;;
@@ -108,8 +121,12 @@ case "$STATUS" in
 esac
 
 step "Почта"
-docker exec abatek-mailserver setup email list 2>&1 | grep -qF "$MAIL_TO" \
-  && ok "Ящик ${MAIL_TO} существует" || bad "Ящик ${MAIL_TO} не создан — выполните: sudo bash ops/mail-setup.sh"
+if [ "${MAIL_TO##*@}" = "$MAIL_DOMAIN" ]; then
+  docker exec abatek-mailserver setup email list 2>&1 | grep -qF "$MAIL_TO" \
+    && ok "Ящик ${MAIL_TO} существует" || bad "Ящик ${MAIL_TO} не создан — выполните: sudo bash ops/mail-setup.sh"
+else
+  ok "Заявки направляются на внешний ящик ${MAIL_TO}; локально он не создаётся"
+fi
 
 step "Итог"
 if [ "$FAILED" -eq 0 ]; then
