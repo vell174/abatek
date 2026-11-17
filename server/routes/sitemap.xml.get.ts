@@ -9,7 +9,7 @@ export default defineEventHandler((event) => {
     '/',
     '/o-kompanii/',
     '/kontakty/',
-    '/primery-rabot/',
+    '/fotogallereya/',
     '/kalkulyator-moshchnosti-privoda-lentochnogo-konveyera/',
     '/kalkulyatory/shirina-lenty/',
     '/kalkulyatory/usloviya-ekspluatatsii/',

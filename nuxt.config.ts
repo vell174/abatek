@@ -104,6 +104,12 @@ export default defineNuxtConfig({
       routes: ['/sitemap.xml', ...equipmentRouteSlugs.map((slug) => `/${slug}/`)],
     },
     routeRules: {
+      '/primery-rabot': {
+        redirect: { to: '/fotogallereya/', statusCode: 301 },
+      },
+      '/primery-rabot/': {
+        redirect: { to: '/fotogallereya/', statusCode: 301 },
+      },
       '/elevatory': {
         redirect: { to: '/elevatory-kovshovye/', statusCode: 301 },
       },

@@ -1,3 +1,24 @@
+import { gallery } from '~/data/pages/primery-rabot/gallery';
+
+export const homeProjectsContent = {
+  eyebrow: 'Фотогалерея',
+  title: 'Изготовленное оборудование АБАТЭК',
+};
+
+const homeProjectImages = [
+  '/images/belt-projects/production/peredvizhnoy-konveyer-dlya-makrirovki-gruza.webp',
+  '/images/vintovoy-konveyer-v-zhelobe/projects/01-vintovoy-konveyer-v-zhelobe-s-kryshkami-i-patrubkami.webp',
+  '/images/metalloizdeliya-po-chertezham/svarnoy-korpus-po-chertezham-zakazchika-abatek-640.webp',
+  '/images/barabany/overview-projects/privodnye-natyazhnye-i-otklonyayushchie-barabany.webp',
+  '/images/rezervuary/projects/rezervuar-dlya-vody-rgs-10-1-800.webp',
+  '/images/ciklony/izgotovlenie-ciklonov-aspiracii-640.webp',
+];
+
+export const homeProjects = homeProjectImages.flatMap((src) => {
+  const image = gallery.find((item) => item.src === src);
+  return image ? [{ title: image.alt, image: image.src, fullImage: image.fullSrc || image.src }] : [];
+});
+
 export const projects = [
   { title: 'Производство конвейерного оборудования АБАТЭК', image: '/images/hero-reference-12909422.webp' },
   {

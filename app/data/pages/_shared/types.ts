@@ -135,6 +135,18 @@ export interface IndustrialPage {
   catalogVariant?: 'default' | 'categories';
   classificationTitle?: string;
   classificationGroups?: Array<{ title: string; description: string; items: IndustrialSection[] }>;
+  beltElevatorDetails?: Array<{
+    image: GalleryImage;
+    sketch: { src: string; alt: string; viewBox: string; width: number; height: number };
+  }>;
+  chainElevatorDetails?: Array<{
+    image?: GalleryImage;
+    imageCaption?: string;
+    secondImage?: GalleryImage;
+    secondImageCaption?: string;
+    sketch?: { src: string; alt: string; viewBox: string; width: number; height: number };
+  }>;
+  chainElevatorTables?: Array<{ title: string; eyebrow?: string; headers: string[]; rows: string[][] }>;
   sectionLinks?: Array<{ id: string; label: string }>;
   parentBreadcrumb?: { label: string; to: string };
   relatedLinks?: Array<{ label: string; to: string; description: string }>;

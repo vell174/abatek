@@ -51,7 +51,7 @@ const copyEmail = async () => {
 };
 const links: Array<{ label: string; to: string; catalog?: boolean }> = [
   { label: 'Каталог', to: '/#catalog', catalog: true },
-  { label: 'Примеры работ', to: '/primery-rabot' },
+  { label: 'Фотогалерея', to: '/fotogallereya' },
   { label: 'О компании', to: '/o-kompanii' },
   { label: 'Контакты', to: '/kontakty' },
 ];
@@ -155,7 +155,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
               <Icon name="lucide:mail" aria-hidden="true" mode="svg" />
               <span class="site-header__phone-details">
                 <strong>{{ email }}</strong>
-                <small>приём заявок круглосуточно</small>
+                <small>почта для заявок</small>
               </span>
             </a>
             <button class="site-header__email-copy" type="button" @click="copyEmail">

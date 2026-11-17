@@ -1,4 +1,9 @@
 import type { IndustrialPage } from '../_shared/types';
+import { beltElevatorGroups, beltElevatorTables } from './belt-models';
+import { chainElevatorGroups, chainElevatorTables } from './chain-models';
+
+const plateChainCaption = 'Пластинчатая цепь';
+const roundChainCaption = 'Круглозвенная цепь';
 
 export const pageData = {
   theme: 'blue',
@@ -26,29 +31,151 @@ export const pageData = {
   hideCatalog: true,
   editorialAccordion: true,
   projectsTitle: 'Выполненные проекты: ковшовые элеваторы',
-  galleryTitle: 'Типы ковшовых элеваторов',
-  classificationTitle: 'Типы ковшовых элеваторов',
-  classificationGroups: [
+  usefulLinksTitle: 'Полезные ссылки',
+  usefulLinks: [
     {
-      title: 'Ленточные ковшовые элеваторы',
-      description: 'Место для трёх моделей ленточных элеваторов.',
-      items: [
-        { title: 'Ленточный элеватор 01' },
-        { title: 'Ленточный элеватор 02' },
-        { title: 'Ленточный элеватор 03' },
-      ],
+      label: 'Ковши элеваторные',
+      to: '/kovshi/',
+      description: 'Сварные ковши для ленточных и цепных элеваторов: типы, размеры и варианты изготовления.',
     },
     {
-      title: 'Цепные ковшовые элеваторы',
-      description: 'Место для четырёх моделей цепных элеваторов.',
-      items: [
-        { title: 'Цепной элеватор 01' },
-        { title: 'Цепной элеватор 02' },
-        { title: 'Цепной элеватор 03' },
-        { title: 'Цепной элеватор 04' },
-      ],
+      label: 'Барабан ковшового элеватора',
+      to: '/baraban-kovshovogo-elevatora/',
+      description: 'Приводные и натяжные барабаны ковшовых элеваторов, изготовление по техническому заданию.',
     },
   ],
+  galleryTitle: 'Типы ковшовых элеваторов',
+  classificationTitle: 'Типы ковшовых элеваторов',
+  beltElevatorDetails: [
+    {
+      image: {
+        src: '/images/elevatory/belt-types/lg-buckets-black.png',
+        alt: 'Схема глубоких ковшей элеватора ЛГ на ленте',
+        width: 1345,
+        height: 1170,
+      },
+      sketch: {
+        src: '/images/elevatory/belt-types/bucket-sketch-source-3.png',
+        alt: 'Эскизы глубокого ковша с обозначениями B, L, H и R',
+        viewBox: '82 265 385 195',
+        width: 1028,
+        height: 527,
+      },
+    },
+    {
+      image: {
+        src: '/images/elevatory/belt-types/lm-buckets-black.png',
+        alt: 'Схема мелких ковшей элеватора ЛМ на ленте',
+        width: 1338,
+        height: 1175,
+      },
+      sketch: {
+        src: '/images/elevatory/belt-types/bucket-sketch-source-6.png',
+        alt: 'Эскизы мелкого ковша с обозначениями B, L, H и R',
+        viewBox: '85 280 385 190',
+        width: 1034,
+        height: 539,
+      },
+    },
+    {
+      image: {
+        src: '/images/elevatory/belt-types/lo-buckets-black.png',
+        alt: 'Схема остроугольных ковшей элеватора ЛО на ленте',
+        width: 1341,
+        height: 1173,
+      },
+      sketch: {
+        src: '/images/elevatory/belt-types/bucket-sketch-source-9.png',
+        alt: 'Эскизы остроугольного ковша с обозначениями B, L и H',
+        viewBox: '96 228 380 190',
+        width: 1034,
+        height: 426,
+      },
+    },
+  ],
+  chainElevatorDetails: [
+    {
+      imageCaption: plateChainCaption,
+      secondImageCaption: roundChainCaption,
+      image: {
+        src: '/images/elevatory/chain-types/image2.png',
+        alt: 'Ковши элеватора ЦГ на пластинчатой цепи',
+        width: 1800,
+        height: 1046,
+      },
+      secondImage: {
+        src: '/images/elevatory/chain-types/image3.png',
+        alt: 'Ковши элеватора ЦГ на круглозвенной цепи',
+        width: 1800,
+        height: 1305,
+      },
+      sketch: {
+        src: '/images/elevatory/chain-types/image4.png',
+        alt: 'Эскиз глубокого ковша ЦГ с размерами B, L, H и R',
+        viewBox: '72 215 400 265',
+        width: 1028,
+        height: 527,
+      },
+    },
+    {
+      imageCaption: plateChainCaption,
+      secondImageCaption: roundChainCaption,
+      image: {
+        src: '/images/elevatory/chain-types/image6.png',
+        alt: 'Мелкие ковши элеватора ЦМ на пластинчатой цепи',
+        width: 1800,
+        height: 1489,
+      },
+      secondImage: {
+        src: '/images/elevatory/chain-types/image7.png',
+        alt: 'Мелкие ковши элеватора ЦМ на круглозвенной цепи',
+        width: 1800,
+        height: 1629,
+      },
+      sketch: {
+        src: '/images/elevatory/chain-types/image8.png',
+        alt: 'Эскиз мелкого ковша ЦМ с размерами B, L, H и R',
+        viewBox: '72 215 400 265',
+        width: 1034,
+        height: 539,
+      },
+    },
+    {
+      imageCaption: plateChainCaption,
+      secondImageCaption: roundChainCaption,
+      image: {
+        src: '/images/elevatory/chain-types/image10.png',
+        alt: 'Остроугольные ковши элеватора ЦО на пластинчатой цепи',
+        width: 1800,
+        height: 1298,
+      },
+      secondImage: {
+        src: '/images/elevatory/chain-types/image11.png',
+        alt: 'Остроугольные ковши элеватора ЦО на круглозвенной цепи',
+        width: 1800,
+        height: 1070,
+      },
+      sketch: {
+        src: '/images/elevatory/chain-types/image12.png',
+        alt: 'Эскиз остроугольного ковша ЦО с размерами B, L и H',
+        viewBox: '72 215 400 250',
+        width: 1034,
+        height: 426,
+      },
+    },
+    {
+      sketch: {
+        src: '/images/elevatory/chain-types/image14.png',
+        alt: 'Эскиз сомкнутого ковша ЦС с обозначениями B, L, H и R',
+        viewBox: '85 230 355 215',
+        width: 937,
+        height: 455,
+      },
+    },
+  ],
+  chainElevatorTables,
+  classificationGroups: [...beltElevatorGroups, chainElevatorGroups],
+  tables: beltElevatorTables,
   sections: [
     {
       title: 'Основные части ковшового элеватора',

@@ -248,8 +248,8 @@ const users = [
             <span>Комплектующие к конвейерам</span>
             <Icon name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
           </NuxtLink>
-          <NuxtLink to="/primery-rabot">
-            <span>Выполненные проекты</span>
+          <NuxtLink to="/fotogallereya">
+            <span>Фотогалерея</span>
             <Icon name="lucide:arrow-up-right" aria-hidden="true" mode="svg" />
           </NuxtLink>
         </nav>

@@ -26,7 +26,7 @@ const copyEmail = async () => {
       <div class="footer__column">
         <h3 class="footer__title">Оборудование</h3>
         <NuxtLink class="footer__link" to="/#catalog">Каталог</NuxtLink>
-        <NuxtLink class="footer__link" to="/primery-rabot">Примеры работ</NuxtLink>
+        <NuxtLink class="footer__link" to="/fotogallereya">Фотогалерея</NuxtLink>
         <NuxtLink class="footer__link" to="/poleznoe/">Калькуляторы и справочники</NuxtLink>
       </div>
       <div class="footer__column">
@@ -53,7 +53,6 @@ const copyEmail = async () => {
             {{ isEmailCopied ? '(скопировано)' : '(копировать)' }}
           </button>
         </span>
-        <small class="footer__note">Заявки круглосуточно</small>
       </div>
     </div>
     <div class="site-container footer__bottom">
@@ -82,8 +81,7 @@ const copyEmail = async () => {
   }
 
   &__description,
-  &__link,
-  &__note {
+  &__link {
     display: block;
     margin: 6px 0;
     font-size: 12px;

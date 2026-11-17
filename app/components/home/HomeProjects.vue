@@ -9,16 +9,15 @@ import {
   DialogRoot,
   DialogTitle,
 } from 'reka-ui';
-import { projects } from '~/data/projects';
+import { homeProjects, homeProjectsContent } from '~/data/projects';
 
-const featuredProjects = projects.slice(0, 6);
 const [emblaRef, emblaApi] = emblaCarouselVue({ align: 'start', loop: true });
-const selectedProject = ref<(typeof projects)[number] | null>(null);
+const selectedProject = ref<(typeof homeProjects)[number] | null>(null);
 const dialogOpen = ref(false);
 
 const scrollPrev = () => emblaApi.value?.scrollPrev();
 const scrollNext = () => emblaApi.value?.scrollNext();
-const openProject = (project: (typeof projects)[number]) => {
+const openProject = (project: (typeof homeProjects)[number]) => {
   selectedProject.value = project;
   dialogOpen.value = true;
 };
@@ -32,8 +31,8 @@ const setDialogOpen = (open: boolean) => {
     <div class="site-container home-projects__container">
       <div class="home-projects__heading">
         <div class="home-projects__heading-content">
-          <p class="home-projects__eyebrow">Практический опыт</p>
-          <h2 class="home-projects__title">Выполненные проекты конвейерного оборудования</h2>
+          <p class="home-projects__eyebrow">{{ homeProjectsContent.eyebrow }}</p>
+          <h2 class="home-projects__title">{{ homeProjectsContent.title }}</h2>
         </div>
         <div class="home-projects__actions">
           <button class="home-projects__control" type="button" aria-label="Предыдущий проект" @click="scrollPrev">
@@ -42,12 +41,12 @@ const setDialogOpen = (open: boolean) => {
           <button class="home-projects__control" type="button" aria-label="Следующий проект" @click="scrollNext">
             <Icon name="lucide:arrow-right" aria-hidden="true" mode="svg" />
           </button>
-          <NuxtLink class="home-projects__link" to="/primery-rabot">Все примеры →</NuxtLink>
+          <NuxtLink class="home-projects__link" to="/fotogallereya">Фотогалерея →</NuxtLink>
         </div>
       </div>
       <div ref="emblaRef" class="home-projects__viewport">
         <div class="home-projects__track">
-          <article v-for="(project, index) in featuredProjects" :key="project.title" class="home-projects__slide">
+          <article v-for="(project, index) in homeProjects" :key="project.title" class="home-projects__slide">
             <button class="home-projects__card" type="button" @click="openProject(project)">
               <img
                 class="home-projects__image"
@@ -74,7 +73,7 @@ const setDialogOpen = (open: boolean) => {
             </DialogDescription>
             <img
               class="project-viewer__image"
-              :src="selectedProject.image"
+              :src="selectedProject.fullImage"
               :alt="selectedProject.title"
               width="1600"
               height="1100"

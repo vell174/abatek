@@ -169,17 +169,46 @@ const faq = computed(
           <section v-if="page.classificationGroups?.length" class="industrial-types">
             <div class="site-container industrial-types__inner">
               <h2 class="industrial-types__title">{{ page.classificationTitle ?? page.galleryTitle }}</h2>
-              <section v-for="group in page.classificationGroups" :key="group.title" class="industrial-types__group">
+              <section
+                v-for="(group, groupIndex) in page.classificationGroups"
+                :key="group.title"
+                class="industrial-types__group"
+              >
                 <h3 class="industrial-types__group-title">{{ group.title }}</h3>
                 <p class="industrial-types__description">{{ group.description }}</p>
                 <div class="industrial-types__grid">
                   <template v-for="(product, index) in group.items" :key="product.title">
-                    <article v-if="!product.image" class="industrial-types__pending-card">
+                    <BeltElevatorDetails
+                      v-if="groupIndex === 1 && page.chainElevatorDetails?.[index] && page.chainElevatorTables?.length"
+                      :product="product"
+                      :number="index + 1"
+                      :image="page.chainElevatorDetails[index]!.image"
+                      :image-caption="page.chainElevatorDetails[index]!.imageCaption"
+                      :second-image="page.chainElevatorDetails[index]!.secondImage"
+                      :second-image-caption="page.chainElevatorDetails[index]!.secondImageCaption"
+                      :sketch="page.chainElevatorDetails[index]!.sketch"
+                      :tables="page.chainElevatorTables.slice(index * 2, index * 2 + 2)"
+                    />
+                    <BeltElevatorDetails
+                      v-else-if="groupIndex === 0 && page.beltElevatorDetails?.[index] && page.tables?.length"
+                      :product="product"
+                      :number="index + 1"
+                      :image="page.beltElevatorDetails[index]!.image"
+                      :sketch="page.beltElevatorDetails[index]!.sketch"
+                      :tables="page.tables.slice(index * 2, index * 2 + 2)"
+                    />
+                    <article v-else-if="!product.image" class="industrial-types__pending-card">
                       <span class="industrial-types__pending-number">{{ String(index + 1).padStart(2, '0') }}</span>
                       <h4 class="industrial-types__pending-title">{{ product.title }}</h4>
+                      <p v-for="paragraph in product.text" :key="paragraph" class="industrial-types__pending-text">
+                        {{ paragraph }}
+                      </p>
+                      <ul v-if="product.items?.length" class="industrial-types__pending-list">
+                        <li v-for="item in product.items" :key="item">{{ item }}</li>
+                      </ul>
                     </article>
                     <ScraperProductCard
-                      v-else
+                      v-else-if="!(groupIndex === 0 && page.beltElevatorDetails?.[index])"
                       :product="product"
                       :index="index"
                       variant="category"
@@ -221,7 +250,7 @@ const faq = computed(
           />
 
           <SpecsTableSection
-            v-for="table in page.tables"
+            v-for="table in page.beltElevatorDetails ? [] : page.tables"
             :key="table.title"
             :title="table.title"
             :columns="table.headers"
@@ -1751,7 +1780,7 @@ const faq = computed(
 .industrial-types__pending-card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
   min-height: 180px;
   padding: 28px;
   background: #fff;
@@ -1768,6 +1797,21 @@ const faq = computed(
 .industrial-types__pending-number {
   font-weight: 800;
   color: $blue;
+}
+
+.industrial-types__pending-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: $muted;
+}
+
+.industrial-types__pending-list {
+  padding-left: 20px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: $ink;
 }
 
 .industrial-editorial__illustration-image {
