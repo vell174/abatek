@@ -19,21 +19,12 @@ const contacts = [
       </span>
       <strong class="contacts__value">{{ contact.value }}</strong>
     </a>
-    <div class="contacts__item">
-      <span class="contacts__topline">
-        <Icon name="lucide:clock-3" aria-hidden="true" mode="svg" />
-        <span class="contacts__label">Режим приёма заявок</span>
-      </span>
-      <strong class="contacts__value">Круглосуточно</strong>
-    </div>
     <div class="contacts__item contacts__item--wide">
       <span class="contacts__topline">
         <Icon name="lucide:map-pin" aria-hidden="true" mode="svg" />
-        <span class="contacts__label">Адрес</span>
+        <span class="contacts__label">Адрес производства</span>
       </span>
-      <strong class="contacts__value contacts__value--small">
-        г. Челябинск, ул. Енисейская, Индустриальный парк «Станкомаш»
-      </strong>
+      <strong class="contacts__value contacts__value--small">г. Челябинск, ул. Енисейская, 8лит76/1</strong>
     </div>
     <div class="contacts__item contacts__item--wide contacts__item--legal">
       <span class="contacts__topline">

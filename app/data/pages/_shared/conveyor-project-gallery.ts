@@ -1,9 +1,5 @@
 export const gallery = [
   {
-    src: '/images/gallery/26553102.webp',
-    alt: 'Ленточный конвейер',
-  },
-  {
     src: '/images/gallery/26553101.webp',
     alt: 'Наклонный желобчатый конвейер для подачи отсева щебня',
   },
