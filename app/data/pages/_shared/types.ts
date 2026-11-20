@@ -132,6 +132,7 @@ export interface IndustrialPage {
   contentOrder?: 'projects-first' | 'editorial-first' | 'catalog-first';
   projectsThenDetails?: boolean;
   hideCatalog?: boolean;
+  hideCatalogImages?: boolean;
   catalogVariant?: 'default' | 'categories';
   classificationTitle?: string;
   classificationGroups?: Array<{ title: string; description: string; items: IndustrialSection[] }>;

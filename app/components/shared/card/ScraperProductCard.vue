@@ -6,6 +6,7 @@ const {
   headingTag = 'h3',
   compact = false,
   detailsButton = false,
+  showImage = true,
 } = defineProps<{
   product: IndustrialSection;
   index: number;
@@ -13,6 +14,7 @@ const {
   headingTag?: 'h3' | 'h4';
   compact?: boolean;
   detailsButton?: boolean;
+  showImage?: boolean;
 }>();
 defineEmits<{ action: []; details: [] }>();
 </script>
@@ -25,6 +27,7 @@ defineEmits<{ action: []; details: [] }>();
       variant !== 'default' ? 'scraper-product--category' : '',
       `scraper-product--${variant}`,
       { 'scraper-product--compact': compact },
+      { 'scraper-product--text-only': !showImage },
     ]"
   >
     <NuxtLink v-if="variant !== 'default' && product.href" class="scraper-product__category-link" :to="product.href">
@@ -44,7 +47,7 @@ defineEmits<{ action: []; details: [] }>();
       <p v-for="paragraph in product.text" :key="paragraph" class="scraper-product__category-text">{{ paragraph }}</p>
     </NuxtLink>
     <template v-else>
-      <figure class="scraper-product__figure">
+      <figure v-if="showImage" class="scraper-product__figure">
         <img
           class="scraper-product__image"
           :class="{ 'scraper-product__image--contain': product.imageFit === 'contain' }"
@@ -57,6 +60,7 @@ defineEmits<{ action: []; details: [] }>();
         <span>{{ String(index + 1).padStart(2, '0') }}</span>
       </figure>
       <div class="scraper-product__body">
+        <span v-if="!showImage" class="scraper-product__number">{{ String(index + 1).padStart(2, '0') }}</span>
         <div class="scraper-product__content">
           <h3>{{ product.title }}</h3>
           <p v-for="paragraph in product.text" :key="paragraph">{{ paragraph }}</p>
@@ -104,6 +108,23 @@ defineEmits<{ action: []; details: [] }>();
   transition:
     border-color 0.22s ease,
     transform 0.22s ease;
+
+  &--text-only {
+    min-height: 300px;
+  }
+
+  &__number {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    margin-bottom: 18px;
+    font-size: 11px;
+    font-weight: 900;
+    color: $navy;
+    background: $yellow;
+    border-radius: 50%;
+  }
 
   &--category {
     min-height: 0;

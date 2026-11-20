@@ -489,6 +489,7 @@ const faq = computed(
                   :key="product.title"
                   :product="product"
                   :index="index"
+                  :show-image="!page.hideCatalogImages"
                   @action="openRequest"
                 />
 
