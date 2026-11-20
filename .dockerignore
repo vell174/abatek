@@ -3,6 +3,8 @@ node_modules
 .output
 dist
 abatek-copy3
+tmp
+build-*.log
 .git
 .github
 .vscode
