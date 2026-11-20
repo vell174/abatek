@@ -156,6 +156,13 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
+      script: [
+        { src: 'https://www.googletagmanager.com/gtm.js?id=GTM-KDTWLGZ7', async: true },
+        {
+          innerHTML:
+            "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date());",
+        },
+      ],
       // Запрет наследуется всем содержимым, включая меню и формы в порталах.
       htmlAttrs: { lang: 'ru', translate: 'no', class: 'notranslate' },
       bodyAttrs: { translate: 'no', class: 'notranslate' },
