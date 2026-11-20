@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { CheckboxIndicator, CheckboxRoot, Label } from 'reka-ui';
-
 const model = defineModel<boolean>({ default: false });
 const inputId = useId();
 
@@ -21,22 +19,19 @@ withDefaults(
 </script>
 
 <template>
-  <Label class="ui-checkbox" :for="inputId" :data-disabled="disabled ? '' : undefined">
-    <CheckboxRoot
+  <label class="ui-checkbox" :for="inputId" :data-disabled="disabled ? '' : undefined">
+    <input
       :id="inputId"
       v-model="model"
       class="ui-checkbox__control"
+      type="checkbox"
       :name="name"
       :value="value"
       :required="required"
       :disabled="disabled"
-    >
-      <CheckboxIndicator class="ui-checkbox__indicator">
-        <Icon name="lucide:check" size="21" aria-hidden="true" mode="svg" />
-      </CheckboxIndicator>
-    </CheckboxRoot>
+    />
     <span class="ui-checkbox__label"><slot /></span>
-  </Label>
+  </label>
 </template>
 
 <style scoped lang="scss">
@@ -52,30 +47,41 @@ withDefaults(
   }
 
   &__control {
-    display: grid;
     flex: 0 0 auto;
-    place-items: center;
     width: 24px;
     height: 24px;
-    padding: 0;
-    color: $navy;
+    margin: 0;
+    appearance: none;
     cursor: pointer;
     background: #fff;
     border: 2px solid rgb(255 255 255 / 55%);
     border-radius: 5px;
 
-    &[data-state='checked'] {
+    &::after {
+      display: block;
+      width: 7px;
+      height: 12px;
+      margin: 2px 0 0 6px;
+      content: '';
+      border: solid $navy;
+      border-width: 0 2px 2px 0;
+      opacity: 0;
+      transform: rotate(45deg);
+    }
+
+    &:checked {
       background: $yellow;
       border-color: $yellow;
     }
-  }
 
-  &__indicator {
-    display: grid;
-    place-items: center;
-    width: 21px;
-    height: 21px;
-    font-size: 21px;
+    &:checked::after {
+      opacity: 1;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $yellow;
+      outline-offset: 3px;
+    }
   }
 
   &__label {

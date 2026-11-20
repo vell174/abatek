@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Макет — нестандартные ролики АБАТЭК</title>
+    <style>
+      :root { font-family: Montserrat, Arial, sans-serif; color: #17304b; background: #f6f8fb; }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; }
+      a { color: inherit; text-decoration: none; }
+      img { display: block; width: 100%; height: 100%; object-fit: cover; }
+      button, input, textarea, select { font: inherit; }
+      .shell { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
+      .demo { padding: 9px 20px; background: #f9c721; color: #17304b; text-align: center; font-size: 12px; font-weight: 700; }
+      .header { background: #fff; border-bottom: 1px solid #e5ebf1; }
+      .header__inner { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+      .logo { font-size: 25px; font-weight: 900; letter-spacing: -.06em; color: #0c4579; }
+      .logo b { color: #f1b900; }
+      .nav { display: flex; gap: 30px; font-size: 13px; font-weight: 700; }
+      .nav a:hover { color: #0b63ac; }
+      .header__cta, .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; border: 0; border-radius: 8px; background: #f9c721; color: #142b43; font-size: 13px; font-weight: 800; cursor: pointer; }
+      .header__cta:hover, .button:hover { background: #ffdb58; }
+      .hero { position: relative; isolation: isolate; min-height: 610px; display: flex; align-items: center; overflow: hidden; background: #092947; color: #fff; }
+      .hero::before { position: absolute; z-index: -2; inset: 0; content: ''; background: url('./public/images/roliki/konveyernye-roliki-dlya-lentochnyh-transporterov-hero.webp') center / cover; }
+      .hero::after { position: absolute; z-index: -1; inset: 0; content: ''; background: linear-gradient(90deg, #092947 0%, #092947ed 42%, #09294760 76%, #09294715); }
+      .hero__inner { padding-block: 74px 86px; }
+      .eyebrow { margin: 0 0 18px; color: #f9c721; font-size: 11px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { max-width: 790px; margin-bottom: 22px; font-size: clamp(40px, 5vw, 70px); line-height: 1.08; letter-spacing: -.055em; }
+      .hero__lead { max-width: 650px; margin-bottom: 32px; color: #e2ebf3; font-size: 18px; line-height: 1.6; }
+      .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; }
+      .hero__note { max-width: 300px; color: #d0deea; font-size: 12px; line-height: 1.5; }
+      .hero__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 62px; }
+      .hero__tags span { padding: 9px 12px; border: 1px solid #ffffff4d; border-radius: 5px; color: #edf5fb; font-size: 12px; }
+      .section { padding-block: 82px; }
+      .section--white { background: #fff; }
+      .section--soft { background: #eef3f8; }
+      .heading { max-width: 770px; margin-bottom: 38px; }
+      .heading .eyebrow { color: #0b63ac; }
+      h2 { margin-bottom: 14px; color: #0c3155; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.16; letter-spacing: -.04em; }
+      .heading p:last-child { margin-bottom: 0; color: #5c6e7f; font-size: 16px; line-height: 1.65; }
+      .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .problem { padding: 26px; border: 1px solid #e0e8ef; border-radius: 12px; background: #fff; }
+      .problem__number { display: inline-block; margin-bottom: 36px; color: #0b63ac; font-size: 12px; font-weight: 900; }
+      .problem h3 { margin-bottom: 10px; font-size: 18px; }
+      .problem p { margin-bottom: 0; color: #627486; font-size: 14px; line-height: 1.65; }
+      .models { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+      .model { display: grid; grid-template-columns: 45% 55%; min-height: 280px; overflow: hidden; border: 1px solid #e0e8ef; border-radius: 12px; background: #fff; }
+      .model img { background: #f3f1ef; }
+      .model__copy { display: flex; flex-direction: column; justify-content: center; padding: 25px; }
+      .model h3 { margin-bottom: 10px; color: #0c3155; font-size: 19px; }
+      .model p { margin-bottom: 0; color: #627486; font-size: 13px; line-height: 1.6; }
+      .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+      .specs__list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 28px 0 0; padding: 0; list-style: none; }
+      .specs__list li { padding: 17px; border-left: 3px solid #f9c721; background: #fff; font-size: 13px; font-weight: 700; }
+      .specs__image { height: 400px; overflow: hidden; border-radius: 12px; }
+      .specs__image img { object-position: center 32%; }
+      .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .project { overflow: hidden; border-radius: 12px; background: #fff; }
+      .project img { height: 235px; }
+      .project h3 { margin: 0; padding: 18px 19px 21px; font-size: 15px; line-height: 1.5; }
+      .request { background: #0b3153; color: #fff; }
+      .request__grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 70px; }
+      .request h2 { color: #fff; }
+      .request p { color: #d4e1eb; line-height: 1.7; }
+      .request__steps { margin: 30px 0 0; padding-left: 20px; color: #e8f0f6; line-height: 2.1; font-size: 14px; }
+      .form { padding: 30px; border-radius: 12px; background: #fff; color: #17304b; }
+      .form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+      .field { display: grid; gap: 7px; margin-bottom: 15px; font-size: 12px; font-weight: 800; }
+      .field input, .field textarea, .field select { width: 100%; min-height: 44px; padding: 11px 12px; border: 1px solid #d8e1ea; border-radius: 6px; background: #fff; color: #17304b; outline-color: #0b63ac; font-size: 13px; font-weight: 400; }
+      .field textarea { min-height: 90px; resize: vertical; }
+      .form__hint { margin-bottom: 18px; color: #6d7e8c; font-size: 11px; line-height: 1.5; }
+      .form__demo { margin: 12px 0 0; color: #6d7e8c; font-size: 11px; }
+      .footer { padding: 28px 0; background: #071f36; color: #b6c8d7; font-size: 12px; }
+      .footer .shell { display: flex; justify-content: space-between; gap: 20px; }
+      @media (max-width: 850px) { .nav { display: none; } .problem-grid, .projects { grid-template-columns: 1fr 1fr; } .models, .specs, .request__grid { grid-template-columns: 1fr; } .request__grid { gap: 30px; } }
+      @media (max-width: 600px) { .shell { width: min(100% - 28px, 1160px); } .header__inner { min-height: 62px; } .header__cta { display: none; } .hero { min-height: 610px; } .hero::after { background: linear-gradient(90deg, #092947ed, #092947a8); } .hero__inner { padding-block: 55px; } .hero__lead { font-size: 16px; } .hero__tags { margin-top: 44px; } .section { padding-block: 58px; } .problem-grid, .models, .projects, .specs__list, .form__grid { grid-template-columns: 1fr; } .model { grid-template-columns: 1fr; } .model img { height: 240px; } .specs__image { height: 270px; } .form { padding: 20px; } .footer .shell { display: block; } }
+    </style>
+  </head>
+  <body>
+    <div class="demo">Концепт страницы · тексты и форма показаны для согласования</div>
+    <header class="header">
+      <div class="shell header__inner">
+        <a class="logo" href="#top" aria-label="АБАТЭК — наверх">АБА<b>ТЭК</b></a>
+        <nav class="nav" aria-label="Разделы макета"><a href="#tasks">Задачи</a><a href="#models">Исполнения</a><a href="#projects">Примеры работ</a></nav>
+        <a class="header__cta" href="#request">Отправить чертёж</a>
+      </div>
+    </header>
+    <main id="top">
+      <section class="hero">
+        <div class="shell hero__inner">
+          <p class="eyebrow">Ролики под вашу задачу</p>
+          <h1>Нестандартные ролики для рольгангов и оборудования</h1>
+          <p class="hero__lead">Изготовим ролики по чертежу или образцу: под размеры существующей линии, нагрузку, способ привода и условия работы.</p>
+          <div class="hero__actions"><a class="button" href="#request">Отправить чертёж или фото →</a><span class="hero__note">Подойдёт эскиз, фото с размерами или техническое задание</span></div>
+          <div class="hero__tags"><span>Для действующих линий</span><span>Для нового оборудования</span><span>По чертежу или образцу</span></div>
+        </div>
+      </section>
+      <section id="tasks" class="section section--white">
+        <div class="shell">
+          <div class="heading"><p class="eyebrow">Когда мы полезны</p><h2>Ролик нужен под конкретный узел</h2><p>Подбираем исполнение под оборудование заказчика, когда важны посадочные размеры, нагрузка и совместимость с уже работающей линией.</p></div>
+          <div class="problem-grid">
+            <article class="problem"><span class="problem__number">01 / ЗАМЕНА</span><h3>Нужен аналог существующего ролика</h3><p>Работаем по чертежу или образцу, уточняем размеры корпуса, вала и мест установки.</p></article>
+            <article class="problem"><span class="problem__number">02 / НОВЫЙ ПРОЕКТ</span><h3>Проектируется рольганг</h3><p>Согласуем исполнение роликов с грузом, шагом установки и схемой привода.</p></article>
+            <article class="problem"><span class="problem__number">03 / ОСОБЫЕ УСЛОВИЯ</span><h3>Типовой ролик не подходит</h3><p>Обсуждаем материал, длину, диаметр, опоры и защиту подшипников для рабочей среды.</p></article>
+          </div>
+        </div>
+      </section>
+      <section id="models" class="section section--soft">
+        <div class="shell">
+          <div class="heading"><p class="eyebrow">Варианты исполнения</p><h2>Какие ролики можем обсудить</h2><p>Тип исполнения — отправная точка. Конкретные размеры и конструкцию определяем по вашей документации.</p></div>
+          <div class="models">
+            <article class="model"><img src="./public/images/roliki/rolik-dlya-rolganga.webp" alt="Стальной ролик для рольганга" /><div class="model__copy"><h3>Для рольгангов</h3><p>Ролики для приводных и неприводных участков перемещения штучного груза.</p></div></article>
+            <article class="model"><img src="./public/images/roliki/gladkie-konveyernye-roliki-studiya.webp" alt="Гладкие ролики для конвейера" /><div class="model__copy"><h3>Гладкие</h3><p>Ролики для опоры ленты и других задач, где требуется ровная рабочая поверхность.</p></div></article>
+            <article class="model"><img src="./public/images/roliki/deflektornyy-konveyernyy-rolik.webp" alt="Дефлекторный ролик" /><div class="model__copy"><h3>Направляющие</h3><p>Исполнение для контроля положения ленты или направления движения изделия.</p></div></article>
+            <article class="model"><img src="./public/images/roliki/amortiziruyushchiy-konveyernyy-rolik.webp" alt="Амортизирующий ролик" /><div class="model__copy"><h3>С амортизацией</h3><p>Ролики с упругими элементами для участков с ударной нагрузкой.</p></div></article>
+          </div>
+        </div>
+      </section>
+      <section class="section section--white">
+        <div class="shell specs">
+          <div><div class="heading"><p class="eyebrow">Изготовление под проект</p><h2>Что можно задать в техническом задании</h2><p>Начните с имеющегося чертежа или измерений. Если данных не хватает, обсудим, что нужно уточнить для расчёта.</p></div><ul class="specs__list"><li>Длина и диаметр корпуса</li><li>Форма и размеры вала</li><li>Материал и покрытие</li><li>Подшипники и уплотнения</li><li>Способ крепления</li><li>Количество в партии</li></ul></div>
+          <div class="specs__image"><img src="./public/images/roliki/projects/gotovye-roliki-dlya-lentochnogo-konveyera.webp" alt="Готовые конвейерные ролики на производстве" /></div>
+        </div>
+      </section>
+      <section id="projects" class="section section--soft">
+        <div class="shell"><div class="heading"><p class="eyebrow">Наше производство</p><h2>Фото выполненных работ</h2><p>В рабочей версии здесь лучше показать проекты с краткими исходными требованиями и полученным исполнением.</p></div><div class="projects"><article class="project"><img src="./public/images/roliki/projects/gotovye-roliki-dlya-lentochnogo-konveyera.webp" alt="Партия готовых роликов" /><h3>Партия готовых роликов</h3></article><article class="project"><img src="./public/images/roliki/projects/shtabel-stalnyh-konveyernyh-rolikov.webp" alt="Стальные конвейерные ролики" /><h3>Стальные ролики с подшипниковыми узлами</h3></article><article class="project"><img src="./public/images/rolgang/projects/rolgang-nerzhaveyushchie-roliki.webp" alt="Ролики в составе рольганга" /><h3>Ролики в составе рольганга</h3></article></div></div>
+      </section>
+      <section id="request" class="section request">
+        <div class="shell request__grid"><div><p class="eyebrow">Запрос на изготовление</p><h2>Пришлите чертёж, эскиз или фото ролика</h2><p>Укажите известные размеры и количество. По этим данным можно предметно обсудить конструкцию и подготовку расчёта.</p><ol class="request__steps"><li>Получаем исходные данные</li><li>Уточняем размеры и условия работы</li><li>Согласуем исполнение и расчёт</li></ol></div>
+          <form class="form" onsubmit="event.preventDefault(); alert('Это макет: отправка заявки пока не подключена.');"><div class="form__grid"><label class="field">Ваше имя<input name="name" autocomplete="name" placeholder="Как к вам обращаться" /></label><label class="field">Телефон или email<input name="contact" placeholder="Контакт для ответа" /></label></div><div class="form__grid"><label class="field">Для какого оборудования?<select name="equipment"><option>Выберите вариант</option><option>Рольганг</option><option>Ленточный конвейер</option><option>Другое оборудование</option></select></label><label class="field">Количество<input name="quantity" inputmode="numeric" placeholder="Например, 20 шт." /></label></div><label class="field">Что известно о ролике?<textarea name="details" placeholder="Размеры, нагрузка, материал, способ крепления…"></textarea></label><label class="field">Чертёж или фото<input name="attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.dwg,.dxf" /></label><p class="form__hint">В рабочей версии формы согласуем допустимые форматы файлов и порядок обработки заявок.</p><button class="button" type="submit">Отправить запрос →</button><p class="form__demo">Демонстрационный макет: форма не отправляет данные.</p></form>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"><div class="shell"><span>АБАТЭК · концепт страницы нестандартных роликов</span><span>Макет для обсуждения, без публикации на сайте</span></div></footer>
+  </body>
+</html>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { legalHeroImages } from '~/data/legal-hero';
+
 defineProps<{
   title: string;
   description: string;
@@ -7,7 +9,14 @@ defineProps<{
 
 <template>
   <div>
-    <PageHeroSection_01 eyebrow="Правовая информация" :title="title" :text="description" />
+    <PageHeroSection_01
+      eyebrow="Правовая информация"
+      :title="title"
+      :text="description"
+      :background-image="legalHeroImages.desktop"
+      :mobile-background-image="legalHeroImages.mobile"
+      background-variant="photo"
+    />
     <section class="legal-document content-section">
       <article class="site-container legal-document__content">
         <p class="legal-document__updated">Дата публикации: 14 августа 2026 года</p>

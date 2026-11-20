@@ -22,6 +22,7 @@ export const catalogGroups: CatalogGroup[] = [
       { label: 'Ленточный питатель', to: '/lentochnye-pitateli/' },
       { label: 'Винтовой конвейер', to: '/vintovye-konvejery' },
       { label: 'Роликовый конвейер (рольганг)', to: '/rolgang' },
+      { label: 'Цепной конвейер-транспортер', to: '/cepnye-konveyeri/' },
       { label: 'Скребковый цепной конвейер', to: '/konveyery-skrebkovye' },
       { label: 'Элеватор ковшовый', to: '/elevatory-kovshovye/' },
     ],

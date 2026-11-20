@@ -823,6 +823,7 @@ const links: Array<{ label: string; to: string; catalog?: boolean }> = [
       font-weight: 600;
       line-height: 1.4;
       color: $yellow;
+      text-align: left;
       cursor: pointer;
       background: transparent;
       border: 0;

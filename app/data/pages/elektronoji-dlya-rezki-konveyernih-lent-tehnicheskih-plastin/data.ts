@@ -26,7 +26,7 @@ export const electronKnivesDriveAnimation = {
 } as const;
 
 export const electronKnivesDemoVideo = {
-  src: '/images/ispytanie-elektronozha-dlya-rezki-konveyernyh-lent-abatek-optimized.mp4',
+  src: '/media/electron-knives.mp4',
   poster: '/images/ispytanie-elektronozha-dlya-rezki-konveyernyh-lent-abatek-optimized-poster.jpg',
   title: 'Испытание электроножа для резки конвейерных лент',
   eyebrow: 'Электронож в работе',

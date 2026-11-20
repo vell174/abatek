@@ -76,17 +76,17 @@ export const pageData = {
     clips: [
       {
         title: 'Конвейер для дровокола',
-        src: '/videos/drovokoly/konveyer-dlya-drovokola.mp4',
+        src: '/media/konveyer-dlya-drovokola.mp4',
         poster: '/videos/drovokoly/konveyer-dlya-drovokola-poster.jpg',
       },
       {
         title: 'Конвейер для погрузки колотых дров',
-        src: '/videos/drovokoly/konveyer-dlya-pogruzki-kolotyh-drov.mp4',
+        src: '/media/konveyer-dlya-pogruzki-kolotyh-drov.mp4',
         poster: '/videos/drovokoly/konveyer-dlya-pogruzki-kolotyh-drov-poster.jpg',
       },
       {
         title: 'Транспортер для дров в работе',
-        src: '/videos/drovokoly/transporter-dlya-drov-v-rabote.mp4',
+        src: '/media/transporter-dlya-drov-v-rabote.mp4',
         poster: '/videos/drovokoly/transporter-dlya-drov-v-rabote-poster.jpg',
       },
     ],

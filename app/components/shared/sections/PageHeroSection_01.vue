@@ -5,6 +5,7 @@ const {
   accentTexts = [],
   eyebrow = 'АБАТЭК',
   backgroundImage = '',
+  mobileBackgroundImage = '',
   backgroundImageAlt = '',
   backgroundImagePosition = 'center 52%',
   backgroundImageWidth = 1920,
@@ -19,6 +20,7 @@ const {
   accentTexts?: readonly string[];
   eyebrow?: string;
   backgroundImage?: string;
+  mobileBackgroundImage?: string;
   backgroundImageAlt?: string;
   backgroundImagePosition?: string;
   backgroundImageWidth?: number;
@@ -54,11 +56,19 @@ defineEmits<{ action: [] }>();
     class="page-hero"
     :class="[
       backgroundImage && 'page-hero--custom-background',
+      mobileBackgroundImage && 'page-hero--mobile-background',
       backgroundImageAlt && 'page-hero--image-element',
       compact && 'page-hero--compact',
       `page-hero--${backgroundVariant}`,
     ]"
-    :style="backgroundImage ? { '--page-hero-background-image': `url('${backgroundImage}')` } : undefined"
+    :style="
+      backgroundImage
+        ? {
+            '--page-hero-background-image': `url('${backgroundImage}')`,
+            ...(mobileBackgroundImage && { '--page-hero-mobile-background-image': `url('${mobileBackgroundImage}')` }),
+          }
+        : undefined
+    "
   >
     <img
       v-if="backgroundImage && backgroundImageAlt"
@@ -432,6 +442,12 @@ defineEmits<{ action: [] }>();
 @media (max-width: $phone) {
   .page-hero {
     padding-block: 58px;
+
+    &--mobile-background {
+      background-image:
+        linear-gradient(90deg, rgba($navy, 0.95), rgba($navy, 0.78) 58%, rgba($navy, 0.45)),
+        var(--page-hero-mobile-background-image);
+    }
 
     &__title {
       max-width: 100%;
